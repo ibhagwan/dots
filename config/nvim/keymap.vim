@@ -8,11 +8,16 @@ let mapleader ="\<Space>"
 " by default `d` is a 'cut' operation into the unnamedplus (+) register
 " which in our case is the clipboard, bind <space>d to "real delete" op
 " <space>v and <space>s are used to mimc term cmd-v and cmd-s pastes
+" <space>y and <space>Y paste directly from the yank register (0)
 " https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text
 nnoremap <leader>v "+p
 xnoremap <leader>v "+p
 nnoremap <leader>s "*p
 xnoremap <leader>s "*p
+nnoremap <leader>y "0p
+xnoremap <leader>y "0p
+nnoremap <leader>Y "0P
+xnoremap <leader>Y "0P
 " <space>b as a shortcut to the 'blackhole' register
 " <space>d|dd|D is mapped "real delete"
 " x|c do not copy deleted text to register
@@ -20,7 +25,7 @@ nnoremap <leader>b "_
 nnoremap <leader>d "_d
 nnoremap <leader>D "_D
 nnoremap <leader>dd "_dd
-nnoremap x "_x
+"nnoremap x "_x
 "nnoremap c "_c
 "nnoremap C "_C
 "nnoremap cc "_cc
@@ -38,6 +43,12 @@ xnoremap <leader>x "_x
 " conistent with the behaviour of `C` and `D`
 nnoremap Y y$
 xnoremap Y <Esc>y$gv
+
+" Map `cp` to `xp` (transpose two adjacent chars)
+" as a **repeatable action** with `.`
+nmap cp <Plug>TransposeCharacters
+nnoremap  <Plug>TransposeCharacters xp
+  \:call repeat#set("\<Plug>TransposeCharacters")<CR>
 
 " Fix some common typos
 cnoreabbrev W! w!

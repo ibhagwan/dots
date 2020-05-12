@@ -188,22 +188,31 @@ if id != 0
 
 endif
 
-" disable auto commenting, must be last line as plugins may overwrite
-" this gets overwritten by `filetypes.vim` for ceratin types
-" c: Auto-wrap comments using textwidth, inserting the current comment
-" r:  Automatically insert the current comment leader after hitting
-"     <Enter> in Insert mode.
-" o: Automatically insert the current comment leader after hitting 'o' or
-"     'O' in Normal mode.
-augroup initvim-formatopts
-  autocmd!
-  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-augroup END
+if has("autocmd")
+  " disable auto commenting, must be last line as plugins may overwrite
+  " this gets overwritten by `filetypes.vim` for ceratin types
+  " c: Auto-wrap comments using textwidth, inserting the current comment
+  " r:  Automatically insert the current comment leader after hitting
+  "     <Enter> in Insert mode.
+  " o: Automatically insert the current comment leader after hitting 'o' or
+  "     'O' in Normal mode.
+  augroup initvim-formatopts
+    autocmd!
+    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+  augroup END
 
-" Sync syntax from the start of the file when opening a buffer
-" otherwise syntax highlight might get out of sync when scrolling
-" supposdely has some performance issues?
-augroup initvim-syncformat
-  autocmd!
-  autocmd BufEnter * :syntax sync fromstart
-augroup END
+  " Sync syntax from the start of the file when opening a buffer
+  " otherwise syntax highlight might get out of sync when scrolling
+  " supposdely has some performance issues?
+  augroup initvim-syncformat
+    autocmd!
+    autocmd BufEnter * :syntax sync fromstart
+  augroup END
+
+  " Source the vimrc file after saving it
+  augroup initvim-source
+    autocmd!
+    autocmd bufwritepost init.vim,keymap.vim,plugins.vim,filetypes.vim,ibhagwan.vim
+      \ source $MYVIMRC
+  augroup END
+endif

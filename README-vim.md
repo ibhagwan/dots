@@ -8,6 +8,8 @@ The cheatsheet assumes at least minimal understanding of motions and operators, 
 
 Note that everything below works with vanilla vim/nvim and does not require the use of any plugins. I am not opposed to plugins and even use a few which I find extremely helpful but as a philosophy I try to use as much built-in functionality (with minimal keymap changes) as I can before turning to plugins. As you can see below there is **so much** you can do with vanilla Vim that I decided to leave plugins out of the scope of this document.
 
+If you'd like to take your Vim to the next level, I highly recommend watching all of [Drew Neil's VimCasts](http://vimcasts.org/episodes/page/8/) they are absolutely wonderful and will blow your mind. When you're ready to jump in the water and test your skills [Vimgolf](http://www.vimgolf.com) is fantastic exercise which will cement all your Vim knowledge and add new tricks to your arsenal. Download [Vimgolf client from here](https://github.com/igrigorik/vimgolf) or it's [lesser known python client by Daniel Stein](https://github.com/dstein64/vimgolf) if you wish to avoid the ruby dependencies.
+
 **Thanks to [/u/-romainl-](https://www.reddit.com/user/-romainl-/) for [his great feedback](https://www.reddit.com/r/vim/comments/gha79v/i_wrote_an_advanced_comprehensive_cheatsheet_for/fq7qeop?utm_source=share&utm_medium=web2x) correcting previous inaccuracies.**
 
 
@@ -90,6 +92,8 @@ zt              " scroll the screen so the cursor is at the (t)op
 <ctrl-o>        " jump to previous location in :jumps
 <ctrl-i>        " jump to next location in :jumps
 ``              " jump to last known location (automatic mark)
+g;              " cycle backwards in `:changes` (edit locations)
+g,              " cycle forwards in `:changes` (edit locations)
 ```
 
 **Note:** When navigating lines with `hjkl^$`, if a line is too long and is wrapped, pressing `j` will move down to the next line even if the current line is wrapping 2 or more lines, to go down 1 "visual" line use `gj` instead. The `g` prefix works the same for other navigation commands `hjkl^$` (`g^` and `g$` for start and end of visual line). A very useful mapping is to map `<up><down>` or `jk` to move by visual lines as long as they aren't prefixed with {count} so we can still use up and down motions (e.g. `10j`) for whole lines:
@@ -150,13 +154,16 @@ cb              " change (replace) backwards to the start of a word
 c0              " change (replace) to the start of the line
 c$              " change (replace) to the end of the line
 C               " change (replace) to the end of the line
-s               " delete character and substitute text
-S               " delete line and substitute text (same as cc)
+c/pattern       " change (replace) to first occurrence of 'pattern'
+s               " delete character and substitute text (equal to `cl`)
+S               " delete line and substitute text (equal to `cc`)
 xp              " transpose two letters (delete and paste)
 ylxp            " transpose two letters (yank, delete and paste)
 vyxp            " transpose two letters (yank, delete and paste)
 >>              " indent current line right
 <<              " indent current line left
+==              " re-indent line (using 'equalprg' if specified)
+gg=G            " re-indent entire buffer
 <ctrl-a>        " find number in current line and increment by 1
 <ctrl-x>        " find number in current line and decrement by 1
 {count}:        " will translate {count} to :{range} in ex mode
@@ -179,6 +186,7 @@ vyxp            " transpose two letters (yank, delete and paste)
 ```vim
 p               " (p)ut or (p)aste clipboard after cursor
 P               " (p)ut or (p)aste clipboard before cursor
+]p              " put text and align indentation with surroundings
 yy              " yank (copy) a line
 {count}yy       " yank (copy) {count} lines
 yl              " yank a single character (l = to the right)
@@ -194,8 +202,11 @@ D               " delete (cut) to the end of the line
 d$              " delete (cut) to the end of the line
 d^              " delete (cut) to the first non-blank character of the line
 d0              " delete (cut) to the beginning of the line
-x               " delete (cut) character
+d/pattern       " delete (cut) to first occurrence of 'pattern'
+x               " delete (cut) character under the cursor
+X               " delete (cut) character before the cursor
 "+p             " paste the `+` register (the clipboard)
+"0p             " paste the yank `0` register
 "{reg}p         " paste {reg} (:registers)
 "{reg}yy        " yank current line into {reg} (:registers)
 "_dd            " delete line into the 'blackhole' register (no clipboard)
@@ -203,9 +214,10 @@ x               " delete (cut) character
 Copy paste using ex mode:
 ```vim
 :{range}co{line}    " copy {range} to {line}
+:{range}t{line}     " shortcut to the `:co[opy]` command above
 :-2co .             " copy line 2 above cursor to line below cursor
-:+2co 0             " copy line 2 below cursor to start of file
-:.,$co $            " copy all lines from the cursor to end of file to end of file
+:+2t 0              " copy line 2 below cursor to start of file
+:.,$t $             " copy all lines from the cursor to end of file to end of file
 :1,3co 5            " copy lines 1-3 to below line 5
 ```
 
@@ -219,7 +231,7 @@ Copy paste using ex mode:
     xnoremap Y <Esc>y$gv
 ```
 
-- By default all modification operators `dcx` copy the modified text to the unnamed `"` register (unless `set clipboard` was set) which can be confusing at first. For example, let's say we want to overwrite a word with yanked text, we would naturally do `ciw<Esc>p` or `ciw<ctrl-r>"` only to find out the same word would be pasted (and not our yanked text), to work around that we can tell the `c` operator to copy the text into the 'blackhole' register instead: `"_ciw`. A few useful mappings for my leader key (by default `\`, personally I use `\<space>`) are below, so if I want to change a word without it polluting my registers I would run `<leader>bciw`, similarly if I wish to delete a line I would run `<leader>dd`:
+- By default all modification operators `dcx` copy the modified text to the unnamed `"` register (unless `set clipboard` was set) which can be confusing at first. For example, let's say we want to overwrite a word with yanked text, we would naturally do `ciw<Esc>p` or `ciw<ctrl-r>"` only to find out the same word would be pasted (and not our yanked text), to work around that we can tell the `c` operator to copy the text into the 'blackhole' register instead: `"_ciw`. Alternatively we can also use the yank register `0` which contains the content of the last yank operation using `"0p` or `"0P` (to paste before the cursor). A few useful mappings for my leader key (by default `\`, personally I use `\<space>`) are below, so if I want to change a word without it polluting my registers I would run `<leader>bciw`, similarly if I wish to delete a line I would run `<leader>dd`:
 
 ```vim
     nnoremap <leader>b "_
@@ -296,8 +308,9 @@ y               " yank
 >               " indent right 
 <               " indent left 
 !               " filter through external command 
-=               " filter through 'equalprg' option command 
-gq              " format lines to 'textwidth' length 
+=               " re-indent line (using 'equalprg' if specified)
+gq              " format lines to 'textwidth' length (cursor moves to end)
+gw              " format lines to 'textwidth' length (cursor stays in place)
 gu              " make selection lower-case
 gU              " make selection UPPER-case
 {num}g<ctrl-a>  " increment current selection by {num}
@@ -305,6 +318,8 @@ gU              " make selection UPPER-case
 ```
 
 **Notes:**
+- Some operators, namely the repeat `.` and paste `pP` operators have unique behaviors when used after a VISUAL 'block' mode edit, that is extremely useful when editing text as blocks. Say we wanted to append semicolon to the end of a paragraph we could simply do `<ctrl-v>}A;<Esc>` we can then repeat the operation using `.` which will replicate the change to the same block range under the cursor. Similarly we can use the paste before and after the cursor `p` and `P` to paste entire columns, the following will duplicate the first column of a paragraph: `<ctrl-v>}yp` which you can easily undo as an atomic operation with `u`.
+
 - If you want to preform an {ex} command on visual selection press `:` (with selected visuals), vim will automatically prefix your ex command with the visual range `:'<,'>` so you can execute any command on the selected text, e.g. `:'<,'>norm @q` will execute macro `q` on all visually selected lines.
 
 - When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](common/config/nvim/keymap.vim):
@@ -323,26 +338,36 @@ vmap > >gv
 ?pattern                    " search backward for pattern
 /<CR>                       " repeat search in same direction
 ?<CR>                       " repeat search in opposite direction
+/\v{pattern}                " Search forwards using Vim's 'very magic' pattern
+                            " special characters can be used without esc seq
 n                           " repeat search in same direction
 N                           " repeat search in opposite direction
+& or :&&                    " repeat last substitute in the same line
+g&                          " repeat last substitute on all lines
 :noh                        " remove highlighting of search matches
 :s/old/new/                 " replace first occurrence of old with new
 :s/old/new/g                " replace all old with new throughout line ('globally')
 :%s/old/new/g               " replace all old with new throughout file ('globally')
 :%s/old/new/gc              " replace all old with new throughout file with confirmations
 :%s/old/'&'/g               " surround all occurrences of old with ' (i.e. 'old')
+:s/\%Vold/new/              " replace all occurrences of old with new in visual selection
 :{range} s/old/new/         " replace all old with in {range} (e.g. `:10,20s/...`)
 :{num},$ s/old/new/         " replace all old with new from line {num} to last line
 :g/regex/{ex}               " run :{ex} for every line matching regex
 :g!/regex/{ex}              " run :{ex} for every line NOT matching regex
 :v/regex/{ex}               " same as above, shortcut to `:g!`
-:g/regex/y {reg}            " copy all matching line to register {reg}
-                            " capitalize {reg} to append instead
+:g/regex/y {reg}            " copy all matching lines to register {reg}
+                            " capitalize {reg} to append to {reg}
+:g/regex/m $                " move all matching lines to end of file
+:g/regex/-1j                " for every matching line, go up one line and join
+:%s/\s\+$//e                " remove all trailing whitespaces throughout buffer
 ```
 
 **Notes:**
 
 - For more information on the different `.../g` modifiers read `:help s_flags`
+
+- For more information on the "very magic" pattern read [Vim fandom: Simplifying regular expressions using magic and no-magic](https://vim.fandom.com/wiki/Simplifying_regular_expressions_using_magic_and_no-magic).
 
 - The `g` and `v` ex commands are extremely useful, few examples: `:g/pattern/d` or `:g/pattern/norm dd` will delete all lines matching `pattern`, you can also supply a range to the command: `:g/pattern/-1d` will delete one line above all lines matching `pattern`, same can be achieved with `:g/pattern/norm 1jdd`
 
@@ -366,6 +391,7 @@ N                           " repeat search in opposite direction
 ## <a id="macros">Macros</a>
 ```vim
 q{a-z}                  " start recording macro to register {a-z}
+q{A-Z}                  " append recording macro to register {a-z}
 q                       " stop macro recording
 @{a-z}                  " execute macro {a-z}
 {count}@{a-z}           " execute macro {a-z} on {count} lines
@@ -381,6 +407,10 @@ q                       " stop macro recording
 - Don’t leave undos in your macro. If you undo in a macro to correct a mistake, always be sure to manually remove the mistake and the undo from the macro. In replay mode, an undo will undo the entire macro up until that point, erasing all of your hard work and bleeding the macro out into the rest of your text.
 
 - The above was taken from [Hillel Wayne's blog: Vim Macro Tricks](https://www.hillelwayne.com/vim-macro-trickz/).
+
+- Alternatively, you can resume recording a macro using the capitalized version of the registers, say we started recording into the `q` register with `qq` we can "pause" the macro recording with `q` and later resume recording with `qQ` (note the capitalized `Q`).
+
+- A neat trick to running macros quickly is to use the `.` register which is the last inputed text. Let's say we want to run a macro that does the simple task of transposing two adjacent characters `xp`, what we can do is enter INSERT mode, enter the macro keys, press `u` for undo and then execute the macro with `@.`, thus the entire sequence equals `ixp<Esc>u` and now we can run our macro with `@.`.
 
 ## <a id="marks">Marks</a>
 ```vim
@@ -474,7 +504,11 @@ gT or :tabprev or :tabp     " goto to the previous tab
 [s                          " find previous misspelled word
 ]s                          " find next misspelled word
 z=                          " see spellcheck suggestions
+{num}z=                     " automatically accept (change) suggestion {num}
 zg                          " add current word to dictionary
+zw                          " add current word to dictionary as a 'bad' word
+zug                         " undo `zg`
+zuw                         " undo `zw`
 ```
 
 ## <a id="misc-commands">Misc commands</a>
@@ -488,6 +522,9 @@ zg                          " add current word to dictionary
 q/ or q?                    " same as above but for searches
 :echo &{opt}                " echo Vim option to command line (expand values)
 :set {opt}?                 " echo Vim option to commend line (no expand)
+:source                     " 'source': execute a file as a series of commands
+:source $MYVIMRC            " source your $MYVIMRC
+:retab                      " retab current buffer according to `expandtab` and `shiftwidth`
 ```
 
 ## <a id="ctrl-r-and-the-expression-register">Ctrl-R and the Expression Register</a>
@@ -527,3 +564,4 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 
   We can modify the first line using `ciw(<ctrl-r>+)` which will result in "(one)" but when we repeat the action for "two" the result would still be "(one)" as the actual text is saved in the register. To circumvent this we can use `ciw(<ctrl-r><ctrl-o>+)` instead which inserts the actual command `^R^O+` into the register, that way when we repeat the action with `.` the result would be as expected "(two)".
 
+- For more information regarding `<ctrl-r><ctrl-o>` read `:help i_ctrl-r_ctrl-o` and watch [Drew Neil's vimcast: Pasting from INSERT mode](http://vimcasts.org/episodes/pasting-from-insert-mode/)
