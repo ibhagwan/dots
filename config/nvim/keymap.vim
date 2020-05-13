@@ -14,10 +14,10 @@ nnoremap <leader>v "+p
 xnoremap <leader>v "+p
 nnoremap <leader>s "*p
 xnoremap <leader>s "*p
-nnoremap <leader>y "0p
-xnoremap <leader>y "0p
-nnoremap <leader>Y "0P
-xnoremap <leader>Y "0P
+nnoremap <leader>p "0p
+xnoremap <leader>p "0p
+nnoremap <leader>P "0P
+xnoremap <leader>P "0P
 " <space>b as a shortcut to the 'blackhole' register
 " <space>d|dd|D is mapped "real delete"
 " x|c do not copy deleted text to register
@@ -46,6 +46,8 @@ xnoremap Y <Esc>y$gv
 
 " Map `cp` to `xp` (transpose two adjacent chars)
 " as a **repeatable action** with `.`
+" (since the `@=` trick doesn't work
+"nmap cp @='xp'<CR>
 nmap cp <Plug>TransposeCharacters
 nnoremap  <Plug>TransposeCharacters xp
   \:call repeat#set("\<Plug>TransposeCharacters")<CR>
@@ -147,7 +149,7 @@ nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 nnoremap <silent> <leader>l <Esc>:set list!<CR><Esc>
 
 " Toggle colored column at 81
-nnoremap <silent> <leader>; :execute "set colorcolumn="
+nnoremap <silent> <leader>' :execute "set colorcolumn="
                 \ . (&colorcolumn == "" ? "81" : "")<CR>
 
 
@@ -162,9 +164,9 @@ nnoremap <silent> <leader>; :execute "set colorcolumn="
 inoremap <expr>j (pumvisible()?(empty(v:completed_item)?'j':"\<C-n>"):'j')
 inoremap <expr>k (pumvisible()?(empty(v:completed_item)?'k':"\<C-p>"):'k')
 
-" <Tab> to enter menu and also select first item
+" <Tab> to enter menu and cycle items
 inoremap <expr><Tab> (pumvisible()?
-  \ (empty(v:completed_item)?"\<C-n>":"\<C-y>"):"\<Tab>")
+  \ (empty(v:completed_item)?"\<C-n>":"\<C-n>"):"\<Tab>")
 
 " <Esc> to close popup menus and delete selection
 " <ctrl-c> will revert selection and switch to normal mode
@@ -188,9 +190,9 @@ endfunction
 " as it is cumbersome and prevents tabbing after a word, we keep
 " our own <Tab> mapping and use <S-Tab> for coc expand instead
 "inoremap <silent><expr> <TAB>
-      "\ pumvisible() ? "\<C-n>" :
-      "\ <SID>check_back_space() ? "\<TAB>" :
-      "\ coc#refresh()
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
 inoremap <expr><S-TAB> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
@@ -234,7 +236,7 @@ nmap <leader>nf :CocCommand explorer --preset floating<CR>
 
 
 " === LeaderF shorcuts === "
-"   ;          - Browse currently open buffers in normal mode
+"   <leader>;  - Browse currently open buffers in normal mode
 "   <leader>fb - Browse currently open (b)uffers in insert mode
 "   <leader>w  - Browse files in current (w)orking directory
 "   <leader>fm - Browse current (m)arks (output of :marks)
@@ -267,7 +269,7 @@ endfunction
 " we rebind <leader>ff and <leader>fb> anyways
 let g:Lf_ShortcutF = "<leader>ff"
 let g:Lf_ShortcutB = "<leader>fb"
-noremap ;          :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR><Tab>
+noremap <leader>;  :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR><Tab>
 noremap <leader>fb :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR>
 noremap <leader>w  :<C-U><C-R>=<SID>Leaderf("Leaderf file", "", 1)<CR><CR><Tab>
 noremap <leader>fm :<C-U><C-R>=<SID>Leaderf("Leaderf marks", "", 0)<CR><CR><Tab>

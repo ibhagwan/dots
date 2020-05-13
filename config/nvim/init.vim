@@ -37,9 +37,12 @@ if has('nvim')
     autocmd BufLeave term://* stopinsert
   augroup END
   " <Esc> for normal mode
+  " <Alt-[> or <C-v><Esc> to send <C-[> to term
   " <C-o> to jump back
   " <C-r> to simulate i-<C-r> (expression register)
   tnoremap <Esc> <C-\><C-n>
+  tnoremap <M-[> <Esc>
+  tnoremap <C-v><Esc> <Esc>
   tnoremap <C-o> <C-\><C-n><C-o>
   tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
   " Shortcut commands for term splits
@@ -153,6 +156,14 @@ set shortmess+=c
 " diagnostics appear/become resolved. We set this individually for code files
 "set signcolumn=yes
 
+" `viminfo` is deprecated, we use &shada instead
+" • '100 Marks will be remembered for the last 100 edited files.
+" • <1000 Limits the number of lines saved for each register to 1000 lines;
+"   if a register contains more than 1000 lines, only the first 1000 lines are saved.
+" • s100 Registers with more than 100 KB of text are skipped.
+" • h Disables search highlighting when Vim starts.
+set shada=!,'100,<1000,s100,h
+
 " Python setup
 if has('nvim')
   let g:python_host_prog  = '/usr/bin/python2'
@@ -196,10 +207,10 @@ if has("autocmd")
   "     <Enter> in Insert mode.
   " o: Automatically insert the current comment leader after hitting 'o' or
   "     'O' in Normal mode.
-  augroup initvim-formatopts
-    autocmd!
-    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-  augroup END
+  "augroup initvim-formatopts
+  "  autocmd!
+  "  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+  "augroup END
 
   " Sync syntax from the start of the file when opening a buffer
   " otherwise syntax highlight might get out of sync when scrolling

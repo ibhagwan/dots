@@ -6,7 +6,7 @@ I've been using vi for over 20 years but always limited it's use for basically o
 
 The cheatsheet assumes at least minimal understanding of motions and operators, to better understand motions, operators and how it all comes together in what is referred to as "the vim language" I highly recommend reading [Jim Denis's stackoverflow answer: Your problem with Vim is that you don't grok vi](https://gist.github.com/nifl/1178878).
 
-Note that everything below works with vanilla vim/nvim and does not require the use of any plugins. I am not opposed to plugins and even use a few which I find extremely helpful but as a philosophy I try to use as much built-in functionality (with minimal keymap changes) as I can before turning to plugins. As you can see below there is **so much** you can do with vanilla Vim that I decided to leave plugins out of the scope of this document.
+Note that everything below works with vanilla vim/nvim and does not require the use of any plugins. I am not opposed to plugins and even use a few which I find extremely helpful but as a philosophy I try to use as much built-in functionality (with minimal keymap changes) as I can before turning to plugins. As you can see below there is **so much** you can do with vanilla Vim that I decided to leave plugins out of the scope of this document. If you'd like to take a look at my custom mappings and plugins, refer to [init.vim](config/nvim/init.vim), [keymap.vim](config/nvim/keymap.vim), [filetypes.vim](config/nvim/filetypes.vim) and [plugins.vim](config/nvim/plugins.vim).
 
 If you'd like to take your Vim to the next level, I highly recommend watching all of [Drew Neil's VimCasts](http://vimcasts.org/episodes/page/8/) they are absolutely wonderful and will blow your mind. When you're ready to jump in the water and test your skills [Vimgolf](http://www.vimgolf.com) is fantastic exercise which will cement all your Vim knowledge and add new tricks to your arsenal. Download [Vimgolf client from here](https://github.com/igrigorik/vimgolf) or it's [lesser known python client by Daniel Stein](https://github.com/dstein64/vimgolf) if you wish to avoid the ruby dependencies.
 
@@ -77,9 +77,12 @@ f{char}         " jump to next occurrence of character {char}
 F{char}         " jump to previous occurrence of character {char}
 t{char}         " jump to (t)ill (one char before) next occurrence of {char}
 T{char}         " jump to (t)ill (one char before) previous occurrence of {char}
+{count};        " repeat last f, t, F or T in the same direction {count} times
+{count},        " repeat last f, t, F or T in the opposite direction {count} times
 {               " jump to previous paragraph (or function/block, when editing code)
 }               " jump to next paragraph (or function/block, when editing code)
 %               " jump to matching parenthesis ([{}])
+{num}|          " jump to screen column {num}
 zz or z.        " center screen on cursor
 zb              " scroll the screen so the cursor is at the (b)ottom
 zt              " scroll the screen so the cursor is at the (t)op
@@ -118,7 +121,7 @@ O               " append (open) a new line above the current line
 ```
 ### When in INSERT mode (most work also in ex mode):
 ```vim
-<ctrl-u>        " delete to line start or delete newline (on empty lines)
+<ctrl-u>        " undo edit on current line, <BS><CR> on empty lines
 <ctrl-d>        " delete from start of line to first non-blank character
 <ctrl-y>        " put text from the above line column
 <ctrl-w>        " delete a word backwards
@@ -166,6 +169,7 @@ vyxp            " transpose two letters (yank, delete and paste)
 gg=G            " re-indent entire buffer
 <ctrl-a>        " find number in current line and increment by 1
 <ctrl-x>        " find number in current line and decrement by 1
+{num}<ctrl-a>   " find number in current line and increment by {num}
 {count}:        " will translate {count} to :{range} in ex mode
 ```
 
@@ -213,7 +217,9 @@ X               " delete (cut) character before the cursor
 ```
 Copy paste using ex mode:
 ```vim
-:{range}co{line}    " copy {range} to {line}
+:{range}y           " yank {range} into the default register
+:{range}m{line}     " move {range} below {line}
+:{range}co{line}    " copy {range} to below {line}
 :{range}t{line}     " shortcut to the `:co[opy]` command above
 :-2co .             " copy line 2 above cursor to line below cursor
 :+2t 0              " copy line 2 below cursor to start of file
@@ -313,8 +319,10 @@ gq              " format lines to 'textwidth' length (cursor moves to end)
 gw              " format lines to 'textwidth' length (cursor stays in place)
 gu              " make selection lower-case
 gU              " make selection UPPER-case
-{num}g<ctrl-a>  " increment current selection by {num}
-{num}g<ctrl-a>  " decrement current selection by {num}
+v<ctrl-a>       " increment digit under the cursor
+{num}<ctrl-a>   " increment current selection by {num} (lines separately increment)
+{num}<ctrl-x>   " decrement current selection by {num} (lines separately decrement)
+{num}g<ctrl-a>  " increment current selection by {num} (lines serially increment)
 ```
 
 **Notes:**
@@ -322,7 +330,7 @@ gU              " make selection UPPER-case
 
 - If you want to preform an {ex} command on visual selection press `:` (with selected visuals), vim will automatically prefix your ex command with the visual range `:'<,'>` so you can execute any command on the selected text, e.g. `:'<,'>norm @q` will execute macro `q` on all visually selected lines.
 
-- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](common/config/nvim/keymap.vim):
+- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](config/nvim/keymap.vim):
 
 ```vim
 vmap < <gv
@@ -396,6 +404,9 @@ q                       " stop macro recording
 @{a-z}                  " execute macro {a-z}
 {count}@{a-z}           " execute macro {a-z} on {count} lines
 @@                      " repeat execution of last macro
+@:                      " repeat execution of last ex command e.g. `:s/...`
+@.                      " execute last inserted text as macro
+@='[cmds]'              " execute commands through the expression register
 :'<,'>normal @q         " execute macro `q` on visual selection
 "{a-z}p                 " paste macro {a-z} (register)
 "{a-z}y$                " yank into macro {a-z} to end of line
@@ -410,7 +421,10 @@ q                       " stop macro recording
 
 - Alternatively, you can resume recording a macro using the capitalized version of the registers, say we started recording into the `q` register with `qq` we can "pause" the macro recording with `q` and later resume recording with `qQ` (note the capitalized `Q`).
 
-- A neat trick to running macros quickly is to use the `.` register which is the last inputed text. Let's say we want to run a macro that does the simple task of transposing two adjacent characters `xp`, what we can do is enter INSERT mode, enter the macro keys, press `u` for undo and then execute the macro with `@.`, thus the entire sequence equals `ixp<Esc>u` and now we can run our macro with `@.`.
+- A neat trick to running macros quickly is to use the `.` register which is the last inputed text. Let's say we want to run a macro that does the simple task of transposing two adjacent characters `xp`, what we can do is enter INSERT mode, enter the macro keys, press `u` for undo and then execute the macro with `@.`, thus the entire sequence equals `ixp<Esc>u` and now we can run our macro with `@.`. Alternatively, if you'd like your macro to contain a `<cr>` (down one line) you can run `O~$~<Esc>dd` and then run the macro with `2@"` (since our text was 'cut' into the default register) - this will toggle capitalization of the first and last character in 2 subsequent lines.
+
+- Building on the above, the same `xp` macro can be run using the expression register by running `@='xp'` and then repeat the macro execution with `@@`. You can run more complex commands using the full format `{count}@='[commands]'`. For example, running `3@='v2<ctrl-a>w'` on the text `1 5 8` will increment each digit by 2 resulting in `3 7 10`. This example is equivalent to `qqv2<ctrl-a>wq2@q`: which records the edit to macro `q` and then executes it two more times. (note: if you wish to input special characters (`<Esc>`, `<CR>`, etc.) in the command line, prefix the special character with `<ctrl-v>` e.g. `<ctrl-v><Esc>`.
+
 
 ## <a id="marks">Marks</a>
 ```vim
@@ -533,8 +547,12 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 
 ### INSERT and ex modes:
 ```vim
-<Esc>:registers             " list registers and their values
-<Esc>:put={expr}            " put value of {expr}<cr> into buffer
+:registers {reg}            " display registers {reg} and their values
+:display "0                 " display value of registers `"` and `0'
+:put{reg}                   " put value of {reg} in the line below
+:put={expr}                 " put value of {expr} in the line below
+:let @{reg}={expr}          " manually assign value to {reg}
+:let @*=expand('%')         " expand current file path into `*` (clipboard)
 <ctrl-r>{reg}               " put register {reg}
 <ctrl-r>={expr}             " put the value of {expr}
 <ctrl-r>=[1,2,3]            " put 1<cr>2<cr>3<cr>
