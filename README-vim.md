@@ -33,6 +33,7 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 - [Spellcheck](#spellcheck)
 - [Misc Commands](#misc-commands)
 - [Ctrl-R and the Expression Register](#ctrl-r-and-the-expression-register)
+- [Comparing buffers with vimdiff](#comparing-buffers-with-vimdiff)
 
 ## <a id="saving-exiting-vim">Saving & Exiting Vim</a>
 ```vim
@@ -44,7 +45,10 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 :wq or :x or ZZ " write the current file and quit
 :q              " quit (fails if there are unsaved changes)
 :q! or ZQ       " quit and throw away unsaved changes
+:cq             " quit Vim with exit code
 ```
+
+**NOTE:** the `:cq` command is useful in situations when we need to exit-cancel, for example when running `<Esc>v` in bash shell `set -o vi`, when exiting using `:cq` the command won't be executed automatically. Another example is when exiting the output window of `git rebase`, `:cq` will cancel the rebase operation.
 
 ## <a id="normal-mode-navigation">NORMAL mode navigation</a>
 ```vim
@@ -59,28 +63,31 @@ H               " move to top of screen    [H]igh
 M               " move to middle of screen [M]iddle
 L               " move to bottom of screen [L]ow
 w               " jump forwards to the start of a word
-W               " jump forwards to the start of a word (words can contain punctuation)
+W               " jump forwards to the start of a WORD (words can contain punctuation)
 e               " jump forwards to the end of a word
-E               " jump forwards to the end of a word (words can contain punctuation)
+E               " jump forwards to the end of a WORD (words can contain punctuation)
 ge              " jump backwards to the end of a word
-gE              " jump backwards to the end of a word (words can contain punctuation)
+gE              " jump backwards to the end of a WORD (words can contain punctuation)
 b               " jump backwards to the start of a word
-B               " jump backwards to the start of a word (words can contain punctuation)
+B               " jump backwards to the start of a WORD (words can contain punctuation)
 0               " jump to the start of the line
 ^               " jump to the first non-blank character of the line
 $               " jump to the end of the line
 g_              " jump to the last non-blank character of the line
 gg              " go to the first line of the document
 G               " go to the last line of the document
-{count}G        " go to line number {count}
+{num}G          " go to line number {num} (NORMAL mode)
+:{num}<CR>      " to to line number {num} (ex mode)
 f{char}         " jump to next occurrence of character {char}
 F{char}         " jump to previous occurrence of character {char}
 t{char}         " jump to (t)ill (one char before) next occurrence of {char}
 T{char}         " jump to (t)ill (one char before) previous occurrence of {char}
 {count};        " repeat last f, t, F or T in the same direction {count} times
 {count},        " repeat last f, t, F or T in the opposite direction {count} times
-{               " jump to previous paragraph (or function/block, when editing code)
-}               " jump to next paragraph (or function/block, when editing code)
+(               " jump to previous sentence (jumps after the next '.' or EOL)
+)               " jump to next sentence (jumps after the previous '.' or EOL)
+{               " jump to previous paragraph (jumps to next empty line)
+}               " jump to next paragraph (jumps to previous empty line)
 %               " jump to matching parenthesis ([{}])
 {num}|          " jump to screen column {num}
 zz or z.        " center screen on cursor
@@ -94,9 +101,15 @@ zt              " scroll the screen so the cursor is at the (t)op
 <ctrl-y>        " scroll the screen down
 <ctrl-o>        " jump to previous location in :jumps
 <ctrl-i>        " jump to next location in :jumps
-``              " jump to last known location (automatic mark)
+``              " jump to last jump location
+`.              " jump to last edit location
+'.              " jump to start of line of last edit
 g;              " cycle backwards in `:changes` (edit locations)
 g,              " cycle forwards in `:changes` (edit locations)
+ga              " display dec/hex/oct values of character under cursor
+g8              " display hex value of utf-8 character under cursor
+g?              " rot13 a character (cycle 13 alphanumeric chars backwards)
+ggg?G           " rot13 entire buffer
 ```
 
 **Note:** When navigating lines with `hjkl^$`, if a line is too long and is wrapped, pressing `j` will move down to the next line even if the current line is wrapping 2 or more lines, to go down 1 "visual" line use `gj` instead. The `g` prefix works the same for other navigation commands `hjkl^$` (`g^` and `g$` for start and end of visual line). A very useful mapping is to map `<up><down>` or `jk` to move by visual lines as long as they aren't prefixed with {count} so we can still use up and down motions (e.g. `10j`) for whole lines:
@@ -124,6 +137,7 @@ O               " append (open) a new line above the current line
 <ctrl-u>        " undo edit on current line, <BS><CR> on empty lines
 <ctrl-d>        " delete from start of line to first non-blank character
 <ctrl-y>        " put text from the above line column
+<ctrl-e>        " put text from the below line column
 <ctrl-w>        " delete a word backwards
 <ctrl-r>{reg}   " put register {reg}
 ```
@@ -166,6 +180,7 @@ vyxp            " transpose two letters (yank, delete and paste)
 >>              " indent current line right
 <<              " indent current line left
 ==              " re-indent line (using 'equalprg' if specified)
+=%              " indent current block of code
 gg=G            " re-indent entire buffer
 <ctrl-a>        " find number in current line and increment by 1
 <ctrl-x>        " find number in current line and decrement by 1
@@ -250,6 +265,8 @@ Copy paste using ex mode:
     xnoremap <leader>x "_x
 ```
 
+- In addition to being copied to the default register (`"` or `*`), every 'deleted' text is also copied into the 'small delete' registers {1-9}. To view the latest deletes run `:reg[isters]` or `:di[splay]`. A neat trick to cycle through the delete registers is to use `"1p` and then run `u.`, the undo+repeat advances the 'pasted register' so it will perform `"2p`, `"3p` and so forth.
+
 ## <a id="text-objects">Text Objects</a></a>
 ```vim
 aw              " a word (includes surrounding white space
@@ -305,6 +322,8 @@ gv              " NORMAL mode: reselect last visual selection
 
 - A neat trick you can do with VISUAL mode is using visual modes as motion operators, If you perform `d2j`, it will delete all three lines. That’s because `j` is a linewise motion. If you instead pressed `d<c-V>2j`, it would convert the motion to blockwise and delete just the column characters instead. For more information read [Hillel Wayne's blog: At least one Vim trick you might not know](https://www.hillelwayne.com/post/intermediate-vim/).
 
+- VISUAL mode has a nice feature to expand selection based on blocks, say we wanted to select the inside of an `if` condition in C, we do so with `vi(` or `vi)`, if we wanted to expand the selection to the outer block we can just run `i{` or `i}` (without having to cancel the selection and press `v` again).
+
 ## <a id="visual-mode-operations">VISUAL mode operations</a>
 ```vim
 ~               " switch case
@@ -330,6 +349,8 @@ v<ctrl-a>       " increment digit under the cursor
 
 - If you want to preform an {ex} command on visual selection press `:` (with selected visuals), vim will automatically prefix your ex command with the visual range `:'<,'>` so you can execute any command on the selected text, e.g. `:'<,'>norm @q` will execute macro `q` on all visually selected lines.
 
+- A shortcut to the above can be done with the bang `!` operator, this will automatically put is in ex command mode with the visual selection already entered, the equivalent of `:'<,'>!` ready for entering a command, this is useful in many situations, for example to sort a visual block we can just do `viB!sort` which is the equivalent `viB:!sort`. The same can also be done from NORMAL mode using `!iBsort`.
+
 - When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](config/nvim/keymap.vim):
 
 ```vim
@@ -342,10 +363,16 @@ vmap > >gv
 #                           " search word under cursor backward
 *                           " search word under cursor forward
 /pattern                    " search for pattern
-/pattern/{n}                " go to {-+n}th line below/above the match
+/pattern<ctrl-g>            " go to next match without exiting search mode `/`
+/pattern/{-+n}              " put cursor {-+n}th line below/above the match
+/pattern/e{-+n}             " put cursor {-+n}th char before/after match (e)nd
+/pattern/b{-+n}             " put cursor {-+n}th char before/after match (b)egin
 ?pattern                    " search backward for pattern
 /<CR>                       " repeat search in same direction
 ?<CR>                       " repeat search in opposite direction
+/<ctrl-r>/                  " put last search pattern into search mode
+/<ctrl-r><ctrl-w>           " put word under cursor into search mode
+/<ctrl-r><ctrl-a>           " put WORD under cursor into search mode
 /\v{pattern}                " Search forwards using Vim's 'very magic' pattern
                             " special characters can be used without esc seq
 n                           " repeat search in same direction
@@ -369,6 +396,9 @@ g&                          " repeat last substitute on all lines
 :g/regex/m $                " move all matching lines to end of file
 :g/regex/-1j                " for every matching line, go up one line and join
 :%s/\s\+$//e                " remove all trailing whitespaces throughout buffer
+/\%>10l\%<20l{regex}        " search for regex between lines 10-20 (excluding ln 20)
+/\v%>10l%<20l{regex}        " same as above using 'very magic'
+/\%u{xxxx}                  " search for unicode character `u+{xxxx}` (e.g. `u+0061` for `a`)
 ```
 
 **Notes:**
@@ -388,6 +418,33 @@ g&                          " repeat last substitute on all lines
 
     :%s/foo/\=substitute(getline('.'), 'bar','blah','g')
 ```
+
+### More search examples
+```vim
+/^fred.*joe.*bill           " line beginning with fred, followed by joe then bill
+/^[A-J]                     " line beginning A-J
+/^[A-J][a-z]\+\s            " line beginning A-J then one or more lowercase characters then space or tab
+/fred\_.\{-}joe             " fred then anything then joe (over multiple lines)
+/fred\_s\{-}joe             " fred then any whitespace (including newlines) then joe
+/fred\|joe                  " fred OR joe
+```
+
+### More substitution examples
+```vim
+:%s/fred/joe/igc                " general substitute command
+:%s/\r//g                       " delete DOS Carriage Returns (^M)
+:'a,'bg/fred/s/dick/joe/gc      " VERY USEFUL
+:s/\(.*\):\(.*\)/\2 : \1/       " reverse fields separated by :
+" non-greedy matching \{-}      " `:help /\{-}`
+:%s/^.\{-}pdf/new.pdf/          " to first pdf)
+:s/fred/<c-r>a/g                " substitute 'fred' with contents of register 'a'
+:%s/^\(.*\)\n\1/\1$/            " delete duplicate lines
+" running multiple commands
+:%s/suck\|buck/loopy/gc         " ORing
+:s/__date__/\=strftime("%c")/   " insert datestring
+:%s/\f\+\.gif\>/\r&\r/g | v/\.gif$/d | %s/gif/jpg/
+```
+
 ## <a id="searching-multiple-files">Searching multiple files</a>
 ```vim
 :vimgrep /pattern/ {file} " search for pattern in multiple files
@@ -452,6 +509,9 @@ gf              " find and open the file under the cursor
 :windo {ex}     " run :{ex} on all windows (e.g. :windo q - quits all windows)
 :bufdo {ex}     " same as above for buffers
 :on             " make current window the 'only' window (close all others)
+:hide or :q     " hide (close) current window
+:new            " new window in a horizontal split
+:vnew           " new window in a vertical split
 <ctrl-w>o       " same as `:on` above
 <ctrl-w>w       " jump to next window
 <ctrl-w>r       " swap windows 
@@ -528,9 +588,12 @@ zuw                         " undo `zw`
 ## <a id="misc-commands">Misc commands</a>
 ```vim
 :help {keyword}             " view help for {keyword}
+:help {keyword}<ctrl-d>     " list help of matching {keyword}
 :helpgrep {keyword}         " help search for {keyword}, open results with :cwindow
 :read {file}                " read {file} below the cursor
 :!{cmd}                     " execute shell command {cmd}
+:.!{cmd or !!{cmd}          " filter current line through {cmd}
+!!date                      " replace current line with output of `date`
 :read !{cmd}                " read output of {cmd} below cursor
 :<ctrl-f> or q:             " enter command line window, <ctrl-c> or :q to exit
 q/ or q?                    " same as above but for searches
@@ -539,6 +602,9 @@ q/ or q?                    " same as above but for searches
 :source                     " 'source': execute a file as a series of commands
 :source $MYVIMRC            " source your $MYVIMRC
 :retab                      " retab current buffer according to `expandtab` and `shiftwidth`
+:earlier {time}             " revert a file to earlier time, e.g. `earlier 1m`
+:later {time}               " revert a file to later time
+<ctrl-l>                    " clear status message window (error messages, search, etc)
 ```
 
 ## <a id="ctrl-r-and-the-expression-register">Ctrl-R and the Expression Register</a>
@@ -556,6 +622,8 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 <ctrl-r>{reg}               " put register {reg}
 <ctrl-r>={expr}             " put the value of {expr}
 <ctrl-r>=[1,2,3]            " put 1<cr>2<cr>3<cr>
+<ctrl-r>%                   " put file path of current buffer
+<ctrl-r>-                   " put last deleted text
 :<ctrl-r><ctrl-w>           " put word under cursor
 :<ctrl-r><ctrl-a>           " put WORD under cursor (includes punctuation)
 :<ctrl-r><ctrl-l>           " put current cursor line
@@ -583,3 +651,24 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
   We can modify the first line using `ciw(<ctrl-r>+)` which will result in "(one)" but when we repeat the action for "two" the result would still be "(one)" as the actual text is saved in the register. To circumvent this we can use `ciw(<ctrl-r><ctrl-o>+)` instead which inserts the actual command `^R^O+` into the register, that way when we repeat the action with `.` the result would be as expected "(two)".
 
 - For more information regarding `<ctrl-r><ctrl-o>` read `:help i_ctrl-r_ctrl-o` and watch [Drew Neil's vimcast: Pasting from INSERT mode](http://vimcasts.org/episodes/pasting-from-insert-mode/)
+
+### <a id="comparing-buffers-with-vimdiff">Comparing buffers with vimdiff</a>
+
+```vim
+:diffthis               " Edit current windows in diff mode
+:diffoff                " Exit diff mode
+:diffput {bufspec}      " Put diff into {bufspec} from current buffer
+:diffget {bufspec}      " Pull diff from {bufspec} into current buffer
+do                      " diff (o)btain, NORMAL mode for `:diffget`
+dp                      " diff (p)ut, NORMAL mode for `:diffput`
+[c                      " jump to previous (c)hange
+]c                      " jump to next (c)hange
+:windo set scrollbind   " bind all current windows scrolling
+:windo set noscrollbind " unbind all current windows scrolling
+```
+
+**NOTE:** 
+
+- The shortcuts `do` and `dp` also run `:diffupdate`, so the equivalent of `dp` can be thought of as `:diffput {target buffer} | diffupdate`
+
+- `{targetbuffer}` above is automatically resolved as the 'other buffer' on a 2-way split, that works for both `do` and `dp`. However, `do` cannot sensibly decide which buffer to use in a 3-way split (git merge conflict resolution) and therefore cannot be used in this case. `dp` assumes we always want to 'push' changes to the working copy which is always the middle buffer and therefore can be used in a 3-way split from either the left (target) or right (merge) buffers.

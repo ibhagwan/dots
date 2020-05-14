@@ -466,10 +466,16 @@ nnoremap <leader>cS :<C-u>CocList -N --top outline<cr>
 nnoremap <leader>ca :<C-u>CocList -N --top --normal diagnostics<cr>
 nnoremap <leader>cc :<C-u>CocListResume<CR>
 nnoremap <leader>C  :<C-u>CocListResume<CR>
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nnoremap <leader>? :call CocAction("showSignatureHelp")<CR>
 nnoremap <leader>/ :call <SID>show_documentation()<CR>
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
