@@ -61,7 +61,15 @@ endif
 "show the current unicode character value in the statusline
 "https://vim.fandom.com/wiki/Showing_the_ASCII_value_of_the_current_character
 "set statusline=%02n:%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
-set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+"set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+
+" just incase vim-fugitive isn't loaded
+if !exists('*FugitiveStatusline')
+  function! FugitiveStatusline()
+      return ''
+  endfunction
+endif
+set statusline=%<%f%h%m%r\ %{FugitiveStatusline()}%=%b\ 0x%B\ \ %l,%c%V\ %P
 
 " invisible characters to use on ':set list'
 set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:␣
