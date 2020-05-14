@@ -298,6 +298,13 @@ gn              " next occurrence of search pattern
 
 - `gn` is a very useful text object, few examples: `cgn` will change the next search pattern match, `vgn` will visually select all text from the cursor to the next match. For more information read [Bennet Hardwick's blog: 8 Vim tips and tricks for advanced beginners](https://bennetthardwick.com/blog/2019-01-06-beginner-advanced-vim-tips-and-tricks/).
 
+- Any text object can also be used with a count. For example, we have the below text (cursor at ^):
+```vim
+    if (function(param1, param2, param3)) {
+                                 ^
+```
+If we run `di)` we will delete all 3 parameters. However we can also run `d2i(` to delete inside the parent parenthesis, thus deleting the entire condition and resulting in the text `if () {`. I found this very useful tip (and others) in [Antoyo's blog](https://blog.antoyo.xyz/vim-tips).
+
 ## <a id="visual-mode-selections">VISUAL mode selections</a>
 ```vim
 <Esc>           " exit visual mode
