@@ -71,9 +71,9 @@ cmap <C-a> <home>
 cmap <C-e> <end>
 
 " Control-S Save
-nmap <C-S> :w<cr>
-vmap <C-S> <esc>:w<cr>
-imap <C-S> <esc>:w<cr>
+nmap <silent> <C-S> :update<cr>
+vmap <silent> <C-S> <esc>:update<cr>
+imap <silent> <C-S> <esc>:update<cr>
 
 " keep visual selection when (de)indenting
 vmap < <gv

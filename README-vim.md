@@ -26,6 +26,7 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 - [Search and replace](#search-and-replace)
 - [Searching multiple files](#searching-multiple-files)
 - [Macros](#macros)
+    * [Recursive Macros](#recursive-macros)
 - [Marks](#marks)
 - [Files and Windows](#files-and-windows)
 - [Tabs](#tabs)
@@ -89,6 +90,7 @@ T{char}         " jump to (t)ill (one char before) previous occurrence of {char}
 {               " jump to previous paragraph (jumps to next empty line)
 }               " jump to next paragraph (jumps to previous empty line)
 %               " jump to matching parenthesis ([{}])
+{num}%          " jump to buf % (e.g. 50% jump to middle of buffer)
 {num}|          " jump to screen column {num}
 zz or z.        " center screen on cursor
 zb              " scroll the screen so the cursor is at the (b)ottom
@@ -485,10 +487,34 @@ q                       " stop macro recording
 
 - Alternatively, you can resume recording a macro using the capitalized version of the registers, say we started recording into the `q` register with `qq` we can "pause" the macro recording with `q` and later resume recording with `qQ` (note the capitalized `Q`).
 
+- Macros are not limited to the current buffer, if you wish to transform text between windows just add a windows switch command to your macro (e.g. `<ctrl-w>w`). This makes it very useful to mass manipulate text between different buffers.
+
 - A neat trick to running macros quickly is to use the `.` register which is the last inputed text. Let's say we want to run a macro that does the simple task of transposing two adjacent characters `xp`, what we can do is enter INSERT mode, enter the macro keys, press `u` for undo and then execute the macro with `@.`, thus the entire sequence equals `ixp<Esc>u` and now we can run our macro with `@.`. Alternatively, if you'd like your macro to contain a `<cr>` (down one line) you can run `O~$~<Esc>dd` and then run the macro with `2@"` (since our text was 'cut' into the default register) - this will toggle capitalization of the first and last character in 2 subsequent lines.
 
 - Building on the above, the same `xp` macro can be run using the expression register by running `@='xp'` and then repeat the macro execution with `@@`. You can run more complex commands using the full format `{count}@='[commands]'`. For example, running `3@='v2<ctrl-a>w'` on the text `1 5 8` will increment each digit by 2 resulting in `3 7 10`. This example is equivalent to `qqv2<ctrl-a>wq2@q`: which records the edit to macro `q` and then executes it two more times. (note: if you wish to input special characters (`<Esc>`, `<CR>`, etc.) in the command line, prefix the special character with `<ctrl-v>` e.g. `<ctrl-v><Esc>`.
 
+
+### <a id="recursive-macros">Recursive Macros</a>
+
+A recursive macro, as the name suggests, is a macro that calls itself, in Vim, the call is usually done at the end of the macro, so a recursive macro will usually end with a call to itself `@q` followed by `q` to stop the macro recording. A simple recursive macro that deletes all vimscript comments in an entire buffer would look like this:
+```vim
+    qqq             " empty the q register, VERY IMPORTANT, read below why
+    qqf"D+@qq       " execute on one line and record our recursive macro
+    @q              " execute until fail
+```
+
+If you wish to test your macro before executing on the entire buffer you can take advantage of appending to a register using a capitalized register letter, let's re-do our example from above while also testing our macro:
+```vim
+    qqq             " empty the q register, VERY IMPORTANT, read below why
+    qqf"D+q         " execute on one line and record our macro
+    @q              " execute one time and check the results
+    qQ@qq           " execute one more time and add the recursion call
+    @q              " execute until fail
+```
+
+As you can see from above, recursive macros can be very useful if you wish to run a macro on the entire buffer without having to worry about the number of times required to run the macro, it's similar to running `9999@q` (in a file with less than 9999 lines). Note that this is different than running the ex command `:%norm @q`, in the latter case the macro would run on the entire buffer regardless if there are some lines with errors (e.g. can't find the `"`), this gives us the flexibility to choose between the two approaches, if we want to run until failure we use a recursive macro, if we wish to run on the entire buffer regardless of errors we use the `:%norm @{reg}` or `:0,$norm @{reg}` variant.
+
+**Note:** It is VERY IMPORTANT to clean the destination register (`q` in our case) by running `q{reg}q` **before we start the recording**, the reason for this is when you're recording the macro for first time you are also running it when you're adding the recursion call `@q`, if our register isn't empty the register commands will be executed and most likely mess up our edit.
 
 ## <a id="marks">Marks</a>
 ```vim
