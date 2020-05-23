@@ -142,6 +142,7 @@ O               " append (open) a new line above the current line
 <ctrl-e>        " put text from the below line column
 <ctrl-w>        " delete a word backwards
 <ctrl-r>{reg}   " put register {reg}
+<ctrl-g>u       " break the (u)ndo chain
 ```
 
 **Note:** Any NORMAL mode operator can be run from INSERT mode by using `<ctrl-o>{op}` or `<alt+{op}>` (only works on some keyboards). Alternatively, if we're in ex mode we can use `:norm {cmd}`. For example: say we want to append text at the end of the line we can simply press `<alt+A>` or `<ctrl-o>A` which will take us to the end of the line, all without leaving INSERT mode. The same can be achieved from ex mode with `<Esc>:norm A`, even though the latter isn't useful for this specific example it can be useful in many other cases where more complex commands are required (e.g. using the `global` command: `:g/regex/norm >>` will indent all lines matching the regex)
@@ -390,7 +391,9 @@ N                           " repeat search in opposite direction
 g&                          " repeat last substitute on all lines
 :noh                        " remove highlighting of search matches
 :s/old/new/                 " replace first occurrence of old with new
+:s/old/new/i                " replace first occurrence of old with new (case insensitive)
 :s/old/new/g                " replace all old with new throughout line ('globally')
+:%s/old/new                 " replace first occurrence of old with new throughout file
 :%s/old/new/g               " replace all old with new throughout file ('globally')
 :%s/old/new/gc              " replace all old with new throughout file with confirmations
 :%s/old/'&'/g               " surround all occurrences of old with ' (i.e. 'old')
@@ -405,6 +408,8 @@ g&                          " repeat last substitute on all lines
 :g/regex/m $                " move all matching lines to end of file
 :g/regex/-1j                " for every matching line, go up one line and join
 :%s/\s\+$//e                " remove all trailing whitespaces throughout buffer
+:g/^/m0                     " reverse order of all lines in current buffer
+:v/./d                      " delete all empty lines (same as `:g!/./d`)
 /\%>10l\%<20l{regex}        " search for regex between lines 10-20 (excluding ln 20)
 /\v%>10l%<20l{regex}        " same as above using 'very magic'
 /\%u{xxxx}                  " search for unicode character `u+{xxxx}` (e.g. `u+0061` for `a`)
@@ -638,6 +643,8 @@ q/ or q?                    " same as above but for searches
 :earlier {time}             " revert a file to earlier time, e.g. `earlier 1m`
 :later {time}               " revert a file to later time
 <ctrl-l>                    " clear status message window (error messages, search, etc)
+:<ctrl-b>                   " go to start of line in command line mode
+:<ctrl-e>                   " go to end of line in command line mode
 ```
 
 ## <a id="ctrl-r-and-the-expression-register">Ctrl-R and the Expression Register</a>
@@ -648,6 +655,7 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 ```vim
 :registers {reg}            " display registers {reg} and their values
 :display "0                 " display value of registers `"` and `0'
+:{line}put                  " put clipboard register under {line}
 :put{reg}                   " put value of {reg} in the line below
 :put={expr}                 " put value of {expr} in the line below
 :let @{reg}={expr}          " manually assign value to {reg}
