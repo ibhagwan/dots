@@ -19,7 +19,6 @@ set laststatus=2          " 2 = always show status line (filename, etc)
 set scrolloff=3           " min number of lines to keep between cursor and screen edge
 set number                " show the number ruler
 set relativenumber        " show relative numbers in the ruler
-set splitbelow splitright " splits open bottom right
 
 if has('nvim')
   set cursorline          " Show a line where the current cursor is
@@ -136,7 +135,7 @@ set foldenable          " enable folding
 set foldlevelstart=10   " open most folds by default
 set foldnestmax=10      " 10 nested fold max
 set foldmethod=indent   " fold based on indent level
-"set colorcolumn=80     " mark column 80
+set colorcolumn=81      " mark column 80
 set modelines=1         " read a modeline on the last line of the file
 set autoindent          " autoindent
 set smartindent         " add <tab> depending on syntax (C/C++)

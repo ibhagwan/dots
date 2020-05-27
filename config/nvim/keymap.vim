@@ -168,9 +168,9 @@ inoremap <expr>k (pumvisible()?(empty(v:completed_item)?'k':"\<C-p>"):'k')
 inoremap <expr><Tab> (pumvisible()?
   \ (empty(v:completed_item)?"\<C-n>":"\<C-n>"):"\<Tab>")
 
-" <Esc> to close popup menus and delete selection
+" <Esc> to close popup menus (keeping selection)
 " <ctrl-c> will revert selection and switch to normal mode
-inoremap <expr> <Esc> (pumvisible() ? "\<c-e>" : "\<Esc>")
+inoremap <expr> <Esc> (pumvisible() ? "\<c-y>" : "\<Esc>")
 inoremap <expr> <c-c> (pumvisible() ? "\<c-e>\<c-c>" : "\<c-c>")
 
 " Make up/down arrows behave in completion popups

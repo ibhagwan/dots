@@ -630,6 +630,8 @@ zuw                         " undo `zw`
 :helpgrep {keyword}         " help search for {keyword}, open results with :cwindow
 :read {file}                " read {file} below the cursor
 :!{cmd}                     " execute shell command {cmd}
+:!%                         " execute current file
+:!%:p                       " execute current file (use full path)
 :.!{cmd or !!{cmd}          " filter current line through {cmd}
 !!date                      " replace current line with output of `date`
 :read !{cmd}                " read output of {cmd} below cursor
@@ -696,8 +698,8 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 ### <a id="comparing-buffers-with-vimdiff">Comparing buffers with vimdiff</a>
 
 ```vim
-:diffthis               " Edit current windows in diff mode
-:diffoff                " Exit diff mode
+:windo diffthis         " Edit current windows in diff mode
+:windo diffoff          " Exit diff mode
 :diffput {bufspec}      " Put diff into {bufspec} from current buffer
 :diffget {bufspec}      " Pull diff from {bufspec} into current buffer
 do                      " diff (o)btain, NORMAL mode for `:diffget`
