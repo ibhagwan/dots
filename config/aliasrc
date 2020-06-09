@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
+command -v nvim >/dev/null && alias \
+  vi="nvim" vim="nvim" \
+  vidiff="nvim -d" vimdiff="nvim -d"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+  bat="cat /sys/class/power_supply/BAT?/capacity" \
+  mkd="mkdir -pv" \
+  mkdir="mkdir -pv" \
+  ll="ls -l" \
+  la="ls -lA" \
+  ..="cd .." \
+  df="df -h" \
+  du="du -ch" \
+  psxk="ps    --ppid 2 -p 2 --deselect" \
+  psuk="ps u  --ppid 2 -p 2 --deselect" \
+  psak="ps au --ppid 2 -p 2 --deselect"
+  # cp="cp -v" \
+  # mv="mv -v" \
+  # rm="rm -v" \
+
+
+# Colorize commands when possible.
+ls -hN --color=auto > /dev/null 2>&1 && alias \
+  ls="ls -hN --color=auto --group-directories-first" \
+  grep="grep --color=auto" \
+  diff="diff --color=auto" \
+  ccat="highlight --out-format=ansi"
+
+# trick to pass aliases with sudo/doas
+# https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
+alias sudo='sudo '
+alias doas='doas '
+
+
+# https://github.com/chubin/wttr.in
+alias weather='curl http://wttr.in'
+alias weatherny='curl http://wttr.in/New_York'
+alias weatherla='curl http://wttr.in/Los_Angeles'
+alias weatherta='curl http://wttr.in/Tel_Aviv'
+
+# custom programs
+alias influx="influx -precision rfc3339"
+alias dock="~/bin/dock-manager.sh dock"
+alias undock="~/bin/dock-manager.sh undock"
+alias dock-dual="~/bin/dock-manager.sh dock-dual"
+alias alsamixer="alsamixer -c 1"
+alias nextcloud="~/bin/Nextcloud"
+alias joplin="~/bin/Joplin"
+alias cryptomator="GDK_SCALE=2 /bin/cryptomator"
+alias osync="/bin/osync.sh ~/.config/osync/dbx.conf"
+alias dnscrypt-log="sudo tail -f /var/log/dnscrypt-proxy/query.log"
+alias unbound-adblock="sudo unbound-adhosts.sh"
+alias proton-log="journalctl --user -u bridge -f"
+alias open-ports="netstat -tulpn"
+alias open-ports-pid="sudo netstat -tulpn"
+alias fixmywifi="sudo modprobe -r brcmfmac && sudo modprobe brcmfmac"
+alias source-kshrc="source ~/.kshrc"
+alias source-zshrc="source ~/.config/zsh/.zshrc"
+
+if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
+  alias btrfs-snap="btrfs-snap-void"
+  alias unbound-log="sudo tail -f /etc/unbound/log/unbound.log"
+else
+  alias btrfs-snap="btrfs-snap-arch"
+  alias unbound-log="journalctl -u unbound -f"
+fi
