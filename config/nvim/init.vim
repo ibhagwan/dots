@@ -173,8 +173,14 @@ set shada=!,'100,<1000,s100,h
 
 " Python setup
 if has('nvim')
-  let g:python_host_prog  = '/usr/bin/python2'
-  let g:python3_host_prog = '/usr/bin/python3'
+  let platform=system('uname -s')
+  if (match(platform, "Darwin") == 0)
+    let g:python_host_prog  = '/usr/bin/python2'
+    let g:python3_host_prog = '/usr/local/bin/python3'
+  else
+    let g:python_host_prog  = '/usr/bin/python2'
+    let g:python3_host_prog = '/usr/bin/python3'
+  endif
 endif
 
 " Markdown fencing syntax
