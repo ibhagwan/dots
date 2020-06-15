@@ -1,0 +1,8 @@
+{
+  "global": {
+  },
+  "luaVersion": "5.3",
+  "packagePath": "./?.lua;./lain/widget/?.lua;./lain/widget/contrib/?.lua;./themes/ibhagwan/?.lua;./themes/ibhagwan/widgets/?.lua",
+  "cwd": "~/.config/awesome"
+}
+# vim:set ft=json:

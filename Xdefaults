@@ -1,0 +1,153 @@
+! ===== fonts
+Xft.dpi             : 166
+Xft.rgba            : rgb
+Xft.antialias       : 1
+Xft.hinting         : 1
+Xft.autohint        : 0
+Xft.hintstyle       : hintfull
+!Xft.hintstyle      : hintslight
+Xft.lcdfilter       : lcddefault
+
+! fixed is the one true font - use iso10646 for unicode characters
+*font               : -misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1
+
+! ===== colors
+! iTerm2 Theme: Pastel (Dark Background)
+! 0:black 1:red 2: green 3: yellow 4: blue 5: magenta 6: cyan 7: white
+! 8:black 9:red 10:green 11:yellow 12:blue 13:magenta 14:cyan 15:white
+! 8-15 being the bright versions of the above colors (same order)background #323F4E
+*background         : #323F4E
+*foreground         : #F8F8F2
+*cursorColor        : #FFB573
+*color0             : #3D4C5F
+*color1             : #F48FB1
+*color2             : #A1EFD3
+*color3             : #FFFED5
+!color4             : #A5D5FF
+*color4             : #92B6F4
+*color5             : #FFB2FF
+*color6             : #87DFEB
+*color7             : #F1F1F2
+*color8             : #56687E
+*color9             : #EE4F84
+*color10            : #53E2AE
+*color11            : #FFFDC2
+!color12            : #C2E4FF
+*color12            : #6498EF
+*color13            : #FF8FFD
+*color14            : #24D1E7
+!color14            : #24D1E7
+*color15            : #FFFFFF
+
+! ===== xautolock
+Xautolock.time          : 2
+Xautolock.corners       : 0+00
+Xautolock.corneredelay  : 1
+Xautolock.locker        : slock-dpms
+
+
+! ===== urxvt start =====
+!URxvt*background        : #3f3f3f
+URxvt*termName          : xterm-256color
+URxvt*geometry          : 126x39
+URxvt*internalBorder    : 1
+URxvt*saveLines         : 4096
+URxvt*scrollBar         : false
+URxvt*scrollstyle       : plain
+URxvt*font              : xft:monospace:size=7
+URxvt*boldFont          : xft:monospace:size=7:style=Bold
+URxvt*italicFont        : xft:monospace:size=7:style=Italic
+URxvt*boldItalicFont    : xft:monospace:size=7:style=BoldItalic
+!URxvt*fading           : 25%
+URxvt*cursorBlink       : false
+! transparency
+!URxvt*depth            : 32
+!URxvt*background       : rgba:0000/0000/0200/c800
+! fake transparency
+!URxvt*transparent      : true
+!URxvt*shading          : 30
+
+URxvt*perl-lib          : /home/bhagwan/.dots/urxvt-perls
+URxvt*perl-ext-common   : default,clipboard,resize-font
+URxvt*keysym.Mod4-c     : perl:clipboard:copy
+URxvt*keysym.Mod4-v     : perl:clipboard:paste
+URxvt*keysym.Mod4-C-v   : perl:clipboard:paste_escaped
+!URxvt*keysym.Mod4-s     : perl:clipboard:paste_selection
+
+URxvt.clipboard.copycmd   : xsel -ib
+URxvt.clipboard.pastecmd  : xsel -ob
+URxvt.clipboard.ppastecmd : xsel -op
+
+URxvt*perl-ext          : selection,mark-yank-urls
+URxvt*keysym.Mod4-u     : perl:mark-yank-urls:activate_mark_mode
+URxvt*urlLauncher       : "firefox"
+
+URxvt.keysym.Mod4-minus : resize-font:smaller
+URxvt.keysym.Mod4-equal : resize-font:bigger
+URxvt.keysym.Mod4-0     : resize-font:reset
+URxvt.keysym.Mod4-C-0   : resize-font:show
+
+!! Keycode fixes for Ctrl+direction in Vim
+!URxvt*keysym.C-Up      : \033[1;5A
+!URxvt*keysym.C-Down    : \033[1;5B
+!URxvt*keysym.C-Right   : \033[1;5C
+!URxvt*keysym.C-Left    : \033[1;5D
+!URxvt*keysym.C-Prior   : \033[5;5~
+!URxvt*keysym.C-Next    : \033[6;5~
+!URxvt*keysym.C-Home    : \033[7;5~
+!URxvt*keysym.C-End     : \033[8;5~
+
+!Disables the insanely annoying Ctrl+Shift shortcut that enters ISO14755 mode
+URxvt*iso14755          : False
+! ===== urxvt end =====
+
+
+! ===== xterm start =====
+XTerm*background             : #3f3f3f
+!XTerm*utf8                  : 1
+!XTerm*locale                : true
+XTerm*cursorBlink            : false
+! remove the additional black border
+XTerm*borderWidth            : 0
+XTerm*internalBorder         : 2
+! set TERM env variable to use 256 colors
+XTerm*termName               : xterm-256color
+XTerm*VT100*geometry         : 126x39
+XTerm*font                   : xft:monospace:size=7
+XTerm*boldFont               : xft:monospace:size=7:style=Bold
+XTerm*italicFont             : xft:monospace:size=7:style=Italic
+XTerm*boldItalicFont         : xft:monospace:size=7:style=BoldItalic
+! make alt key work normally
+XTerm*vt100.metaSendsEscape  : true
+XTerm*v100.saveLines         : 10240
+XTerm*vt100.scrollBar        : false
+! terminal bell tells the window manager to raise urgent flag
+XTerm*vt100.bellIsUrgent     : true
+! no bold fonts - just use brighter colors
+!XTerm*allowBoldFonts        : false
+! pressing a key automatically scrolls to the bottom
+XTerm*scrollKey              : true
+! dont allow terminal to go fullscreen
+!XTerm*fullscreen             : never
+! clicking a line selects only from the current word forward
+XTerm*cutToBeginningOfLine   : false
+! and dont include a trailing newline in the selection!
+XTerm*cutNewline             : false
+! some black magic to change what characters XTerm considers "word delimiters"
+XTerm*charClass              : 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+! select word on two clicks
+! select whole line on three clicks
+XTerm*on2Clicks              : word
+XTerm*on3Clicks              : line
+! Enable copy/paste with rcmd-c/cmd-v as well as shift+click to copy
+! Open links in firefox with ctrl+shift+click
+XTerm*VT100*Translations	: #override \
+	Shift <Btn1Down>: select-start() \n\
+	Shift <Btn1Motion>: select-extend() \n\
+	Shift <Btn1Up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0) \n\
+	Ctrl Shift <Btn1Up>: exec-formatted("firefox '%t'", PRIMARY) \n\
+	Super <KeyPress> C: copy-selection(PRIMARY, CLIPBOARD) \n\
+	Super <KeyPress> V:  insert-selection(CLIPBOARD, CUT_BUFFER0) \n\
+	Super <KeyPress> S:  insert-selection(PRIMARY) \n
+! ===== xterm end =====
+
