@@ -109,6 +109,11 @@ bindkey -s '^z' 'fg\r'
 # Load zsh-syntax-highlighting; should be last.
 #source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
+# fzf (https://github.com/junegunn/fzf)
+# if installed enable fzf keybinds
+[ -f /usr/share/doc/fzf/completion.zsh ] && source /usr/share/doc/fzf/completion.zsh
+[ -f /usr/share/doc/fzf/key-bindings.zsh ] && source /usr/share/doc/fzf/key-bindings.zsh
+
 # antigen plugin manager
 # https://github.com/zsh-users/antigen
 source ~/.config/zsh/antigen.zsh

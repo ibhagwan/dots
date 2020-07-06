@@ -35,6 +35,7 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 - [Misc Commands](#misc-commands)
 - [Ctrl-R and the Expression Register](#ctrl-r-and-the-expression-register)
 - [Comparing buffers with vimdiff](#comparing-buffers-with-vimdiff)
+- [Folding](#folding)
 
 ## <a id="saving-exiting-vim">Saving & Exiting Vim</a>
 ```vim
@@ -715,3 +716,42 @@ dp                      " diff (p)ut, NORMAL mode for `:diffput`
 - The shortcuts `do` and `dp` also run `:diffupdate`, so the equivalent of `dp` can be thought of as `:diffput {target buffer} | diffupdate`
 
 - `{targetbuffer}` above is automatically resolved as the 'other buffer' on a 2-way split, that works for both `do` and `dp`. However, `do` cannot sensibly decide which buffer to use in a 3-way split (git merge conflict resolution) and therefore cannot be used in this case. `dp` assumes we always want to 'push' changes to the working copy which is always the middle buffer and therefore can be used in a 3-way split from either the left (target) or right (merge) buffers.
+
+## <a id="folding">Folding</a>
+
+Fold methods (set with `set foldmethod=<method>`:
+
+```vim
+manual                  " folds must be defined by commands (i.e. `zf`)
+indent                  " folds are defined by lines of equal indent
+expr                    " folds are defined by `foldexpr`
+marker                  " folds are defined by `{{{` and `}}}`
+sytax                   " folds are defined by syntax highlighting
+diff                    " folds are defined by non-modified text
+```
+
+```vim
+zo                      " open fold under cursor
+zO                      " open folds under cursor recursively
+zc                      " close fold under cursor
+zC                      " close folds under cursor recursively
+za                      " toggle fold under cursor
+zA                      " toggle folds under cursor recursively
+zM                      " close all folds, set `foldlevel` to 0
+zR                      " open all folds, set `foldlevel` to highest level
+zn                      " sets `nofoldenable`, disable folding
+zN                      " set `foldenable`, restore all previous folds
+zi                      " toggle between `foldenable` and `nofoldenable`
+```
+
+Fold management when `foldmethod` is set to `manual` or `marker`:
+
+```vim
+zf{motion}              " create a fold from current line to motion
+{visual}zf              " create a fold around visual selection
+{count}zF               " create a fold for {count} lines
+:{range}fo[ld]          " create a fold for {range} (e.g. `:.,+3fo`)
+zd                      " delete surrounding fold at the cursor
+zD                      " recursively delete surrounding fold
+zE                      " delete all folds in current window
+```

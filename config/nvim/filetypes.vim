@@ -2,7 +2,7 @@
 augroup initvim-vim
   au! BufNewFile,BufFilePre,BufRead *.vim set filetype=vim
     \ expandtab shiftwidth=2 tabstop=2 softtabstop=2
-    \ colorcolumn=81
+    \ colorcolumn=81 foldmethod=marker
 augroup END
 
 " bash

@@ -7,7 +7,7 @@ command -v nvim >/dev/null && alias \
 
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
-  bat="cat /sys/class/power_supply/BAT?/capacity" \
+  batt="cat /sys/class/power_supply/BAT?/capacity" \
   mkd="mkdir -pv" \
   mkdir="mkdir -pv" \
   ll="ls -l" \
@@ -47,6 +47,8 @@ alias influx="influx -precision rfc3339"
 alias dock="~/bin/dock-manager.sh dock"
 alias undock="~/bin/dock-manager.sh undock"
 alias dock-dual="~/bin/dock-manager.sh dock-dual"
+alias lid-bind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/bind"
+alias lid-unbind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/unbind"
 alias alsamixer="alsamixer -c 1"
 alias nextcloud="~/bin/Nextcloud"
 alias joplin="~/bin/Joplin"
@@ -60,11 +62,14 @@ alias open-ports-pid="sudo netstat -tulpn"
 alias fixmywifi="sudo modprobe -r brcmfmac && sudo modprobe brcmfmac"
 alias source-kshrc="source ~/.kshrc"
 alias source-zshrc="source ~/.config/zsh/.zshrc"
+alias dracut-update="echo test | sudo dracut-hook install"
+alias log-rotate="sudo logrotate -v /etc/logrotate.d/dns"
+alias log-rotate-force="sudo logrotate -vf /etc/logrotate.d/dns"
 
-if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
+#if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
   alias btrfs-snap="btrfs-snap-void"
   alias unbound-log="sudo tail -f /etc/unbound/log/unbound.log"
-else
-  alias btrfs-snap="btrfs-snap-arch"
-  alias unbound-log="journalctl -u unbound -f"
-fi
+#else
+#  alias btrfs-snap="btrfs-snap-arch"
+#  alias unbound-log="journalctl -u unbound -f"
+#fi

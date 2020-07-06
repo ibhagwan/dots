@@ -239,6 +239,7 @@ nmap <leader>nf :CocCommand explorer --preset floating<CR>
 "   <leader>;  - Browse currently open buffers in normal mode
 "   <leader>fb - Browse currently open (b)uffers in insert mode
 "   <leader>w  - Browse files in current (w)orking directory
+"   <leader>m  - Browse current (m)arks (output of :marks)
 "   <leader>fm - Browse current (m)arks (output of :marks)
 "   <leader>fc - Browse (c)ommand(:) history
 "   <leader>fs - Browse (s)earch history
@@ -249,9 +250,12 @@ nmap <leader>nf :CocCommand explorer --preset floating<CR>
 "   <leader>fi - Search current directory (i)nteractive mode
 "   <leader>fe - Search current buffer for (e)xpression
 "   <leader>fE - Search current directory for (e)xpression
+"   <leader>fg - Search current buffer (empty expression)
+"   <leader>fG - Search current directory (empty expression)
 "   <leader>F  - Search current directory (empty expression)
 "   <leader>ff - Reuse previous rg search buffer
-"   <leader>fv - Search visually selected text literally
+"   <leader>fv - Search visually selected text literally (buffer)
+"   <leader>fV - Search visually selected text literally (directory)
 "   <leader>fw - Search word under curosr in current buffer
 "   <leader>fW - Search word under curosr in current directory
 "   <leader>gg - Search word under curosr in current directory
@@ -266,15 +270,19 @@ function! s:LeaderfRg(statusline) abort
 endfunction
 
 " Override the default keybinds so they don't pollute our binds
-" we rebind <leader>ff and <leader>fb> anyways
+" we rebind <leader>ff and <leader>fb anyways
 let g:Lf_ShortcutF = "<leader>ff"
 let g:Lf_ShortcutB = "<leader>fb"
+" bang[!] after 'Leaderf!' will open directly in 'normal' mode
+" since it leaves a block cursor in the prompt I use <Tab>
+" at the end of the mapping instead
 noremap <leader>;  :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR><Tab>
-noremap <leader>fb :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR>
+noremap <leader>fb :<C-U><C-R>=<SID>Leaderf("Leaderf buffer", "", 0)<CR><CR><Tab>
 noremap <leader>w  :<C-U><C-R>=<SID>Leaderf("Leaderf file", "", 1)<CR><CR><Tab>
 noremap <leader>fm :<C-U><C-R>=<SID>Leaderf("Leaderf marks", "", 0)<CR><CR><Tab>
-noremap <leader>fc :<C-U><C-R>=<SID>Leaderf("Leaderf cmdHistory", "", 0)<CR><CR>
-noremap <leader>fs :<C-U><C-R>=<SID>Leaderf("Leaderf searchHistory", "", 0)<CR><CR>
+noremap <leader>m  :<C-U><C-R>=<SID>Leaderf("Leaderf marks", "", 0)<CR><CR><Tab>
+noremap <leader>fc :<C-U><C-R>=<SID>Leaderf("Leaderf cmdHistory", "", 0)<CR><CR><Tab>
+noremap <leader>fs :<C-U><C-R>=<SID>Leaderf("Leaderf searchHistory", "", 0)<CR><CR><Tab>
 noremap <leader>fh :<C-U><C-R>=<SID>Leaderf("Leaderf help", "", 0)<CR><CR>
 noremap <leader>fl :<C-U><C-R>=<SID>Leaderf("Leaderf line", "", 0)<CR><CR>
 noremap <leader>fr :<C-U><C-R>=<SID>Leaderf("Leaderf mru", "", 0)<CR><CR><Tab>
@@ -282,12 +290,15 @@ noremap <leader>fo :<C-U><C-R>=<SID>Leaderf("Leaderf colorscheme", "", 0)<CR><CR
 noremap <leader>fi :<C-U><C-R>=<SID>Leaderf("call leaderf#Rg#Interactive()", "", 1)<CR><CR>
 noremap <leader>fe :<C-U><C-R>=<SID>Leaderf("Leaderf rg --current-buffer -e", "", 1)<CR>
 noremap <leader>fE :<C-U><C-R>=<SID>Leaderf("Leaderf rg -e", "", 1)<CR>
+noremap <leader>fg :<C-U><C-R>=<SID>Leaderf("Leaderf rg --current-buffer", "", 1)<CR><CR>
+noremap <leader>fG :<C-U><C-R>=<SID>Leaderf("Leaderf rg", "", 1)<CR><CR>
 noremap <leader>F  :<C-U><C-R>=<SID>Leaderf("Leaderf rg", "", 1)<CR><CR>
-noremap <leader>ff :<C-U><C-R>=<SID>Leaderf("Leaderf! rg --recall", "", 1)<CR><CR>
+noremap <leader>ff :<C-U><C-R>=<SID>Leaderf("Leaderf rg --recall", "", 1)<CR><CR><Tab>
 noremap <leader>ft :<C-U><C-R>=<SID>Leaderf("Leaderf bufTag", "", 0)<CR><CR>
-noremap <leader>fv :<C-U><C-R>=<SID>Leaderf("Leaderf! rg -F -e", leaderf#Rg#visual(), 1)<CR><CR>
+noremap <leader>fv :<C-U><C-R>=<SID>Leaderf("Leaderf! rg --current-buffer -F -e", leaderf#Rg#visual(), 1)<CR><CR>
+noremap <leader>fV :<C-U><C-R>=<SID>Leaderf("Leaderf! rg -F -e", leaderf#Rg#visual(), 1)<CR><CR>
 noremap <leader>fw :<C-U><C-R>=<SID>Leaderf("Leaderf rg --current-buffer -e", expand("<cword>"), 1)<CR><CR><Tab>
-noremap <leader>fW :<C-U><C-R>=<SID>Leaderf("Leaderf rg", expand("<cword>"), 1)<CR><CR>
+noremap <leader>fW :<C-U><C-R>=<SID>Leaderf("Leaderf rg", expand("<cword>"), 1)<CR><CR><Tab>
 noremap <leader>gg :<C-U><C-R>=<SID>LeaderfRg(1)<CR><CR>
 
 " rebind <C-j> and <C-k> for preview popup up/down
@@ -331,7 +342,6 @@ let g:Lf_NormalMap = {
 "   ;          - Browse currently open buffers in normal mode
 "   <leader>rb - Browse currently open buffers in insert mode (filter)
 "   <leader>rz - Reuse previous Denite buffer
-"   <leader>m  - Browse current marks (output of :marks)
 "   <leader>rm - Browse current marks (output of :marks)
 "   <leader>j  - Browse current jumplist (output of :jumps)
 "   <leader>J  - Browse current changelist (output of :changes)
@@ -344,7 +354,6 @@ let g:Lf_NormalMap = {
 "nmap <silent>;  :Denite buffer<CR>
 nmap <leader>rb :Denite buffer<CR>
 nmap <leader>rr :Denite -resume<CR>
-nmap <leader>m  :Denite mark<CR>
 nmap <leader>rm :Denite mark<CR>
 nmap <leader>j  :Denite jump<CR>
 nmap <leader>J  :Denite change<CR>
