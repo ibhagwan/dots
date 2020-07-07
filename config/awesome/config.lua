@@ -37,4 +37,7 @@ module.battery          = "BAT0"
 -- Set resource for temperature widget
 -- module.tempfile      = '/sys/devices/virtual/thermal/thermal_zone1/temp'
 
+-- Wallpaper path
+module.wallpaper_path   = '~/Pictures/Wallpapers/Matcha.jpeg'
+
 return module

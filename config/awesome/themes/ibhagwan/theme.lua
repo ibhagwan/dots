@@ -30,14 +30,16 @@ local config = {
     -- Your city for the weather forcast widget
     city_id = 5368361,
     -- Your color scheme
-    color_scheme = "dark"
+    color_scheme = "dark",
+    -- Wallpaper
+    wallpaper_path = nil
 }
 -- TODO verifying file exists doesn't work...
 if gfs.file_readable(gfs.get_configuration_dir() .. "/config.lua") then
     config = require("config")
 end
 
--- Set the color theme, light is default
+-- Set the color theme, dark is default
 local color_scheme = {}
 if (config.color_scheme == "xrdb") then color_scheme = col_schemes.xrdb()
 elseif (config.color_scheme == "dark") then color_scheme = col_schemes.dark
@@ -64,8 +66,11 @@ theme.icon_theme = config.icon_theme or "HighContrast"
 
 -- Wallpaper
 function theme.wallpaper(s)
-    local filename = "MtEverestWest.jpg"
-    awful.spawn(string.format("feh --bg-fill %s/Pictures/Wallpapers/%s", os.getenv("HOME"), filename))
+    local wallpaper_path = config.wallpaper_path
+    if (wallpaper_path ~= nil and wallpaper_path ~= '') then
+        wallpaper_path = wallpaper_path:gsub("~", os.getenv("HOME"))
+        awful.spawn(string.format('feh --bg-fill "%s"', wallpaper_path))
+    end
 end
 
 -- no gaps for fullscreen mode
