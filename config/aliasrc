@@ -54,8 +54,6 @@ alias nextcloud="~/bin/Nextcloud"
 alias joplin="~/bin/Joplin"
 alias cryptomator="GDK_SCALE=2 /bin/cryptomator"
 alias osync="/bin/osync.sh ~/.config/osync/dbx.conf"
-alias dnscrypt-log="sudo tail -f /var/log/dnscrypt-proxy/query.log"
-alias unbound-adblock="sudo unbound-adhosts.sh"
 alias proton-log="journalctl --user -u bridge -f"
 alias open-ports="netstat -tulpn"
 alias open-ports-pid="sudo netstat -tulpn"
@@ -65,11 +63,17 @@ alias source-zshrc="source ~/.config/zsh/.zshrc"
 alias dracut-update="echo test | sudo dracut-hook install"
 alias log-rotate="sudo logrotate -v /etc/logrotate.d/dns"
 alias log-rotate-force="sudo logrotate -vf /etc/logrotate.d/dns"
+alias btrfs-snap="btrfs-snap-void"
+alias unbound-adblock="sudo unbound-adhosts.sh"
+alias svlog='f(){ tail $2 "/var/log/$1/current";  unset -f f; }; f'
+#alias svlog='f(){ tail -f "/var/log/$@/current";  unset -f f; }; f'
 
-#if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
-  alias btrfs-snap="btrfs-snap-void"
-  alias unbound-log="sudo tail -f /etc/unbound/log/unbound.log"
-#else
-#  alias btrfs-snap="btrfs-snap-arch"
-#  alias unbound-log="journalctl -u unbound -f"
-#fi
+if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
+  alias unbound-log="svlog unbound -f"
+  alias dnscrypt-log="svlog dnscrypt-proxy -f"
+  alias xbps-cacherm-obsolete="xcleancache.sh pruneme 1"
+  alias xbps-cacherm-uninstalled="xcleancache.sh notinstalled"
+else
+  alias unbound-log="journalctl -u unbound -f"
+  alias dnscrypt-log="sudo tail -f /var/log/dnscrypt-proxy/query.log"
+fi
