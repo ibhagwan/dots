@@ -106,7 +106,14 @@ call plug#end()
 let g:coc_global_extensions = [
       \ "coc-explorer",
       \ "coc-lua",
+      \ "coc-tsserver",
+      \ "coc-css",
+      \ "coc-html",
+      \ "coc-json",
+      \ "coc-prettier",
   \]
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 let g:coc_explorer_global_presets = {
 \   '.nvim': {

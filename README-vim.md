@@ -1,6 +1,6 @@
 # iBhagwan's (n)vim cheatsheet
 
-\*\*This cheatsheet was inspired by [Hackjutsu's Vim cheatsheet](https://github.com/hackjutsu/vim-cheatsheet).
+\*\*This cheatsheet was inspired by [Hackjutsu's Vim cheatsheet](https://github.com/hackjutsu/vim-cheatsheet) and Laurent Gregoire's excellent [Vim Quick Reference Card](http://tnerual.eriogerg.free.fr/vimqrc.html).
 
 I've been using vi for over 20 years but always limited it's use for basically only editing \*nix system config files, recently I (re-)discovered (n)vim as the magical editor that it is and decided to make it my main editor for coding, writing markdown and the likes so down the rabbit hole I went. The more I researched the more I fell in love with the software, the below is the accumulation of all my notes and findings.
 
@@ -16,17 +16,24 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 ### Table of contents:
 
 - [Saving & Exiting Vim](#saving-exiting-vim)
-- [NORMAL mode navigation](#normal-mode-navigation)
-- [INSERT mode](#insert-mode)
-- [NORMAL mode editing](#normal-mode-editing)
-- [Cut, copy & paste](#cut-copy-and-paste)
+- [Navigation](#navigation)
+    + [Movement](#movement)
+    + [Scrolling](#scrolling)
+- [Editing](#Editing)
+    + [Insert & Exit](#insert-exit)
+    + [Undo & Repeat](#undo-repeat)
+    + [Basic Editing](#basic-editing)
+    + [INSERT mode](#insert-mode)
+    + [Cut, copy & paste](#cut-copy-and-paste)
+- [VISUAL mode](#visual-mode)
+    + [Selections](#selections)
+    + [Operators](#operators)
 - [Text Objects](#text-objects)
-- [VISUAL mode selections](#visual-mode-selections)
-- [VISUAL mode operations](#visual-mode-operations)
-- [Search and replace](#search-and-replace)
-- [Searching multiple files](#searching-multiple-files)
+- [Search & Replace](#search-replace)
+    + [REGEX Examples](#regex-examples)
+    + [Multiple Files](#multiple-files)
 - [Macros](#macros)
-    * [Recursive Macros](#recursive-macros)
+    + [Recursive Macros](#recursive-macros)
 - [Marks](#marks)
 - [Files and Windows](#files-and-windows)
 - [Tabs](#tabs)
@@ -40,62 +47,71 @@ If you'd like to take your Vim to the next level, I highly recommend watching al
 ## <a id="saving-exiting-vim">Saving & Exiting Vim</a>
 ```vim
 :w              " write the current file
-:wq {file}      " write to {file} and quit
 :w {file}       " write to {file}
+:wq {file}      " write to {file} and quit
 :saveas {file}  " write to {file}
+:update {file}  " write only if buffer was modified
 :w !sudo tee %  " write the current file using sudo
-:wq or :x or ZZ " write the current file and quit
+:wq :x ZZ       " write the current file and quit
 :q              " quit (fails if there are unsaved changes)
-:q! or ZQ       " quit and throw away unsaved changes
+:q! ZQ          " quit and throw away unsaved changes
 :cq             " quit Vim with exit code
 ```
 
 **NOTE:** the `:cq` command is useful in situations when we need to exit-cancel, for example when running `<Esc>v` in bash shell `set -o vi`, when exiting using `:cq` the command won't be executed automatically. Another example is when exiting the output window of `git rebase`, `:cq` will cancel the rebase operation.
 
-## <a id="normal-mode-navigation">NORMAL mode navigation</a>
+## <a id="navigation">Navigation</a>
+### <a id="movement">Movement</a>
 ```vim
     k           " up
-h       l       " left-right
+h       l       " left, right
     j           " down
 ```
 ```vim
-+               " move to start of line below
--               " move to start of line above
-H               " move to top of screen    [H]igh
-M               " move to middle of screen [M]iddle
-L               " move to bottom of screen [L]ow
-w               " jump forwards to the start of a word
-W               " jump forwards to the start of a WORD (words can contain punctuation)
-e               " jump forwards to the end of a word
-E               " jump forwards to the end of a WORD (words can contain punctuation)
-ge              " jump backwards to the end of a word
-gE              " jump backwards to the end of a WORD (words can contain punctuation)
-b               " jump backwards to the start of a word
-B               " jump backwards to the start of a WORD (words can contain punctuation)
-0               " jump to the start of the line
-^               " jump to the first non-blank character of the line
-$               " jump to the end of the line
-g_              " jump to the last non-blank character of the line
-gg              " go to the first line of the document
-G               " go to the last line of the document
-{num}G          " go to line number {num} (NORMAL mode)
-:{num}<CR>      " to to line number {num} (ex mode)
-f{char}         " jump to next occurrence of character {char}
-F{char}         " jump to previous occurrence of character {char}
-t{char}         " jump to (t)ill (one char before) next occurrence of {char}
-T{char}         " jump to (t)ill (one char before) previous occurrence of {char}
-{count};        " repeat last f, t, F or T in the same direction {count} times
-{count},        " repeat last f, t, F or T in the opposite direction {count} times
-(               " jump to previous sentence (jumps after the next '.' or EOL)
-)               " jump to next sentence (jumps after the previous '.' or EOL)
-{               " jump to previous paragraph (jumps to next empty line)
-}               " jump to next paragraph (jumps to previous empty line)
++ -             " first non-blank char line above, below
+H M L           " [H]igh, [M]iddle, [L]ow line of the window
+{n}H {n}L       " line {n} from the top, bottom of the window
+b w             " beginning of word left, right (punctuation considered words)
+B W             " beginning of WORD left, right (spaces separate words)
+e ge            " end of word left, right (punctuation considered words)
+E gE            " end of WORD left, right (spaces separate words)
+0 g0            " start of the line, visual-line
+^ g^            " first non-blank character of the line, visual-line
+$ g$            " last character of the line, visual-line (include <CR>)
+_ g_            " first, last non-blank character of the line (not including <CR>)
+{n}_            " down {n-1} lines on first non-blank character
+gm              " middle of the line
+{n}gg {n}G      " goto line {n}, default first, last line of buffer
+:{n}<CR>        " goto line {n}, (ex mode)
+{n}%            " jump to buf % (e.g. 50% jump to middle of buffer)
+{n}|            " jump to screen column {n} of current line
+f{c} F{c}       " next, previous occurrence of character {c}
+t{c} T{c}       " before ([t]ill) next, previous occurrence of {c}
+; ,             " repeat last fFtT in the same, opposite direction
+( )             " previous, next sentence (jumps after the next '.' or EOL)
+{ }             " previous, next paragraph (jumps to next empty line)
 %               " jump to matching parenthesis ([{}])
-{num}%          " jump to buf % (e.g. 50% jump to middle of buffer)
-{num}|          " jump to screen column {num}
+[[ ]]           " backward, forward start section
+[] ][           " backward, forward end of section
+[( ])           " backward, forward unclosed (, )
+[{ ]}           " backward, forward unclosed {, }
+```
+**Note:** When navigating lines with `hjkl^$`, if a line is too long and is wrapped, pressing `j` will move down to the next line even if the current line is wrapping 2 or more lines, to go down 1 "visual" line use `gj` instead. The `g` prefix works the same for other navigation commands `hjkl^$` (`g^` and `g$` for start and end of visual line). A very useful mapping is to map `<up><down>` or `jk` to move by visual lines as long as they aren't prefixed with {count} so we can still use up and down motions (e.g. `10j`) for whole lines:
+
+```
+nnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
+vnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
+nnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
+vnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
+```
+
+### <a id="scrolling">Scrolling</a>
+```vim
 zz or z.        " center screen on cursor
-zb              " scroll the screen so the cursor is at the (b)ottom
-zt              " scroll the screen so the cursor is at the (t)op
+zb or z-        " scroll the screen so the cursor is at the (b)ottom
+zt or z<cr>     " scroll the screen so the cursor is at the (t)op
+zh zl           " scroll one character to the left, right
+zH zL           " scroll half screen to the left, right
 <ctrl-b>        " move back one full screen
 <ctrl-f>        " move forward one full screen
 <ctrl-d>        " move forward 1/2 a screen
@@ -107,66 +123,43 @@ zt              " scroll the screen so the cursor is at the (t)op
 ``              " jump to last jump location
 `.              " jump to last edit location
 '.              " jump to start of line of last edit
-g;              " cycle backwards in `:changes` (edit locations)
-g,              " cycle forwards in `:changes` (edit locations)
-ga              " display dec/hex/oct values of character under cursor
-g8              " display hex value of utf-8 character under cursor
-g?              " rot13 a character (cycle 13 alphanumeric chars backwards)
-ggg?G           " rot13 entire buffer
+g; g,           " cycle backwards, forwards in `:changes` (edit locations)
 ```
 
-**Note:** When navigating lines with `hjkl^$`, if a line is too long and is wrapped, pressing `j` will move down to the next line even if the current line is wrapping 2 or more lines, to go down 1 "visual" line use `gj` instead. The `g` prefix works the same for other navigation commands `hjkl^$` (`g^` and `g$` for start and end of visual line). A very useful mapping is to map `<up><down>` or `jk` to move by visual lines as long as they aren't prefixed with {count} so we can still use up and down motions (e.g. `10j`) for whole lines:
-
-```
-nnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
-vnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
-nnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
-vnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
-```
-
-## <a id="insert-mode">INSERT mode</a>
+## <a id="Editing">Editing</a>
+### <a id="insert-exit">Insert & Exit</a>
 ```vim
 <Esc>           " exit insert mode
 <ctrl-c>        " exit insert mode
-i               " insert before the cursor
-I               " insert at the beginning of the line
-a               " insert (append) after the cursor
-A               " insert (append) at the end of the line
-o               " append (open) a new line below the current line
-O               " append (open) a new line above the current line
-```
-### When in INSERT mode (most work also in ex mode):
-```vim
-<ctrl-u>        " undo edit on current line, <BS><CR> on empty lines
-<ctrl-d>        " delete from start of line to first non-blank character
-<ctrl-y>        " put text from the above line column
-<ctrl-e>        " put text from the below line column
-<ctrl-w>        " delete a word backwards
-<ctrl-r>{reg}   " put register {reg}
-<ctrl-g>u       " break the (u)ndo chain
+i a             " insert before, after the cursor
+I A             " insert at beginning, end of line
+gI              " insert at first column
+o O             " open a new line below, above the current line
+R               " enter REPLACE mode, cursor overwrites everything
+gR              " like R but without affecting layout
 ```
 
-**Note:** Any NORMAL mode operator can be run from INSERT mode by using `<ctrl-o>{op}` or `<alt+{op}>` (only works on some keyboards). Alternatively, if we're in ex mode we can use `:norm {cmd}`. For example: say we want to append text at the end of the line we can simply press `<alt+A>` or `<ctrl-o>A` which will take us to the end of the line, all without leaving INSERT mode. The same can be achieved from ex mode with `<Esc>:norm A`, even though the latter isn't useful for this specific example it can be useful in many other cases where more complex commands are required (e.g. using the `global` command: `:g/regex/norm >>` will indent all lines matching the regex)
-
-## <a id="normal-mode-editing">NORMAL mode editing</a>
+### <a id="undo-repeat">Undo & Repeat</a>
 ```vim
-u               " undo
-U               " undo all changes to current line
+u U             " undo last command, restore last changed line
 <ctrl-r>        " redo
 .               " repeat last edit
-{count}.        " repeat last edit {count} times
+{n}.            " repeat last edit {n} times
 ```
+
+### <a id="basic-editing">Basic Editing</a>
 ```vim
-x               " delete a single character (on cursor)
-X               " delete a single character (before cursor)
-r               " replace a single character
-R               " enter REPLACE mode, cursor overwrites everything
+x X             " delete a single character under, before cursor
+{n}x {n}X       " repeat x, X {n} times
+r{c}            " replace character under cursor with {c}
+gr{c}           " like r, without affecting layout
 ~               " switch case a single character
-J               " join line below to the current one (with space)
-gJ              " join line below to the current one (no space)
-dd              " delete (cut) entire line 
+g~{m}           " switch case of motion {m} (i.e. `g~iw~` for word)
+gu{m} gU{m}     " lower, upper case of motion {m}
+J gJ            " join current line with next, without space
+dd D            " delete (cut) entire line, to end of line
 dw              " delete (cut) to the next word
-cc              " change (replace) entire line
+cc C            " change (replace) entire line, to end of line
 cw              " change (replace) to the end of the current word
 caw             " change (replace) the current word (including spaces)
 ciw             " change (replace) the current word (not including spaces)
@@ -174,7 +167,6 @@ ce              " change (replace) forwards to the end of a word
 cb              " change (replace) backwards to the start of a word
 c0              " change (replace) to the start of the line
 c$              " change (replace) to the end of the line
-C               " change (replace) to the end of the line
 c/pattern       " change (replace) to first occurrence of 'pattern'
 s               " delete character and substitute text (equal to `cl`)
 S               " delete line and substitute text (equal to `cc`)
@@ -191,27 +183,47 @@ gg=G            " re-indent entire buffer
 {num}<ctrl-a>   " find number in current line and increment by {num}
 {count}:        " will translate {count} to :{range} in ex mode
 ```
-
 **Notes:**
 - All (c)hange commands end with the editor in INSERT mode
 
-- All double-char commands (i.e. `dd`, `cc`, `yy`, etc) can be thought of as a shortcut to `0{operator}V$` (we use `<shift-v>` to switch to linewise VISUAL mode so that `$` will include the EOL), the breakdown is as follows:
+- All double-char commands (i.e. `dd`, `cc`, `yy`, etc) can be thought of as a shortcut to `0{operator}$`, the breakdown is as follows:
 ```vim
     0           " go to the start of the line
     {operator}  " {operator} of your choice
-    V           " enter linewise VISUAL mode
     $           " go the end of the line
 ```
 
 - The above can also be combined with a {count} prefix, for example 2dd will delete 2 lines below. A similar result could also be achieved using the full expression of the operator and motion: `{operator}{count}{motion}`, i.e. `d1j` will delete 2 lines down (cursor line + 1 down) and `y2w` will yank 2 words forward. In similar fashion the VISUAL mode operator `v` can be used, e.g. `vi}` will visually select everything inside the curly braces.
 
-## <a id="cut-copy-and-paste">Cut, copy and paste</a>
+### <a id="insert-mode">INSERT mode</a>
 ```vim
-p               " (p)ut or (p)aste clipboard after cursor
-P               " (p)ut or (p)aste clipboard before cursor
-]p              " put text and align indentation with surroundings
+<ctrl-w>        " delete a word backwards
+<ctrl-u>        " undo edit on current line, <BS><CR> on empty lines
+<ctrl-d>        " shift left one shift width
+<ctrl-y>        " put text from the above line column
+<ctrl-e>        " put text from the below line column
+<ctrl-r>{reg}   " put register {reg}
+<ctrl-g>u       " break the (u)ndo chain
+<ctrl-v>{c}     " insert char {c} literally
+<ctrl-v>{n}     " insert char by decimal value
+<ctrl-v>u{n}    " insert unicode char by decimal value
+<ctrl-a>        " insert previously inserted text (equal to `<ctrl-r>.`)
+<ctrl-@@>       " same as <ctrl-a> + exit INSERT mode
+<ctrl-p>        " auto-complete after cursor
+<ctrl-n>        " auto-complete before cursor
+<ctrl-o>{cmd}   " execute one NORMAL mode command (see below note)
+<alt-{cmd}>     " like <ctrl-o>, does not work on all keyboards
+^x^e ^x^y       " scroll up, down
+```
+**Note:** Any NORMAL mode motion can be run from INSERT mode by using `<ctrl-o>{op}` or `<alt+{op}>` (only works on some keyboards). Alternatively, if we're in ex mode we can use `:norm {cmd}`. For example: say we want to append text at the end of the line we can simply press `<alt+A>` or `<ctrl-o>A` which will take us to the end of the line, all without leaving INSERT mode. The same can be achieved from ex mode with `<Esc>:norm A`, even though the latter isn't useful for this specific example it can be useful in many other cases where more complex commands are required (e.g. using the `global` command: `:g/regex/norm >>` will indent all lines matching the regex)
+
+### <a id="cut-copy-and-paste">Cut, copy and paste</a>
+```vim
+p P             " (p)ut or (p)aste clipboard after, before cursor
+]p [P           " like p, P with indent adjusted
+gp gP           " like p, P leaving cursor after new text
 yy              " yank (copy) a line
-{count}yy       " yank (copy) {count} lines
+{n}yy           " yank (copy) {n} lines
 yl              " yank a single character (l = to the right)
 vy              " yank a single character (using VISUAL mode)
 yw              " yank (copy) to the next word
@@ -219,22 +231,22 @@ yiw             " yank (copy) (i)nner word (entire word)
 yaw             " yank (copy) (a) word (entire word, including spaces
 y$              " yank (copy) to end of line
 dd              " delete (cut) a line
-{count}dd       " delete (cut) {count} lines
+{n}dd           " delete (cut) {n} lines
 dw              " delete (cut) to the next word
 D               " delete (cut) to the end of the line
 d$              " delete (cut) to the end of the line
 d^              " delete (cut) to the first non-blank character of the line
 d0              " delete (cut) to the beginning of the line
 d/pattern       " delete (cut) to first occurrence of 'pattern'
-x               " delete (cut) character under the cursor
-X               " delete (cut) character before the cursor
+x X             " delete (cut) character under, before the cursor
 "+p             " paste the `+` register (the clipboard)
 "0p             " paste the yank `0` register
 "{reg}p         " paste {reg} (:registers)
 "{reg}yy        " yank current line into {reg} (:registers)
 "_dd            " delete line into the 'blackhole' register (no clipboard)
+
 ```
-Copy paste using ex mode:
+**Copy paste using ex mode:**
 ```vim
 :{range}y           " yank {range} into the default register
 :{range}m{line}     " move {range} below {line}
@@ -256,7 +268,7 @@ Copy paste using ex mode:
     xnoremap Y <Esc>y$gv
 ```
 
-- By default all modification operators `dcx` copy the modified text to the unnamed `"` register (unless `set clipboard` was set) which can be confusing at first. For example, let's say we want to overwrite a word with yanked text, we would naturally do `ciw<Esc>p` or `ciw<ctrl-r>"` only to find out the same word would be pasted (and not our yanked text), to work around that we can tell the `c` operator to copy the text into the 'blackhole' register instead: `"_ciw`. Alternatively we can also use the yank register `0` which contains the content of the last yank operation using `"0p` or `"0P` (to paste before the cursor). A few useful mappings for my leader key (by default `\`, personally I use `\<space>`) are below, so if I want to change a word without it polluting my registers I would run `<leader>bciw`, similarly if I wish to delete a line I would run `<leader>dd`:
+- By default all modification operators `d c x` copy the modified text to the unnamed `"` register (unless `set clipboard` was set) which can be confusing at first. For example, let's say we want to overwrite a word with yanked text, we would naturally do `ciw<Esc>p` or `ciw<ctrl-r>"` only to find out the same word would be pasted (and not our yanked text), to work around that we can tell the `c` operator to copy the text into the 'blackhole' register instead: `"_ciw`. Alternatively we can also use the yank register `0` which contains the content of the last yank operation using `"0p` or `"0P` (to paste before the cursor). A few useful mappings for my leader key (by default `\`, personally I use `\<space>`) are below, so if I want to change a word without it polluting my registers I would run `<leader>bciw`, similarly if I wish to delete a line I would run `<leader>dd`:
 
 ```vim
     nnoremap <leader>b "_
@@ -271,6 +283,66 @@ Copy paste using ex mode:
 
 - In addition to being copied to the default register (`"` or `*`), every 'deleted' text is also copied into the 'small delete' registers {1-9}. To view the latest deletes run `:reg[isters]` or `:di[splay]`. A neat trick to cycle through the delete registers is to use `"1p` and then run `u.`, the undo+repeat advances the 'pasted register' so it will perform `"2p`, `"3p` and so forth.
 
+## <a id="visual-mode">VISUAL mode</a>
+### <a id="selections">Selections</a>
+```vim
+<Esc>           " exit visual mode
+<ctrl-c>        " exit visual mode
+v               " start VISUAL mode in 'character' mode
+V               " start VISUAL mode in 'line' mode
+<ctrl-v>        " start VISUAL mode in 'block' mode
+o               " move to other end of marked area
+O               " move to other corner of block
+$               " select to end of line (include newline)
+g_              " select to end of line (exclude newline)
+aw              " select a word
+ab              " select a block with ()
+aB              " select a block with {}
+ib              " select inner block with ()
+iB              " select inner block with {}
+gv              " NORMAL mode: reselect last visual selection
+```
+
+**Notes:**
+- The above are just some of the available commands as any text object or motion can be used, e.g. `viw` will visually select current word or `vat` will select an entire tag: `<a>some text</a>`
+
+- A neat trick you can do with VISUAL mode is using visual modes as motion operators, If you perform `d2j`, it will delete all three lines. That’s because `j` is a linewise motion. If you instead pressed `d<c-V>2j`, it would convert the motion to blockwise and delete just the column characters instead. For more information read [Hillel Wayne's blog: At least one Vim trick you might not know](https://www.hillelwayne.com/post/intermediate-vim/).
+
+- VISUAL mode has a nice feature to expand selection based on blocks, say we wanted to select the inside of an `if` condition in C, we do so with `vi(` or `vi)`, if we wanted to expand the selection to the outer block we can just run `i{` or `i}` (without having to cancel the selection and press `v` again).
+
+### <a id="operators">Operators</a>
+```vim
+~               " switch case
+d               " delete
+c               " change
+y               " yank
+>               " indent right 
+<               " indent left 
+!               " filter through external command 
+=               " re-indent line (using 'equalprg' if specified)
+gq              " format lines to 'textwidth' length (cursor moves to end)
+gw              " format lines to 'textwidth' length (cursor stays in place)
+gu              " make selection lower-case
+gU              " make selection UPPER-case
+v<ctrl-a>       " increment digit under the cursor
+{num}<ctrl-a>   " increment current selection by {num} (lines separately increment)
+{num}<ctrl-x>   " decrement current selection by {num} (lines separately decrement)
+{num}g<ctrl-a>  " increment current selection by {num} (lines serially increment)
+```
+
+**Notes:**
+- Some operators, namely the repeat `.` and paste `pP` operators have unique behaviors when used after a VISUAL 'block' mode edit, that is extremely useful when editing text as blocks. Say we wanted to append semicolon to the end of a paragraph we could simply do `<ctrl-v>}A;<Esc>` we can then repeat the operation using `.` which will replicate the change to the same block range under the cursor. Similarly we can use the paste before and after the cursor `p` and `P` to paste entire columns, the following will duplicate the first column of a paragraph: `<ctrl-v>}yp` which you can easily undo as an atomic operation with `u`.
+
+- If you want to preform an {ex} command on visual selection press `:` (with selected visuals), vim will automatically prefix your ex command with the visual range `:'<,'>` so you can execute any command on the selected text, e.g. `:'<,'>norm @q` will execute macro `q` on all visually selected lines.
+
+- A shortcut to the above can be done with the bang `!` operator, this will automatically put is in ex command mode with the visual selection already entered, the equivalent of `:'<,'>!` ready for entering a command, this is useful in many situations, for example to sort a visual block we can just do `viB!sort` which is the equivalent `viB:!sort`. The same can also be done from NORMAL mode using `!iBsort`.
+
+- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](config/nvim/keymap.vim):
+
+```vim
+vmap < <gv
+vmap > >gv
+```
 ## <a id="text-objects">Text Objects</a></a>
 ```vim
 aw              " a word (includes surrounding white space
@@ -309,70 +381,10 @@ gn              " next occurrence of search pattern
 ```
 If we run `di)` we will delete all 3 parameters. However we can also run `d2i(` to delete inside the parent parenthesis, thus deleting the entire condition and resulting in the text `if () {`. I found this very useful tip (and others) in [Antoyo's blog](https://blog.antoyo.xyz/vim-tips).
 
-## <a id="visual-mode-selections">VISUAL mode selections</a>
+## <a id="search-replace">Search & Replace</a>
 ```vim
-<Esc>           " exit visual mode
-<ctrl-c>        " exit visual mode
-v               " start VISUAL mode in 'character' mode
-V               " start VISUAL mode in 'line' mode
-<ctrl-v>        " start VISUAL mode in 'block' mode
-o               " move to other end of marked area
-O               " move to other corner of block
-$               " select to end of line (include newline)
-g_              " select to end of line (exclude newline)
-aw              " select a word
-ab              " select a block with ()
-aB              " select a block with {}
-ib              " select inner block with ()
-iB              " select inner block with {}
-gv              " NORMAL mode: reselect last visual selection
-```
-
-**Notes:**
-- The above are just some of the available commands as any text object or motion can be used, e.g. `viw` will visually select current word or `vat` will select an entire tag: `<a>some text</a>`
-
-- A neat trick you can do with VISUAL mode is using visual modes as motion operators, If you perform `d2j`, it will delete all three lines. That’s because `j` is a linewise motion. If you instead pressed `d<c-V>2j`, it would convert the motion to blockwise and delete just the column characters instead. For more information read [Hillel Wayne's blog: At least one Vim trick you might not know](https://www.hillelwayne.com/post/intermediate-vim/).
-
-- VISUAL mode has a nice feature to expand selection based on blocks, say we wanted to select the inside of an `if` condition in C, we do so with `vi(` or `vi)`, if we wanted to expand the selection to the outer block we can just run `i{` or `i}` (without having to cancel the selection and press `v` again).
-
-## <a id="visual-mode-operations">VISUAL mode operations</a>
-```vim
-~               " switch case
-d               " delete
-c               " change
-y               " yank
->               " indent right 
-<               " indent left 
-!               " filter through external command 
-=               " re-indent line (using 'equalprg' if specified)
-gq              " format lines to 'textwidth' length (cursor moves to end)
-gw              " format lines to 'textwidth' length (cursor stays in place)
-gu              " make selection lower-case
-gU              " make selection UPPER-case
-v<ctrl-a>       " increment digit under the cursor
-{num}<ctrl-a>   " increment current selection by {num} (lines separately increment)
-{num}<ctrl-x>   " decrement current selection by {num} (lines separately decrement)
-{num}g<ctrl-a>  " increment current selection by {num} (lines serially increment)
-```
-
-**Notes:**
-- Some operators, namely the repeat `.` and paste `pP` operators have unique behaviors when used after a VISUAL 'block' mode edit, that is extremely useful when editing text as blocks. Say we wanted to append semicolon to the end of a paragraph we could simply do `<ctrl-v>}A;<Esc>` we can then repeat the operation using `.` which will replicate the change to the same block range under the cursor. Similarly we can use the paste before and after the cursor `p` and `P` to paste entire columns, the following will duplicate the first column of a paragraph: `<ctrl-v>}yp` which you can easily undo as an atomic operation with `u`.
-
-- If you want to preform an {ex} command on visual selection press `:` (with selected visuals), vim will automatically prefix your ex command with the visual range `:'<,'>` so you can execute any command on the selected text, e.g. `:'<,'>norm @q` will execute macro `q` on all visually selected lines.
-
-- A shortcut to the above can be done with the bang `!` operator, this will automatically put is in ex command mode with the visual selection already entered, the equivalent of `:'<,'>!` ready for entering a command, this is useful in many situations, for example to sort a visual block we can just do `viB!sort` which is the equivalent `viB:!sort`. The same can also be done from NORMAL mode using `!iBsort`.
-
-- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](config/nvim/keymap.vim):
-
-```vim
-vmap < <gv
-vmap > >gv
-```
-
-## <a id="search-and-replace">Search and replace</a>
-```vim
-#                           " search word under cursor backward
-*                           " search word under cursor forward
+# *                         " search word under cursor backward, forward
+g# or g*                    " like #, * but also find partial matches
 /pattern                    " search for pattern
 /pattern<ctrl-g>            " go to next match without exiting search mode `/`
 /pattern/{-+n}              " put cursor {-+n}th line below/above the match
@@ -386,8 +398,7 @@ vmap > >gv
 /<ctrl-r><ctrl-a>           " put WORD under cursor into search mode
 /\v{pattern}                " Search forwards using Vim's 'very magic' pattern
                             " special characters can be used without esc seq
-n                           " repeat search in same direction
-N                           " repeat search in opposite direction
+n N                         " repeat search in same, opposite direction
 & or :&&                    " repeat last substitute in the same line
 g&                          " repeat last substitute on all lines
 :noh                        " remove highlighting of search matches
@@ -434,7 +445,8 @@ g&                          " repeat last substitute on all lines
     :%s/foo/\=substitute(getline('.'), 'bar','blah','g')
 ```
 
-### More search examples
+### <a id="regex-examples">REGEX Examples</a>
+### Search examples
 ```vim
 /^fred.*joe.*bill           " line beginning with fred, followed by joe then bill
 /^[A-J]                     " line beginning A-J
@@ -444,7 +456,7 @@ g&                          " repeat last substitute on all lines
 /fred\|joe                  " fred OR joe
 ```
 
-### More substitution examples
+### Substitution examples
 ```vim
 :%s/fred/joe/igc                " general substitute command
 :%s/\r//g                       " delete DOS Carriage Returns (^M)
@@ -460,7 +472,7 @@ g&                          " repeat last substitute on all lines
 :%s/\f\+\.gif\>/\r&\r/g | v/\.gif$/d | %s/gif/jpg/
 ```
 
-## <a id="searching-multiple-files">Searching multiple files</a>
+### <a id="multiple-files">Multiple Files</a>
 ```vim
 :vimgrep /pattern/ {file} " search for pattern in multiple files
 :copen                    " open the 'quickfix` window containing all matches
@@ -476,6 +488,7 @@ q                       " stop macro recording
 @{a-z}                  " execute macro {a-z}
 {count}@{a-z}           " execute macro {a-z} on {count} lines
 @@                      " repeat execution of last macro
+:@{reg}                 " execute {reg} as an ex command
 @:                      " repeat execution of last ex command e.g. `:s/...`
 @.                      " execute last inserted text as macro
 @='[cmds]'              " execute commands through the expression register
@@ -626,6 +639,16 @@ zuw                         " undo `zw`
 
 ## <a id="misc-commands">Misc commands</a>
 ```vim
+K                           " lookup keyword under cursor with `man`
+ga                          " display dec/hex/oct values of character under cursor
+g8                          " display hex value of utf-8 character under cursor
+g?                          " rot13 a character (cycle 13 alphanumeric chars backwards)
+ggg?G                       " rot13 entire buffer
+<ctrl-l>                    " redraw window, clear status message (error messages, search, etc)
+<ctrl-g>                    " display filename and position
+g<ctrl-g>                   " display cursor, line and column position
+```
+```vim
 :help {keyword}             " view help for {keyword}
 :help {keyword}<ctrl-d>     " list help of matching {keyword}
 :helpgrep {keyword}         " help search for {keyword}, open results with :cwindow
@@ -645,7 +668,6 @@ q/ or q?                    " same as above but for searches
 :retab                      " retab current buffer according to `expandtab` and `shiftwidth`
 :earlier {time}             " revert a file to earlier time, e.g. `earlier 1m`
 :later {time}               " revert a file to later time
-<ctrl-l>                    " clear status message window (error messages, search, etc)
 :<ctrl-b>                   " go to start of line in command line mode
 :<ctrl-e>                   " go to end of line in command line mode
 ```
@@ -696,8 +718,7 @@ The expression register (`=`) is used to evaluate expressions and can be accesse
 
 - For more information regarding `<ctrl-r><ctrl-o>` read `:help i_ctrl-r_ctrl-o` and watch [Drew Neil's vimcast: Pasting from INSERT mode](http://vimcasts.org/episodes/pasting-from-insert-mode/)
 
-### <a id="comparing-buffers-with-vimdiff">Comparing buffers with vimdiff</a>
-
+## <a id="comparing-buffers-with-vimdiff">Comparing buffers with vimdiff</a>
 ```vim
 :windo diffthis         " Edit current windows in diff mode
 :windo diffoff          " Exit diff mode
@@ -718,7 +739,6 @@ dp                      " diff (p)ut, NORMAL mode for `:diffput`
 - `{targetbuffer}` above is automatically resolved as the 'other buffer' on a 2-way split, that works for both `do` and `dp`. However, `do` cannot sensibly decide which buffer to use in a 3-way split (git merge conflict resolution) and therefore cannot be used in this case. `dp` assumes we always want to 'push' changes to the working copy which is always the middle buffer and therefore can be used in a 3-way split from either the left (target) or right (merge) buffers.
 
 ## <a id="folding">Folding</a>
-
 Fold methods (set with `set foldmethod=<method>`:
 
 ```vim
