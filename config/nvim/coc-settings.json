@@ -23,7 +23,7 @@
     "explorer.file.showHiddenFiles": true,
     "explorer.openAction.strategy": "sourceWindow",
 
-    "explorer.keyMappings": {
+    "explorer.keyMappings.global": {
         "s"       : "open:split",
         "S"       : "open:split:plain",
         "b"       : "open:split",
@@ -36,7 +36,7 @@
     },
 
     "lua.enable"      : "true",
-    "lua.commandPath" : "~/.config/coc/extensions/coc-lua-data/tools/bin/lua-lsp",
+    "__lua.commandPath" : "~/.config/coc/extensions/coc-lua-data/tools/bin/lua-lsp",
 
     "languageserver": {
         "ccls": {

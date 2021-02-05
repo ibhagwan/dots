@@ -37,6 +37,55 @@ export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 #export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 
+# Prevent launching `at-spi-bus-launcher|at-spi2-registryd`
+export NO_AT_BRIDGE=1
+
+# Configure fzf, command line fuzzyf finder
+# https://github.com/samoshkin/dotfiles/blob/master/variables.sh
+#
+# Keybinds:
+# F2        - Preview file (right side pane)
+# F3        - Preview file (full screen)
+# F4        - Edit with $EDITOR
+# <ctrl-f>  - Scroll page down
+# <ctrl-b>  - Scroll page up
+# <ctrl-d>  - Scroll half page down
+# <ctrl-u>  - Scroll half page up
+# <ctrl-a>  - Select all and accept (enter)
+# <ctrl-y>  - Copy path to clipboard (requires xclip)
+# <ctrl-x>  - Delete selected files
+# 
+# use `bat` for preview if installed
+if [ -x /usr/bin/bat ]; then
+  export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --preview='[[ \$(file --dereference --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:nowrap' --bind='f4:execute($EDITOR {}),f3:execute(bat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-f:page-down,ctrl-b:page-up,ctrl-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard),ctrl-x:execute(rm -i {+})+abort',ctrl-w:toggle-preview-wrap,ctrl-l:clear-query"
+else
+  export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --bind='f4:execute($EDITOR {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-f:page-down,ctrl-b:page-up,ctrl-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard),ctrl-x:execute(rm -i {+})+abort',ctrl-w:toggle-preview-wrap,ctrl-l:clear-query"
+fi
+
+# Use git-ls-files inside git repo, otherwise rg
+# https://github.com/BurntSushi/ripgrep
+if [ -x /usr/bin/rg ]; then
+  RG_OPTS="--files --no-ignore --hidden --follow -g '!{.git,node_modules}/*' 2> /dev/null"
+  export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard || rg $RG_OPTS"
+  export FZF_CTRL_T_COMMAND="rg $RG_OPTS"
+fi
+
+# use `fd` if installed
+# https://github.com/sharkdp/fd
+if [ -x /usr/bin/fd ]; then
+  FD_OPTS="--hidden --follow --exclude .git --exclude node_modules"
+  export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard || fd --type f --type l $FD_OPTS"
+  export FZF_CTRL_T_COMMAND="fd $FD_OPTS"
+  export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS . ~"
+  #export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS"
+fi
+
+# bat options
+# https://github.com/sharkdp/bat
+# for list of themes `bat --list-themes`
+export BAT_PAGER="less -R"
+export BAT_THEME="Monokai Extended"
+
 
 # ksh
 if [ ! -z "$KSH_VERSION" ]; then

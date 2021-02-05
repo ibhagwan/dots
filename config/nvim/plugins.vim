@@ -57,6 +57,9 @@ command! PU PlugUpdate | PlugUpgrade
 
 call plug#begin(stdpath('data') . '/plugged')
 
+  " OCS52 yank
+  Plug 'ojroques/vim-oscyank'
+
   " suda plugin, enable overwriting files with sudo
   " `let g:suda_smart_edit=1` enables auto switch when target is not readable
   Plug 'lambdalisue/suda.vim'
@@ -68,15 +71,19 @@ call plug#begin(stdpath('data') . '/plugged')
   " Git integration
   Plug 'tpope/vim-fugitive'
 
-  " Denite
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+  " fzf needs no introduction
+  "Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  " workaround to the error:
+  " 'Post-update hook for fzf ... /usr/share/nvim/runtime/install not found'
+  Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+  Plug 'junegunn/fzf.vim'
 
-  " LeaderF
-  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-  Plug 'Yggdroot/LeaderF-marks'
+  " fzf checkout
+  Plug 'stsewd/fzf-checkout.vim'
 
   " Intellisense Engine
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 
   " Markdown preview
   "Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
@@ -88,6 +95,74 @@ call plug#end()
 "
 " {{{ Plugin Settings
 "
+
+" override ocsyank terminal auto detection, set as tmux
+" I use this mostly for ssh yanks from a host running tmux
+let g:oscyank_term = 'tmux'
+
+" fzf options
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+" let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.8, 'yoffset': 0, 'border': 'bottom', 'highlight': 'Todo' } }
+" let g:fzf_layout = { 'down': '~40%' } " use terminal window
+" let g:fzf_layout = { 'window': 'enew' } " use vim window
+
+" <F2>        toggle preview
+" <C-w>       toggle preview text wrap
+" <C-d>|<C-u> half page down|up
+" <C-l>       clear query
+let $FZF_DEFAULT_OPTS = '--layout=reverse --preview-window="border:nowrap" --info=inline --multi --bind="f2:toggle-preview,ctrl-w:toggle-preview-wrap,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-f:page-down,ctrl-b:page-up,ctrl-a:toggle-all,ctrl-l:clear-query"'
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+" Ctrl-q allows to select multiple elements an open them in quick list
+let g:fzf_action = {
+      \ 'ctrl-q': function('s:build_quickfix_list'),
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
+
+" Prefix all fzf.vim exported commands with "Fzf"
+let g:fzf_command_prefix = 'Fzf'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" Preview window options
+let g:fzf_preview_window = ['right:50%:nowrap']
+
+" Fzf quickfix browser
+source ~/.config/nvim/fzf-qf.vim
+
+" Coc mappings for fzf lists https://github.com/antoinemadec/coc-fzf
+let g:coc_fzf_preview='down:50%:nohidden'
+let g:coc_fzf_opts=['--layout=reverse', '--info=inline', '--multi']
+
+" Define fzf-checkout only actions as branch, checkout, diff, delete
+" we use <ctrl-x> to maintain confirmity with our zsh map
+let g:fzf_branch_actions = {
+      \ 'delete': {'keymap': 'ctrl-x'},
+      \ 'diff': {
+      \   'prompt': 'Diff> ',
+      \   'execute': 'Git diff {branch}',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-f',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'checkout': {
+      \   'prompt': 'Checkout> ',
+      \   'execute': 'echo system("{git} checkout {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'enter',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \}
+
 
 " coc.nvim note regarding workspace folders:
 " https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders
@@ -148,124 +223,4 @@ let g:mkdp_auto_close = 0
 " previm
 let g:previm_open_cmd = 'firefox'
 
-" LeaderF settings
-" don't show the help in normal mode
-let g:Lf_HideHelp = 1
-let g:Lf_UseCache = 0
-let g:Lf_UseVersionControlTool = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-let g:Lf_ShowRelativePath = 1
-let g:Lf_CursorBlink = 0
-let g:Lf_StlColorscheme = 'dark'
-let g:Lf_JumpToExistingWindow = 1
-" popup mode
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PopupPosition =  [1, 0]
-let g:Lf_PopupPreviewPosition = 'bottom'
-let g:Lf_PopupShowStatusline = 1
-let g:Lf_PreviewInPopup = 1
-let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "Monospace" }
-let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
-
-let g:Lf_RgConfig = [
-        \ "--max-columns=150",
-        \ "--glob=!git/*",
-        \ "--hidden"
-    \ ]
-
-
-
-" === Denite setup ==="
-" offcial doc:
-"   https://github.com/Shougo/denite.nvim/blob/master/doc/denite.txt
-" Shougo's own vim.rc:
-"   https://github.com/Shougo/shougo-s-github/blob/master/vim/rc/plugins/denite.rc.vim
-"   https://github.com/Shougo/shougo-s-github/blob/master/vim/rc/deinlazy.toml#L146-L219
-" Caleb Taylor's config:
-"   https://github.com/ctaylo21/jarvis/tree/master/config/nvim
-"
-
-" TODO: fix: make denite window cursor line have no bg
-hi CursorLineNoBg ctermfg=7 ctermbg=NONE cterm=bold,underline
-function s:DeniteCursorLine()
-  if (bufname('%') =~ "denite")
-    :set winhighlight=CursorLine:CursorLineNoBg
-    return v:true
-  else
-    return v:false
-  endif
-endfunction
-"autocmd BufEnter * call s:DeniteCursorLine()
-
-" Wrap in try/catch to avoid errors on initial install before plugin is available
-try
-
-" Use ripgrep for searching current directory for files
-" By default, ripgrep will respect rules in .gitignore
-"   --files: Print each file that would be searched (but don't search)
-"   --glob:  Include or exclues files for searching that match the given glob
-"            (aka ignore .git files)
-"
-"call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '*'])
-
-" Use ripgrep in place of "grep"
-call denite#custom#var('grep', 'command', ['rg'])
-
-" Custom options for ripgrep
-"   --vimgrep:  Show results with every match on it's own line
-"   --hidden:   Search hidden directories and files
-"   --heading:  Show the file name above clusters of matches from each file
-"   --S:        Search case insensitively if the pattern is all lowercase
-call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
-
-" Recommended defaults for ripgrep via Denite docs
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-" Remove date from buffer list
-call denite#custom#var('buffer', 'date_format', '')
-
-" Custom options for Denite
-"   auto_resize             - Auto resize the Denite window height automatically.
-"   prompt                  - Customize denite prompt
-"   direction               - Specify Denite window direction as directly below current pane
-"   winminheight            - Specify min height for Denite window
-"   highlight_mode_insert   - Specify h1-CursorLine in insert mode
-"   prompt_highlight        - Specify color of prompt
-"   highlight_matched_char  - Matched characters highlight
-"   highlight_matched_range - matched range highlight
-let s:denite_options = {'default' : {
-\ 'split': 'floating',
-\ 'filter_split_direction': 'floating',
-\ 'start_filter': v:false,
-\ 'auto_resize': v:true,
-\ 'source_names': 'short',
-\ 'prompt': 'λ ',
-\ 'highlight_matched_char': 'QuickFixLine',
-\ 'highlight_matched_range': 'Visual',
-\ 'highlight_window_background': 'Visual',
-\ 'highlight_filter_background': 'DiffAdd',
-\ 'winrow': 1,
-\ 'vertical_preview': v:true,
-\ 'floating_preview': v:false
-\ }}
-
-" Loop through denite options and enable them
-function! s:profile(opts) abort
-  for l:fname in keys(a:opts)
-    for l:dopt in keys(a:opts[l:fname])
-      call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
-    endfor
-  endfor
-endfunction
-
-call s:profile(s:denite_options)
-catch
-  echo 'Denite not installed. It should work after running :PlugInstall'
-endtry
-
 " }}}
-

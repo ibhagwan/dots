@@ -196,6 +196,21 @@ let g:markdown_fenced_languages = [
       \ 'bash=sh'
       \ ]
 
+" Clear all registers on init
+if !exists('*ClearRegisters')
+  function! ClearRegisters()
+    "let regs='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-="*+'
+    " do not clear clipboard buffers
+    let regs='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-="'
+    let i=0
+    while (i<strlen(regs))
+        exec 'let @'.regs[i].'=""' 
+        let i=i+1
+    endwhile
+  endfunction
+endif
+command! ClearRegisters call ClearRegisters()
+
 " don't use our plugins and extended settings
 " if we're executing this from sudo/doas
 let id=system('id -u')
@@ -224,6 +239,20 @@ if has("autocmd")
   "  autocmd!
   "  autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
   "augroup END
+
+  " Clear registers on (re-)start
+  augroup initvim-clearreg
+    autocmd!
+    autocmd VimEnter * ClearRegisters
+  augroup END
+
+  " Wrap long lines when using vimdiff: https://stackoverflow.com/a/17329864/2855717.
+  " FilterWritePre doesn't work, BufEnter kinda works (requires buffer switch)
+  augroup initvim-diffwrap
+    autocmd!
+    "autocmd FilterWritePre * if &diff | setlocal wrap< | endif
+    autocmd BufEnter * if &diff | setlocal wrap< | endif
+  augroup END
 
   " Sync syntax from the start of the file when opening a buffer
   " otherwise syntax highlight might get out of sync when scrolling

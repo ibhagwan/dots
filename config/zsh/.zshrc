@@ -113,6 +113,17 @@ bindkey -s '^z' 'fg\r'
 # if installed enable fzf keybinds
 [ -f /usr/share/doc/fzf/completion.zsh ] && source /usr/share/doc/fzf/completion.zsh
 [ -f /usr/share/doc/fzf/key-bindings.zsh ] && source /usr/share/doc/fzf/key-bindings.zsh
+# Arch linux paths
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+
+# totp command complettion (`pip install totp)
+# https://pypi.org/project/totp/
+# https://github.com/WhyNotHugo/totp-cli/blob/master/contrib/totp-cli-completion.zsh
+# 
+#[ -f ~/.config/zsh/totp-cli-completion.zsh ] && source ~/.config/zsh/totp-cli-completion.zsh
+# The above doesn't work, instead copy the file as `_totp` to:
+# `/usr/share/zsh/functions/Completion/Zsh/_totp`
 
 # antigen plugin manager
 # https://github.com/zsh-users/antigen
