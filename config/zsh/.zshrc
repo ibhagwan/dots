@@ -127,6 +127,8 @@ bindkey -s '^z' 'fg\r'
 
 # antigen plugin manager
 # https://github.com/zsh-users/antigen
+# Install nightly version to workaround the $ADOTDIR bug:
+# `curl -L git.io/antigen-nightly > antigen.zsh`
 source ~/.config/zsh/antigen.zsh
 
 # Syntax highlighting bundle.
