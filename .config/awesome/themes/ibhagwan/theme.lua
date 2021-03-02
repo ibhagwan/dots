@@ -148,7 +148,7 @@ function theme.at_screen_connect(s)
             wibox.widget.systray(),
             wibox_widgets.mem(),
             wibox_widgets.cpu(),
-            wibox_widgets.temp(),
+            wibox_widgets.temp(config.tempfile),
             --wibox_widgets.fs(),
             wibox_widgets.kbd({
                 font = theme.font,

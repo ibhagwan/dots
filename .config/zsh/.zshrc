@@ -116,6 +116,9 @@ bindkey -s '^z' 'fg\r'
 # Arch linux paths
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+# OSX paths
+[ -f /usr/local/opt/fzf/shell/completion.zsh ] && source /usr/local/opt/fzf/shell/completion.zsh
+[ -f /usr/local/opt/fzf/shell/key-bindings.zsh ] && source /usr/local/opt/fzf/shell/key-bindings.zsh
 
 # totp command complettion (`pip install totp)
 # https://pypi.org/project/totp/
@@ -124,6 +127,9 @@ bindkey -s '^z' 'fg\r'
 #[ -f ~/.config/zsh/totp-cli-completion.zsh ] && source ~/.config/zsh/totp-cli-completion.zsh
 # The above doesn't work, instead copy the file as `_totp` to:
 # `/usr/share/zsh/functions/Completion/Zsh/_totp`
+
+# Don't use an yplugins for root
+if [ "$EUID" -ne 0 ]; then
 
 # antigen plugin manager
 # https://github.com/zsh-users/antigen
@@ -195,3 +201,5 @@ antigen theme denysdovhan/spaceship-prompt
 
 # We're done antigen!
 antigen apply
+
+fi # if [ "$EUID" -ne 0 ]; then

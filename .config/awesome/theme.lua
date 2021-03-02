@@ -20,7 +20,7 @@ local theme = dofile(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- Wallpaper
 function theme.wallpaper(s)
-    local filename = "MtEverestWest.jpg"
+    local filename = "EverestValley.jpg"
     awful.spawn(string.format("feh --bg-fill %s/Pictures/Wallpapers/%s", os.getenv("HOME"), filename))
 end
 

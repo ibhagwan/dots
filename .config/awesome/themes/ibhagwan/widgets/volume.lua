@@ -26,8 +26,8 @@ local markup = lain.util.markup
 local INC_VOLUME_CMD = 'amixer -D pulse sset %s 5%%+'
 local DEC_VOLUME_CMD = 'amixer -D pulse sset %s 5%%-'
 local TOG_VOLUME_CMD = 'amixer -D pulse sset %s toggle']]--
-local GET_VOLUME_CMD = "sh -c \'pacmd list-sinks | grep -A 15 \"\\* index\"" ..
-    "| grep \"^[[:space:]]volume:\\|muted:\" \'"
+local GET_VOLUME_CMD = "sh -c \'pactl list sinks | grep -A 15 \"Sink\"" ..
+    "| grep \"^[[:space:]]Volume:\\|Mute:\" \'"
 local INC_VOLUME_CMD = 'pactl list short sinks | cut -f1 |' ..
     'while read -r line; do pactl set-sink-volume $line +5%%; done'
 local DEC_VOLUME_CMD  = 'pactl list short sinks | cut -f1 |' ..
@@ -165,7 +165,7 @@ local function worker(args)
     end
 
     local mute_from_stdout_pacmd = function(stdout)
-        local mute = string.match(stdout, "muted:%s(%a+)")   -- \muted:\D? - yes or no
+        local mute = string.match(stdout, "Mute:%s(%a+)")   -- \Mute:\D? - yes or no
         if mute == "yes" then mute = "off" end
         --gdebug.print_error(string.format("stdout:\n%s\tmute: '%s'", stdout, mute))
         return mute

@@ -22,8 +22,12 @@ alias \
   # mv="mv -v" \
   # rm="rm -v" \
 
+# Colorize commands when possible (OSX)
+ls -GFHh > /dev/null 2>&1 && alias \
+  ls="ls -GFHh" \
+  grep="grep --color=auto"
 
-# Colorize commands when possible.
+# Colorize commands when possible (Linux/BSD).
 ls -hN --color=auto > /dev/null 2>&1 && alias \
   ls="ls -hN --color=auto --group-directories-first" \
   grep="grep --color=auto" \
@@ -51,7 +55,10 @@ alias lid-bind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/bind"
 alias lid-unbind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/unbind"
 alias alsamixer="alsamixer -c 1"
 alias nextcloud="~/bin/Nextcloud"
-alias joplin="~/bin/Joplin"
+# To install joplin:
+# `mkdir ~/.joplin-bin/lib/node_modules`
+# `NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`
+alias joplin="~/.joplin-bin/bin/joplin"
 alias cryptomator="GDK_SCALE=2 /bin/cryptomator"
 alias osync="/bin/osync.sh ~/.config/osync/dbx.conf"
 alias proton-log="journalctl --user -u bridge -f"
@@ -63,10 +70,17 @@ alias source-zshrc="source ~/.config/zsh/.zshrc"
 alias dracut-update="echo test | sudo dracut-hook install"
 alias log-rotate="sudo logrotate -v /etc/logrotate.d/dns"
 alias log-rotate-force="sudo logrotate -vf /etc/logrotate.d/dns"
-alias btrfs-snap="btrfs-snap-void"
 alias unbound-adblock="sudo unbound-adhosts.sh"
 alias svlog='f(){ tail $2 "/var/log/$1/current";  unset -f f; }; f'
 #alias svlog='f(){ tail -f "/var/log/$@/current";  unset -f f; }; f'
+alias temp-core="grep \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_label; grep \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_input | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
+alias temp-zone="grep \"\" /sys/class/thermal/thermal_zone?/temp; grep \"\" /sys/class/thermal/thermal_zone?/temp  | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
+
+if [ $EUID -ne 0 ]; then
+  alias btrfs-snap="btrfs-snap-void"
+else
+  alias btrfs-snap="~bhagwan/bin/btrfs-snap-void"
+fi
 
 if command -v lsb_release > /dev/null 2>&1 && [ $(lsb_release -sc) = "void" ]; then
   alias unbound-log="svlog unbound -f"

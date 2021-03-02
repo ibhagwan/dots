@@ -1,7 +1,8 @@
 --- Separating Multiple Monitor functions as a separeted module (taken from awesome wiki)
 
-local awful     = require("awful")
-local naughty   = require("naughty")
+local gtable  = require("gears.table")
+local spawn   = require("awful.spawn")
+local naughty = require("naughty")
 
 -- A path to a fancy icon
 local icon_path = ""
@@ -16,7 +17,7 @@ local function outputs()
          local output = line:match("^([%w-]+) connected ")
          if output then
             outputs[#outputs + 1] = output
-         end
+                                   end
       end
       xrandr:close()
    end
@@ -37,12 +38,12 @@ local function arrange(out)
       local new = {}
       for _, p in pairs(previous) do
          for _, o in pairs(out) do
-            if not awful.util.table.hasitem(p, o) then
-               new[#new + 1] = awful.util.table.join(p, {o})
+            if not gtable.hasitem(p, o) then
+               new[#new + 1] = gtable.join(p, {o})
             end
          end
       end
-      choices = awful.util.table.join(choices, new)
+      choices = gtable.join(choices, new)
       previous = new
    end
 
@@ -66,7 +67,7 @@ local function menu()
       end
       -- Disabled outputs
       for _, o in pairs(out) do
-         if not awful.util.table.hasitem(choice, o) then
+         if not gtable.hasitem(choice, o) then
             cmd = cmd .. " --output " .. o .. " --off"
          end
       end
@@ -95,7 +96,7 @@ local function naughty_destroy_callback(reason)
      reason == naughty.notificationClosedReason.dismissedByUser then
     local action = state.index and state.menu[state.index - 1][2]
     if action then
-      awful.util.spawn(action, false)
+      spawn(action, false)
       state.index = nil
     end
   end
@@ -117,7 +118,7 @@ local function xrandr()
       label = "Keep the current configuration"
       state.index = nil
    else
-      label, action = unpack(next)
+      label, action = next[1], next[2]
    end
    state.cid = naughty.notify({ text = label,
                                 icon = icon_path,

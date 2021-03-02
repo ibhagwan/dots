@@ -2,8 +2,13 @@
 #
 # sh/ksh initialization
 
-PATH=/usr/lib/ccache/bin:$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/opt/X11/bin:/opt/local/bin:$HOME/.local/bin:$HOME/.config/coc/extensions/coc-lua-data/tools/bin:$HOME/.gem/ruby/2.7.0/bin
+PATH=/usr/lib/ccache/bin:$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/opt/X11/bin:/opt/local/bin:$HOME/.local/bin:$HOME/.config/coc/extensions/coc-lua-data/tools/bin
 export PATH HOME TERM
+
+# golang variables
+export GOROOT=/usr/lib/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # use nvim if installed, vi default
 case "$(command -v nvim)" in
@@ -110,3 +115,10 @@ export GOLFVIM=nvim
 # `$ pip3 install vimgolf`
 # https://github.com/dstein64/vimgolf
 export GOLF_VIM=nvim
+
+
+# workaround for Wasabi-Wallet
+# https://github.com/zkSNACKs/WalletWasabi/issues/1223
+# SSL version should match output of:
+# ❯ xbps-query -l | grep libssl
+export CLR_OPENSSL_VERSION_OVERRIDE=48

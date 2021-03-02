@@ -30,14 +30,17 @@ awful.rules.rules = {
           "Galculator",
           "gsimplecal",
           "TelegramDesktop",
+          "Signal",
           "MEGAsync",
           "KeePassXC",
+          "electrum",
         },
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
         -- and the name shown there might not match defined rules here.
         name = {
           "bar",             -- lemonbar
+          "OTPClient",
         },
         role = {
           "AlarmWindow",     -- Thunderbird's calendar.
@@ -53,10 +56,15 @@ awful.rules.rules = {
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     { rule = { class = "TelegramDesktop" }, properties = { tag = "1" } },
+    { rule = { class = "Signal" },          properties = { tag = "1" } },
     { rule = { class = "firefox" },         properties = { tag = "4" } },
     { rule = { class = "Thunderbird" },     properties = { tag = "3" } },
     { rule = { class = "code-oss" },        properties = { tag = "5" } },
-    { rule = { class = "libreoffice-writer" },  properties = { tag = "6" } },
-    { rule = { instance = "libreoffice" },  properties = { tag = "6" } },
+    { rule = { class = "Joplin" },          properties = { tag = "5" } },
+    { rule = { class = "electrum" },        properties = { tag = "5" } },
+    { rule = { class = "libreoffice-writer" },  properties = { tag = "5" } },
+    { rule = { instance = "libreoffice" },  properties = { tag = "5" } },
+    { rule = { name  = "Wasabi Wallet" },   properties = { tag = "6" } },
+    { rule = { class = "cryptowatch_desktop" },   properties = { tag = "5" } },
 }
 -- }}}
