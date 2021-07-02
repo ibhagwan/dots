@@ -1,6 +1,6 @@
 ## dots
 
-My current setup (awesome-wm) as shown [here](https://www.reddit.com/r/unixporn/comments/h9r23q/awesomewm_minimalist_pragmatic_setup/). If you're looking for my vim-cheatsheet [click here](https://github.com/ibhagwan/dots/blob/master/README-vim.md).
+My current setup (awesome-wm) as shown [here](https://www.reddit.com/r/unixporn/comments/h9r23q/awesomewm_minimalist_pragmatic_setup/). If you're looking for my vim-cheatsheet [click here](https://github.com/ibhagwan/vim-cheatsheet).
 
 ![UnixPorn](https://github.com/ibhagwan/dots/raw/master/screenshots/unixporn.png)
 
