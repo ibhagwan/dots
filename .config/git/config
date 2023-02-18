@@ -1,0 +1,163 @@
+[user]
+  name  = bhagwan
+  email = bhagwan@disroot.org
+  signingKey = ~/.ssh/git
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+        allowedSignersFile = ~/.config/git/allowed_signers
+
+[credential]
+  helper =
+  ;helper = store
+
+[pager]
+	branch = false
+	status = false
+
+[core]
+  editor       = nvim
+  whitespace   = cr-at-eol
+  ; git prints non-ASCII file names in quoted octal notation,
+  ; i.e. "\nnn\nnn...", disable to display UTF-8 chars
+  quotepath    = off
+
+[apply]
+  whitespace = warn
+
+[help]
+  ; do not automatically run autocorrect commands
+  autocorrect = 0
+
+[pull]
+  ;rebase = true
+  ;default pull is fast-forward only
+  ;use `git pr` to pull --rebase
+  ff = only
+
+[push]
+  default = simple
+
+[commit]
+  verbose = true
+  gpgsign = true
+
+[tag]
+  gpgsign = true
+
+[diff]
+  tool = vimdiff
+  renames = copy
+
+[difftool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE
+
+[merge]
+  tool = vimdiff
+  ;conflictStyle = diff3
+
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[color]
+  diff   = auto
+  status = auto
+  branch = auto
+  ui     = true
+
+[alias]
+  a     = add
+  ai    = add --interactive
+  ap    = add --patch
+  b     = branch 
+  br    = branch
+  ba    = branch --all
+  bd    = branch --delete
+  c     = commit
+  cm    = commit -m
+  cam   = commit -am
+  ca    = commit --amend
+  fx    = commit --fixup
+  co    = checkout
+  cb    = checkout -b
+  cp    = cherry-pick
+  d     = diff
+  ds    = diff --stat
+  dc    = diff --cached
+  dcs   = diff --cached --stat
+  f     = fetch
+  fo    = fetch origin
+  l     = log --pretty=oneline
+  lp    = log --patch
+  ls    = log --stat
+  lg    = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'
+  m     = merge
+  ma    = merge --abort
+  mt    = mergetool
+  pl    = pull --ff-only
+  ps    = push
+  psf   = push --force
+  pr    = pull --rebase=true
+  rc    = rebase --continue
+  rs    = rebase --skip
+  ra    = rebase --abort
+  ri    = rebase --interactive
+  rr    = rebase --interactive --root
+  ria   = rebase --interactive --autosquash
+  rv    = remote --verbose
+  s     = status
+  st    = status -sbu
+  sb    = status -sb
+  sta   = stash
+  sa    = stash apply
+  sl    = stash list
+  sp    = stash pop
+  ss    = stash show
+  ;undo-commit   undo last commit, preserve local changes
+  ;undo-staging  unstage all changes, preserve local changes
+  ;reset-hard    discard all changes since last commit
+  ;reset-origin  reset repository to remote origin
+  ;reset-pull    discard local changes & pull from origin
+  undo-commit   = reset --mixed HEAD^1
+  undo-staging  = reset --mixed HEAD
+  reset-hard    = reset --hard HEAD
+  reset-origin  = reset --hard origin/master
+  reset-pull    = "!f(){ git reset --hard HEAD && git pull --rebase; }; f"
+  squash-all    = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
+
+[delta]
+  dark = true
+  side-by-side = false
+  line-numbers = true
+  line-numbers-minus-style = "#ff0051"
+  line-numbers-plus-style = "#03e57f"
+  line-numbers-zero-style = "#aaaaaa"
+  line-numbers-left-style = "#1688f0"
+  line-numbers-right-style = "#1688f0"
+  ; plus-style = syntax "#004433"
+  ; plus-emph-style = syntax bold "#007800"
+  ; plus-style = syntax "#450eff"
+  ; plus-emph-style = syntax "#03a4ff"
+  ; minus-style = normal "#990017"
+  ; minus-emph-style = normal "#de004e"
+  ;
+  ; bat symtax-theme
+  syntax-theme = Visual Studio Dark+
+
+  ; file-style = omit
+  ; hunk-header-decoration-style = omit
+  ; hunk-header-file-style = magenta
+  ; hunk-header-line-number-style = dim magenta
+  ; hunk-header-style = file line-number syntax
+  ; minus-emph-style = bold red 52
+  ; minus-empty-line-marker-style = normal "#3f0001"
+  ; minus-non-emph-style = dim red
+  ; minus-style = bold red
+  ; plus-emph-style = bold green 22
+  ; plus-empty-line-marker-style = normal "#002800"
+  ; plus-non-emph-style = dim green
+  ; plus-style = bold green
+  ; whitespace-error-style = reverse red
+  ; zero-style = dim syntax

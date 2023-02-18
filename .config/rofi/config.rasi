@@ -1,0 +1,82 @@
+// https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown
+configuration {
+	dpi: 192;
+    // vi bindings for up/down
+    kb-remove-to-eol: "";
+    kb-accept-entry: "Control+m,Return,KP_Enter";
+    kb-row-up: "Up,Control+p,Control+k";
+    kb-row-down: "Down,Control+n,Control+j";
+    kb-remove-to-sol: "Control+u";
+    kb-move-char-back: "Left";
+    kb-move-char-forward: "Right";
+    kb-page-prev: "Page_Up,Control+b";
+    kb-page-next: "Page_Down,Control+f";
+}
+
+* {
+	font: "Monospace 9";
+    border-color: Grey;
+    foreground: #cbe3e7;
+	background: #323F4E;
+    active-background: @background;
+    active-foreground: #65b2ff;
+    urgent-background: @background;
+    urgent-foreground: #F02E6E;
+    alternate-normal-background: @background;
+    alternate-normal-foreground: @foreground;
+    alternate-active-background: @active-background;
+    alternate-active-foreground: @active-foreground;
+    alternate-urgent-background: @urgent-background;
+    alternate-urgent-foreground: @urgent-foreground;
+    selected-normal-background: #65b2ff;
+    selected-normal-foreground: @foreground;
+    selected-active-background: #d4bfff;
+    selected-active-foreground: #100E23;
+    selected-urgent-background: #F48FB1;
+    selected-urgent-foreground: #100E23;
+}
+
+window {
+	width: 40%;
+	padding: 20px;
+    border: 2px;
+    border-radius: 3;
+}
+
+
+inputbar {
+    text-color: #ffe6b3;
+}
+
+prompt {
+    text-color: inherit;
+}
+
+num-rows {
+    text-color: inherit;
+}
+
+num-filtered-rows {
+    text-color: inherit;
+}
+
+entry {
+    text-color: #91ddff;
+}
+
+listview {
+	lines: 10;
+    scrollbar: false;
+    border-color: DimGrey;
+}
+
+element {
+    border: 0;
+    padding: 2px;
+}
+
+element-text {
+    highlight: bold red;
+	text-color: inherit;
+	background-color: inherit;
+}

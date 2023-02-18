@@ -1,0 +1,20 @@
+set dbus-service            "true"
+# do not save history
+set database                "null"
+set continuous-hist-save    "false"
+# nord color scheme
+set recolor                 "true"
+set default-fg              '#F8F8F2'
+set default-bg              '#323F4E'
+set recolor-darkcolor       '#F8F8F2'
+set recolor-lightcolor      '#323F4E'
+# display vertical scroll bar
+set guioptions              'v'
+# default wndow size
+set window-width            1250
+set window-height           1275
+set adjust-open             "best-fit"
+set scroll-page-aware       "true"
+set scroll-full-overlap     0.01
+set scroll-step             25
+set font                    "Sans 12"

@@ -1,0 +1,7 @@
+# https://github.com/rust-lang/rustfmt/blob/master/Configurations.md
+# to print all config options with defaults
+# `rustfmt --print-config default`
+# to use unstable features:
+# `cargo +nightly fmt --check`
+unstable_features = true
+max_width = 100

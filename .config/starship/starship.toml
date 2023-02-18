@@ -1,0 +1,102 @@
+# do not add new line between prompts
+add_newline = false
+
+# custom one-liner format
+format = """
+$sudo\
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$haskell\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$env_var\
+$crystal\
+$custom\
+$cmd_duration\
+$jobs\
+$battery\
+$time\
+$status\
+$container\
+$shell\
+$character"""
+
+[character]
+# success_symbol  = "[➜](bold green)"
+# success_symbol  = "[>](bold green)"
+# error_symbol = "[x](bold red)"
+# vicmd_symbol = "[V](bold green)"
+
+# indicator when sudo credentials are cached
+[sudo]
+disabled = false
+symbol = " "
+style = "bold blue"
+format = "[$symbol]($style)"
+
+[username]
+show_always = false
+format = "[$user]($style)"
+
+[hostname]
+format = "@[$hostname]($style) "
+
+[directory]
+# truncation_length = 0
+# truncate_to_repo = false

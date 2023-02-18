@@ -1,0 +1,26 @@
+/* https://gist.github.com/tpope/179e711026307aa6f7e34c82a7c14398 */
+/* ~/.config/gtk-3.0/gtk.css */
+
+@import url("file:///usr/share/themes/Emacs/gtk-3.0/gtk-keys.css");
+
+@binding-set gtk-alt-clipboard {
+  bind "<super>x" { "cut-clipboard" () };
+  bind "<super>c" { "copy-clipboard" () };
+  bind "<super>v" { "paste-clipboard" () };
+}
+
+entry {
+  -gtk-key-bindings: gtk-emacs-text-entry, gtk-alt-clipboard;
+}
+
+textview {
+  -gtk-key-bindings: gtk-emacs-text-entry, gtk-emacs-text-view, gtk-alt-clipboard;
+}
+
+treeview {
+  -gtk-key-bindings: gtk-emacs-tree-view;
+}
+
+GtkMenuShell {
+  -gtk-key-bindings: gtk-emacs-menu;
+}

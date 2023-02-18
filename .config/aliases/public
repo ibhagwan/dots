@@ -1,0 +1,82 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
+command -v nvim >/dev/null && alias \
+  vi="nvim" vim="nvim" \
+  vidiff="nvim -d" vimdiff="nvim -d"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+  batt="cat /sys/class/power_supply/BAT?/capacity" \
+  mkdir="mkdir -pv" \
+  ll="ls -l" \
+  la="ls -la" \
+  ..="cd .." \
+  df="df -h" \
+  du="du -ch"
+
+# Colorize commands when possible (OSX)
+ls -GFHh > /dev/null 2>&1 && alias \
+  ls="ls -GFHh" \
+  grep="grep --color=auto"
+
+# Colorize commands when possible (Linux/BSD).
+ls -hN --color=auto > /dev/null 2>&1 && alias \
+  ls="ls -hN --color=auto --group-directories-first" \
+  grep="grep --color=auto" \
+  diff="diff --color=auto"
+
+# Use exa instead of ls when possible
+exa > /dev/null 2>&1 && alias \
+  ls="exa --time-style=long-iso -g --group-directories-first" \
+  tree="exa --tree"
+
+# Use bat instead of cat if possible
+bat --version > /dev/null 2>&1 && alias \
+  cat="bat --pager=never --style=plain"
+
+# trick to pass aliases with sudo/doas
+# https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
+alias sudo='sudo '
+alias doas='doas '
+
+# pip upgrade all packages
+alias pip-outdated='pip list --outdated --format=freeze'
+alias pip-upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
+
+# https://github.com/chubin/wttr.in
+alias weather='curl http://wttr.in'
+
+# crypto coin tracker
+alias ratesx='curl rate.sx'
+
+# custom programs
+alias what-term="ps -p$PPID"
+alias what-shell="ps -p $$"
+alias open-ports="netstat -tulpn"
+alias lid-bind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/bind"
+alias lid-unbind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/unbind"
+alias temp-core="grep -H \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_label; grep -H \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_input | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
+alias temp-zone="grep -H \"\" /sys/class/thermal/thermal_zone?/temp; grep -H \"\" /sys/class/thermal/thermal_zone?/temp  | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
+alias dracut-update="echo test | sudo dracut-hook install"
+
+# awesome-wm helpers
+alias awesome-restart='awesome-client "awesome.restart()"'
+
+# line count current directory
+alias lc='rg --files  | xargs -d "\n" wc -l | perl -lne "\$s += \$1 if /(\d+) total/; END{print \$s}"'
+
+# my ip address
+alias my-ipaddr='echo $(curl -s v4.ident.me)'
+
+# Matrix
+alias matrix='LC_ALL=C tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
+
+# Neovim nightly
+alias nv="/shared/$USER/Applications/nvim.appimage"
+alias nv-dl-nightly="([ -f /shared/$USER/Applications/nvim.appimage ] && cp /shared/$USER/Applications/nvim.appimage /shared/$USER/Applications/nvim.appimage.bak); curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage --output /shared/$USER/Applications/nvim.appimage && chmod a+x /shared/$USER/Applications/nvim.appimage"
+
+# yadm / dotfiles
+# need to add -C $HOME or `dot ls-files|grep` fails inside a git repo
+alias yadm="$HOME/dots/yadm/yadm --yadm-repo ${YADM_REPO} -C ${HOME}"
+alias dot="$HOME/dots/yadm/yadm --yadm-repo ${YADM_REPO} -C ${HOME}"
