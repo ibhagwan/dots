@@ -1,6 +1,6 @@
 # $OpenBSD: dot.profile,v 1.5 2018/02/02 02:29:54 yasuoka Exp $
 #
-PATH=/usr/lib/ccache/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/opt/X11/bin:/opt/local/bin:$HOME/.local/bin:$HOME/.cargo/bin
+PATH=/usr/lib/ccache/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/opt/X11/bin:/opt/local/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin
 MANPATH=/usr/share/man:/usr/local/share/man:/opt/homebrew/share/man
 export PATH MANPATH HOME TERM
 
