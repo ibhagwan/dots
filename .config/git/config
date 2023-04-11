@@ -69,52 +69,30 @@
 
 [alias]
   a     = add
-  ai    = add --interactive
-  ap    = add --patch
   b     = branch 
   br    = branch
   ba    = branch --all
   bd    = branch --delete
+  bdf   = branch --delete --force   ; same as `branch -D`
+  bdr   = push -u origin --delete   ; delete a remote branch
   c     = commit
   cm    = commit -m
   cam   = commit -am
   ca    = commit --amend
-  fx    = commit --fixup
   co    = checkout
-  cb    = checkout -b
   cp    = cherry-pick
   d     = diff
-  ds    = diff --stat
   dc    = diff --cached
-  dcs   = diff --cached --stat
-  f     = fetch
-  fo    = fetch origin
-  l     = log --pretty=oneline
-  lp    = log --patch
-  ls    = log --stat
-  lg    = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'
-  m     = merge
-  ma    = merge --abort
-  mt    = mergetool
+  l     = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'
   pl    = pull --ff-only
   ps    = push
   psf   = push --force
   pr    = pull --rebase=true
-  rc    = rebase --continue
-  rs    = rebase --skip
-  ra    = rebase --abort
-  ri    = rebase --interactive
-  rr    = rebase --interactive --root
-  ria   = rebase --interactive --autosquash
-  rv    = remote --verbose
+  r     = remote --verbose
   s     = status
-  st    = status -sbu
   sb    = status -sb
-  sta   = stash
-  sa    = stash apply
-  sl    = stash list
-  sp    = stash pop
-  ss    = stash show
+  sbu   = status -sbu
+  st    = stash
   ;undo-commit   undo last commit, preserve local changes
   ;undo-staging  unstage all changes, preserve local changes
   ;reset-hard    discard all changes since last commit
@@ -126,6 +104,9 @@
   reset-origin  = reset --hard origin/master
   reset-pull    = "!f(){ git reset --hard HEAD && git pull --rebase; }; f"
   squash-all    = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
+  rebase-root   = rebase --interactive --root
+  ; https://words.filippo.io/git-fixup-amending-an-older-commit
+  fixup         = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 
 [delta]
   dark = true
