@@ -93,6 +93,7 @@
   sb    = status -sb
   sbu   = status -sbu
   st    = stash
+  fpr   = "!f(){ git fetch origin pull/${@}/head:pr_${@}; }; f"
   ;undo-commit   undo last commit, preserve local changes
   ;undo-staging  unstage all changes, preserve local changes
   ;reset-hard    discard all changes since last commit
