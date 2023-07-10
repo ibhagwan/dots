@@ -5,10 +5,9 @@ command -v nvim >/dev/null && alias \
   vi="nvim" vim="nvim" \
   vidiff="nvim -d" vimdiff="nvim -d"
 
-# Verbosity and settings that you pretty much just always are going to want.
+# Verbosity and settings that we are most likely to want anyway.
 alias \
-  batt="cat /sys/class/power_supply/BAT?/capacity" \
-  mkdir="mkdir -pv" \
+  mkdir="mkdir -p" \
   ll="ls -l" \
   la="ls -la" \
   ..="cd .." \
@@ -59,12 +58,13 @@ alias lid-unbind="echo 'PNP0C0D:00' | tee /sys/bus/acpi/drivers/button/unbind"
 alias temp-core="grep -H \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_label; grep -H \"\" /sys/devices/platform/coretemp.?/hwmon/hwmon?/temp?_input | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
 alias temp-zone="grep -H \"\" /sys/class/thermal/thermal_zone?/temp; grep -H \"\" /sys/class/thermal/thermal_zone?/temp  | awk -F ':' 'BEGIN{print \"scale=2;\"}{print \$2\"/1000\"}' | bc"
 alias dracut-update="echo test | sudo dracut-hook install"
+alias batt="cat /sys/class/power_supply/BAT?/capacity"
 
 # awesome-wm helpers
 alias awesome-restart='awesome-client "awesome.restart()"'
 
 # line count current directory
-alias lc='rg --files  | xargs -d "\n" wc -l | perl -lne "\$s += \$1 if /(\d+) total/; END{print \$s}"'
+alias line-count='rg --files  | xargs -d "\n" wc -l | perl -lne "\$s += \$1 if /(\d+) total/; END{print \$s}"'
 
 # my ip address
 alias my-ipaddr='echo $(curl -s v4.ident.me)'
@@ -78,5 +78,6 @@ alias nv-dl-nightly="([ -f /shared/$USER/Applications/nvim.appimage ] && cp /sha
 
 # yadm / dotfiles
 # need to add -C $HOME or `dot ls-files|grep` fails inside a git repo
-alias yadm="$HOME/dots/yadm/yadm --yadm-repo ${YADM_REPO} -C ${HOME}"
-alias dot="$HOME/dots/yadm/yadm --yadm-repo ${YADM_REPO} -C ${HOME}"
+alias dot="git -c status.showUntrackedFiles=no --git-dir=${YADM_REPO} -C ${HOME}"
+alias dot-reset="dot reset-hard && git -C $HOME/dots reset-hard"
+alias dot-pull="dot reset-pull && git -C $HOME/dots reset-hard"

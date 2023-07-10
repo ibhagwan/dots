@@ -1,12 +1,31 @@
 ## dots
 
-### Notes
+#### NOTE: This repo excludes my neovim config which can be found [here](https://github.com/ibhagwan/nvim-lua)
 
-- This repo excludes my neovim config which can be found
-[here](https://github.com/ibhagwan/nvim-lua)
+### Deployment
 
-- This repo is deployed using [`yadm`](https://github.com/TheLocehiliosan/yadm) using the
-[`install.sh`](https://github.com/ibhagwan/dots/blob/master/dots/install.sh) script
+This repo is managed using a
+[git bare repo](https://www.atlassian.com/git/tutorials/dotfiles)
+and deployed using
+[`dots/install.sh`](https://github.com/ibhagwan/dots/blob/master/dots/install.sh):
+
+```sh
+# clones this repository into "$HOME"
+❯ git clone https://github.com/ibhagwan/dots.git $HOME/dots
+# deploys the files in this repository into "$HOME"
+❯ ./dots/install.sh
+```
+
+An alias named `dot` will be created:
+```sh
+alias dot="git -c status.showUntrackedFiles=no --git-dir=${YADM_REPO} -C ${HOME}"
+```
+
+Which you can use to manage your dot files as if it was `git`:
+```sh
+❯ dot status         # git status
+❯ dot pull --rebase  # git pull --rebase
+```
 
 ### Fzf Customizations
 

@@ -1,3 +1,8 @@
-yadm/
-yadm-repo/
-yadm-repo-priv/
+# `dot reset --hard HEAD` will deploy the bare repo into $HOME
+# the files and folders under "./dots" need to be ignored
+/refind/
+/screenshots/
+/extras/
+/fncs.sh
+/install.sh
+/install_root.sh

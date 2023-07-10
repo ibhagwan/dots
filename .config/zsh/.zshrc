@@ -168,18 +168,12 @@ bindkey '^z' fg-bg
 
 # fzf (https://github.com/junegunn/fzf)
 # if installed enable fzf keybinds
-# Linux possible paths
-[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-[ -f /usr/local/share/fzf/completion.zsh ] && source /usr/local/share/fzf/completion.zsh
-[ -f /usr/local/share/fzf/key-bindings.zsh ] && source /usr/local/share/fzf/key-bindings.zsh
-[ -f /usr/share/doc/fzf/completion.zsh ] && source /usr/share/doc/fzf/completion.zsh
-[ -f /usr/share/doc/fzf/key-bindings.zsh ] && source /usr/share/doc/fzf/key-bindings.zsh
-# OSX paths
-[ -f /usr/local/opt/fzf/shell/completion.zsh ] && source /usr/local/opt/fzf/shell/completion.zsh
-[ -f /usr/local/opt/fzf/shell/key-bindings.zsh ] && source /usr/local/opt/fzf/shell/key-bindings.zsh
-[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
-[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
+    "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf" "$HOME/rootfs/share/fzf/shell"
+do
+    [ -f ${dir}/completion.zsh ] && source "${dir}/completion.zsh"
+    [ -f ${dir}/key-bindings.zsh ] && source "${dir}/key-bindings.zsh"
+done
 
 # Fzf commands for git, need to unbind ^G or we conflict
 #   ^G^F    git ls-files
@@ -193,7 +187,7 @@ bindkey '^z' fg-bg
 source $ZDOTDIR/fzf_defaults.sh
 source $ZDOTDIR/fzf_git_functions.sh
 source $ZDOTDIR/fzf_git_keybindings.zsh
-FZF_GIT_CMD="git -C $HOME --work-tree=$HOME --git-dir=$YADM_REPO" \
+FZF_GIT_CMD="git -c status.showUntrackedFiles=no -C $HOME --work-tree=$HOME --git-dir=$YADM_REPO" \
     FZF_ZLE_PREFIX="fzf-yadm" FZF_GIT_BIND="^Y" \
     source $ZDOTDIR/fzf_git_keybindings.zsh
 

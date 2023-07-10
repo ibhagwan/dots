@@ -1,9 +1,13 @@
 # $OpenBSD: dot.profile,v 1.5 2018/02/02 02:29:54 yasuoka Exp $
 #
-PATH=/usr/lib/ccache/bin:$HOME/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/opt/X11/bin:/opt/local/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin
-MANPATH=/usr/share/man:/usr/local/share/man:/opt/homebrew/share/man
+PATH=$HOME/bin:$HOME/rootfs/bin:/usr/lib/ccache/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/X11R7/bin:/opt/X11/bin:/opt/local/bin:/usr/pkg/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin
+MANPATH=$HOME/rootfs/man:/usr/local/share/man:/usr/share/man:/opt/homebrew/share/man:/usr/pkg/man
+#LD_LIBRARY_PATH=$HOME/rootfs/lib:/opt/homebrew/lib:/usr/local/lib:/usr/local/share/lib:/usr/share/lib:/lib:/usr/lib:/usr/X11R6/lib:/usr/X11R7/lib:/opt/X11/lib:/opt/local/lib:/usr/pkg/lib
 export PATH MANPATH HOME TERM
 
+# NetBSD local install
+[ -d $HOME/rootfs/lib/libvterm03 ] && \
+    export LD_LIBRARY_PATH=$HOME/rootfs/lib/libvterm03:$HOME/rootfs/lib
 
 # use nvim if installed, vi default
 case "$(command -v nvim)" in
@@ -54,7 +58,7 @@ export QT_STYLE_OVERRIDE=adwaita-dark
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
 # yadm dotfile repo
-export YADM_REPO="$HOME/dots/yadm-repo"
+export YADM_REPO="$HOME/dots/.git"
 
 # starship prompt config
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship/starship.toml"
