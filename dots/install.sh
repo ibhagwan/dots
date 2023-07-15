@@ -22,6 +22,14 @@ ${DOT_CMD} reset --hard HEAD
 echo "[1;32mUpdating submodules...[0m"
 ${DOT_CMD} submodule update --init --recursive
 
+# configure repo to not display untracked files
+echo "[1;32mConfiguring repo[0m [0;33mstatus.showUntrackedFiles=no[0m"
+${GIT_CMD} config --local status.showUntrackedFiles no
+
+# setup repo symbolic link at $HOME
+echo "[1;32mSetup repo link [0m [0;33m$HOME/.git[0m -> [0;33m$GIT_CWD/.git[0m"
+ln -fs ${GIT_CWD}/.git ${HOME}/.git
+
 # Source aliases
 alias dot="${DOT_CMD}"
 echo "[1;32mCreated the [0;33mdot[1;32m alias.[0m"
