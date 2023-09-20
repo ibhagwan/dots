@@ -169,7 +169,7 @@ bindkey '^z' fg-bg
 # fzf (https://github.com/junegunn/fzf)
 # if installed enable fzf keybinds
 for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
-    "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf" "$HOME/rootfs/share/fzf/shell"
+    "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf/shell" "$HOME/rootfs/share/fzf/shell"
 do
     [ -f ${dir}/completion.zsh ] && source "${dir}/completion.zsh"
     [ -f ${dir}/key-bindings.zsh ] && source "${dir}/key-bindings.zsh"
