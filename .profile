@@ -9,6 +9,9 @@ export PATH MANPATH HOME TERM
 [ -d $HOME/rootfs/lib/libvterm03 ] && \
     export LD_LIBRARY_PATH=$HOME/rootfs/lib/libvterm03:$HOME/rootfs/lib
 
+# WSL via copr SSL proxy
+uname -a | grep "microsoft-standard-WSL2" && export SSL_NO_VERIFY_PEER=1
+
 # use nvim if installed, vi default
 case "$(command -v nvim)" in
   */nvim) VIM=nvim ;;
