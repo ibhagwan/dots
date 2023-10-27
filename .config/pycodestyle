@@ -1,0 +1,7 @@
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#flake8
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#pycodestyle
+# match black's default line length
+# use "extend-ignore" or we get the conflicting W503|W504
+[pycodestyle]
+max-line-length = 160
+extend-ignore = E203
