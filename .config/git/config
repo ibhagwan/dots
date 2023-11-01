@@ -3,6 +3,10 @@
   email = bhagwan@disroot.org
   signingKey = ~/.ssh/git
 
+; run `git config --get user.email` inside ~/Sources/Work
+[includeIf "gitdir:~/Sources/Work/"]
+    path = ~/.config/git/config-work
+
 [gpg]
   format = ssh
 
