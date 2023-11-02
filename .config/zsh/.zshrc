@@ -131,6 +131,12 @@ if command -v zoxide > /dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
+# pyenv
+# https://github.com/pyenv/pyenv#installation
+if command -v pyenv > /dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
 # Use vifm to switch directories and bind it to ctrl-f
 # not using this anymore, ripgrep stole the bind
 vifmcd () {

@@ -12,6 +12,9 @@ export PATH MANPATH HOME TERM
 # WSL via copr SSL proxy
 uname -a | grep "microsoft-standard-WSL2" && export SSL_NO_VERIFY_PEER=1
 
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+
 # use nvim if installed, vi default
 case "$(command -v nvim)" in
   */nvim) VIM=nvim ;;
