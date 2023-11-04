@@ -3,6 +3,10 @@
   email = bhagwan@disroot.org
   signingKey = ~/.ssh/git
 
+[credential]
+  helper =
+  ;helper = store
+
 ; run `git config --get user.email` inside ~/Sources/Work
 [includeIf "gitdir:~/Sources/Work/"]
     path = ~/.config/git/config-work
@@ -11,11 +15,7 @@
   format = ssh
 
 [gpg "ssh"]
-        allowedSignersFile = ~/.config/git/allowed_signers
-
-[credential]
-  helper =
-  ;helper = store
+  allowedSignersFile = ~/.config/git/allowed_signers
 
 [pager]
 	branch = false
