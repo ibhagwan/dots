@@ -35,7 +35,10 @@ Which you can use to manage your dot files as if it was `git`:
 [`fzf_git_keybindings.sh`](https://github.com/ibhagwan/dots/blob/master/.config/zsh/fzf_git_keybindings.zsh)
 which add the below keybinds to the shell:
 
-Use `ctrl-f` to open "live grep" with fzf (if available, in a tmux popup).
+| Key       | Command           |
+| ----------| ------------------|
+| `<C-f-f>` | find paths        |
+| `<C-f-g>` | "live" grep       |
 
 If the pwd is inside a git repo, the following binds are available:
 

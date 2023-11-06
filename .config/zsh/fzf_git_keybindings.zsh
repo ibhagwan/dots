@@ -31,4 +31,6 @@ fzf-rg-widget() {
 }
 zle -N fzf-rg-widget
 bindkey -r '^f'
-bindkey '^f' fzf-rg-widget
+bindkey '^ff' fzf-file-widget
+bindkey '^fg' fzf-rg-widget
+bindkey '^fr' fzf-rg-widget

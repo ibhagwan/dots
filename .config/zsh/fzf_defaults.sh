@@ -44,7 +44,7 @@ export FZF_DEFAULT_OPTS="$FZF_OPTS --bind='$FZF_BINDS' --preview-window='$FZF_PR
 # use `rg` if installed
 # https://github.com/BurntSushi/ripgrep
 if command -v rg > /dev/null 2>&1; then
-  RG_OPTS="--files --no-ignore --hidden --follow -g '!{.git,node_modules}/*' 2> /dev/null"
+  RG_OPTS="--files --hidden --follow -g '!{.git,node_modules}/*' 2> /dev/null"
   export FZF_DEFAULT_COMMAND="rg $RG_OPTS"
   export FZF_CTRL_T_COMMAND="rg $RG_OPTS"
 fi
@@ -58,3 +58,24 @@ if command -v fd > /dev/null 2>&1; then
   export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS"
   # export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS . ~"
 fi
+
+# ctrl-t .gitignore toggle
+# https://github.com/junegunn/fzf/issues/3354
+
+# function _fzf_ctrl_t_command {
+#     FZF_CTRL_T_COMMAND=$(echo $FZF_CTRL_T_COMMAND | awk -F" " -v cmd="$FZF_CTRL_T_COMMAND" \
+#         '{if ($NF=="--no-ignore") { $(NF--)=""; print } else { print $cmd,"--no-ignore" } }')
+#     echo $FZF_CTRL_T_COMMAND
+# }
+
+export FZF_CTRL_T_OPTS="
+  --bind='ctrl-g:unbind(ctrl-g)+change-prompt(unrestricted> )+rebind(ctrl-r)
++reload($FZF_CTRL_T_COMMAND --no-ignore)'
+  --bind='ctrl-r:unbind(ctrl-r)+change-prompt(restricted> )+rebind(ctrl-g)
++reload($FZF_CTRL_T_COMMAND)'
+  --prompt 'restricted> '
+  --header '╱ CTRL-R (restricted) ╱ CTRL-G (unrestricted) ╱'
+"
+
+# remove line feeds
+export FZF_CTRL_T_OPTS=$(echo $FZF_CTRL_T_OPTS | tr -d '\n')
