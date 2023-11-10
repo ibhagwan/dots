@@ -25,10 +25,10 @@ ls -hN --color=auto > /dev/null 2>&1 && alias \
   grep="grep --color=auto" \
   diff="diff --color=auto"
 
-# Use exa instead of ls when possible
-exa > /dev/null 2>&1 && alias \
-  ls="exa --time-style=long-iso -g --group-directories-first" \
-  tree="exa --tree"
+# Use eza instead of ls when possible
+eza > /dev/null 2>&1 && alias \
+  ls="eza --time-style=long-iso -g --group-directories-first" \
+  tree="eza --tree"
 
 # Use bat instead of cat if possible
 bat --version > /dev/null 2>&1 && alias \
