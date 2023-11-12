@@ -14,8 +14,8 @@
 # <alt-a>   - Toggle select-all
 # <ctrl-x>  - Delete selected files
 # <ctrl-y>  - Copy path to clipboard (requires xclip)
-FZF_OPTS="--no-mouse --height=50%  --layout=reverse --multi"
-FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-down:preview-half-page-down,alt-up:preview-half-page-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-a:beginning-of-line,ctrl-e:end-of-line,alt-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard),ctrl-x:execute(rm -i {+})+abort"
+FZF_OPTS="--no-mouse --layout=reverse --multi"
+FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-down:preview-half-page-down,alt-up:preview-half-page-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-a:beginning-of-line,ctrl-e:end-of-line,alt-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard)"
 FZF_PREVIEW_OPTS="hidden:border:nowrap,right:60%"
 FZF_CTRL_R_OPTS="--no-separator --info=inline"
 # FZF_CTRL_T_OPTS="--no-separator --info=inline"
