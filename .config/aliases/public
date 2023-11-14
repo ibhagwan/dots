@@ -27,7 +27,7 @@ ls -hN --color=auto > /dev/null 2>&1 && alias \
 
 # Use lsd instead of ls when possible
 lsd > /dev/null 2>&1 && alias \
-  ls="lsd --group-directories-first" \
+  ls="lsd --date='+%Y-%m-%d %H:%M' --group-directories-first" \
   tree="lsd --tree"
 
 # Use eza instead of ls when possible
