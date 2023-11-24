@@ -44,7 +44,7 @@ export FZF_DEFAULT_OPTS="$FZF_OPTS --bind='$FZF_BINDS' --preview-window='$FZF_PR
 # use `rg` if installed
 # https://github.com/BurntSushi/ripgrep
 if command -v rg > /dev/null 2>&1; then
-  RG_OPTS="--files --hidden --follow -g '!{.git,node_modules}/*' 2> /dev/null"
+  RG_OPTS='--files --hidden --follow -g "!{.git,node_modules}/*"'
   export FZF_DEFAULT_COMMAND="rg $RG_OPTS"
   export FZF_CTRL_T_COMMAND="rg $RG_OPTS"
 fi
