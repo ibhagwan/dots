@@ -32,7 +32,7 @@ lsd > /dev/null 2>&1 && alias \
 
 # Use eza instead of ls when possible
 eza > /dev/null 2>&1 && alias \
-  ls="eza --icons=auto --time-style=long-iso -g --group-directories-first" \
+  ls="eza --icons --time-style=long-iso -g --group-directories-first" \
   tree="eza --tree"
 
 # Use bat instead of cat if possible
