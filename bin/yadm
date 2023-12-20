@@ -1,0 +1,3 @@
+#!/bin/sh
+# create a fake `yadm` command for gitsigns.nvim
+git -c status.showUntrackedFiles=no --git-dir=${YADM_REPO} -C ${HOME} "$@"
