@@ -99,6 +99,7 @@
   st    = stash
   spu   = stash push
   spo   = stash pop
+  sw    = switch
   fpr   = "!f(){ git fetch origin pull/${@}/head:pr_${@}; }; f"
   ;undo-commit   undo last commit, preserve local changes
   ;undo-staging  unstage all changes, preserve local changes
