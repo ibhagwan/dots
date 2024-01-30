@@ -93,7 +93,7 @@ function "_${FZF_PREFIX}-gg" () {
     --disabled --query "$INITIAL_QUERY" \
     --bind "change:reload:sleep 0.1; $CMD_PREFIX {q} 2>&1 || true" \
     --bind "ctrl-g:unbind(change,ctrl-g)+change-prompt(fzf> )+enable-search+clear-query+rebind(ctrl-r)" \
-    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(grep> )+disable-search+reload($CMD_PREFIX {q} || true)+rebind(change,ctrl-g)" \
+    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(regex> )+disable-search+reload($CMD_PREFIX {q} || true)+rebind(change,ctrl-g)" \
     --prompt 'regex> ' \
     --delimiter : \
     --header '╱ CTRL-R (regex mode) ╱ CTRL-G (fzf mode) ╱' \
