@@ -87,16 +87,17 @@ function "_${FZF_PREFIX}-gg" () {
   if [ ! $INITIAL_QUERY = "" ]; then
     INITIAL_QUERY=$(print $INITIAL_QUERY | sed 's/[\\~$?*|\\[()]/\\&/g')
   fi
-  sh -c "${CMD_PREFIX} '${INITIAL_QUERY}' 2>&1" |
-  fzf-exec --ansi --delimiter=: --multi \
-    --color hl:-1:underline,hl+:-1:underline:reverse,query:#ffffff,disabled:#f48fb1 \
-    --disabled --query "$INITIAL_QUERY" \
+  fzf-exec --ansi --multi --disabled \
+    --query "$INITIAL_QUERY" \
+    --bind "start:reload:$CMD_PREFIX {q}" \
     --bind "change:reload:sleep 0.1; $CMD_PREFIX {q} 2>&1 || true" \
-    --bind "ctrl-g:unbind(change,ctrl-g)+change-prompt(fzf> )+enable-search+clear-query+rebind(ctrl-r)" \
-    --bind "ctrl-r:unbind(ctrl-r)+change-prompt(regex> )+disable-search+reload($CMD_PREFIX {q} || true)+rebind(change,ctrl-g)" \
+    --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ regex ]] &&
+    echo "rebind(change)+change-prompt(regex> )+disable-search+change-header(/ CTRL-R: fzf mode /)+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+    echo "unbind(change)+change-prompt(fzf> )+enable-search+transform-header(echo / CTRL-R: edit regex: \{q} /)+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+    --color hl:-1:underline,hl+:-1:underline:reverse,query:#ffffff,disabled:#f48fb1 \
     --prompt 'regex> ' \
     --delimiter : \
-    --header '╱ CTRL-R (regex mode) ╱ CTRL-G (fzf mode) ╱' \
+    --header '╱ CTRL-R: fzf mode ╱' \
     --preview-window 'nohidden,down,60%,border-top,+{2}+3/3,~3' \
     --preview $PREVIEW_CMD |
   cut -d':' -f1

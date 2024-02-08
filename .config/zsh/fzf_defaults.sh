@@ -69,12 +69,11 @@ fi
 # }
 
 export FZF_CTRL_T_OPTS="
-  --bind='ctrl-g:unbind(ctrl-g)+change-prompt(unrestricted> )+rebind(ctrl-r)
-+reload($FZF_CTRL_T_COMMAND --no-ignore)'
-  --bind='ctrl-r:unbind(ctrl-r)+change-prompt(restricted> )+rebind(ctrl-g)
-+reload($FZF_CTRL_T_COMMAND)'
+    --bind 'ctrl-g:transform:[[ ! \$FZF_PROMPT =~ unrestricted ]] &&
+    echo \"rebind(ctrl-g)+change-prompt(unrestricted> )+change-header(/ CTRL-G: restricted /)+reload($FZF_CTRL_T_COMMAND --no-ignore)\" ||
+    echo \"rebind(ctrl-g)+change-prompt(restricted> )+change-header(/ CTRL-G: unrestricted /)+reload($FZF_CTRL_T_COMMAND)\"' \
   --prompt 'restricted> '
-  --header '╱ CTRL-R (restricted) ╱ CTRL-G (unrestricted) ╱'
+  --header '╱ CTRL-G: unrestricted ╱'
 "
 
 # remove line feeds
