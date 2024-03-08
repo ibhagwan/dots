@@ -33,6 +33,9 @@ copy() {
     printf "Copying [1;33m${src}[0m\t=> [1;34m${dst}[0m\t..."
     parent=$(dirname ${dst})
     mkdir -p ${parent} > /dev/null 2>&1
+    if [ -d ${dst} ]; then
+        rm -rf "${dst}"
+    fi
     cp -R "${src}" "${dst}"
     chown -R root:root "${dst}"
     local retVal=$?
