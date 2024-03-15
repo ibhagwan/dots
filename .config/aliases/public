@@ -1,9 +1,12 @@
 #!/bin/sh
 
-# Use neovim for vim if present.
+# Use vim if present
+command -v vim >/dev/null && alias \
+  vi="vim" vidiff="vim -d"
+
+# Use neovim over vim if present
 command -v nvim >/dev/null && alias \
-  vi="nvim" vim="nvim" \
-  vidiff="nvim -d" vimdiff="nvim -d"
+  vi="nvim" vidiff="nvim -d"
 
 # Verbosity and settings that we are most likely to want anyway.
 alias \
@@ -71,8 +74,31 @@ alias awesome-restart='awesome-client "awesome.restart()"'
 # line count current directory
 alias line-count='rg --files  | xargs -d "\n" wc -l | perl -lne "\$s += \$1 if /(\d+) total/; END{print \$s}"'
 
-# my ip address
-alias my-ipaddr='echo $(curl -s v4.ident.me)'
+# ident.me: free public IP address API
+# https://www.ident.me/
+# https://api.ident.me/
+alias ident.me='echo $(
+  (command -v dig &> /dev/null &&
+    (dig +short @ident.me ||
+     dig +short @tnedi.me)) ||
+  (command -v nc &> /dev/null &&
+    (nc ident.me 23 < /dev/null ||
+     nc tnedi.me 23 < /dev/null)) ||
+  (command -v curl &> /dev/null &&
+    (curl -sf ident.me ||
+     curl -sf tnedi.me)) ||
+  (command -v wget &> /dev/null &&
+    (wget -qO- ident.me ||
+     wget -qO- tnedi.me)) ||
+  (command -v openssl &> /dev/null &&
+    (openssl s_client -quiet -connect ident.me:992 2> /dev/null ||
+     openssl s_client -quiet -connect tnedi.me:992 2> /dev/null)) ||
+  (command -v ssh &> /dev/null &&
+    (ssh -qo StrictHostKeyChecking=accept-new ident.me ||
+     ssh -qo StrictHostKeyChecking=accept-new tnedi.me)) ||
+  (echo "Could not find public IP through api.ident.me" >&2 exit 42)
+)'
+alias my-ipaddr=ident.me
 
 # Matrix
 alias matrix='LC_ALL=C tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"'

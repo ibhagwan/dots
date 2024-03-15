@@ -15,19 +15,22 @@ uname -a | grep "microsoft-standard-WSL2" && export SSL_NO_VERIFY_PEER=1
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 
-# use nvim if installed, vi default
-case "$(command -v nvim)" in
-  */nvim) VIM=nvim ;;
-  *)      VIM=vi   ;;
-esac
+# use nvim, vim, vi as $EDITOR
+if command -v nvim >/dev/null ; then
+    VI=nvim
+elif command -v vim >/dev/null ; then
+    VI=vim
+else
+    VI=vi
+fi
 
 # use neovim as man pager
-if [ $VIM = "nvim" ]; then
+if [ $VI = "nvim" ]; then
     export MANPAGER='nvim +Man!'
     export MANWIDTH=999
 fi
 
-export EDITOR=$VIM
+export EDITOR=$VI
 export FCEDIT=$EDITOR
 export PAGER=less
 export LESS='-iMRS -x2'

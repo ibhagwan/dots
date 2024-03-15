@@ -1,0 +1,205 @@
+" Disable 24 bit colors since we are using default colorschemes
+if has("termguicolors")
+  set notermguicolors
+endif
+
+" Use 256 terminal colors instead
+set t_Co=256
+syntax on
+
+if v:version >= 900
+  colorscheme slate
+else
+  colorscheme torte
+endif
+
+set mouse=""		  " no mouse
+
+set ruler                 " show line,col at the nvim cmdline
+set showmode              " show current mode (insert, etc) under the cmdline
+set showcmd               " show current command under the cmd line
+set cmdheight=2           " cmdline height
+set laststatus=2          " 2 = always show status line (filename, etc)
+set scrolloff=3           " min number of lines to keep between cursor and screen edge
+set number                " show the number ruler
+set relativenumber        " show relative numbers in the ruler
+
+set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:␣
+set showbreak=↪\
+
+set wrap breakindent    " start wrapped lines indented
+set linebreak           " do not break words on wrap
+
+" default <tab> behavior
+set tabstop=2           " Tab indentation levels every two columns
+set softtabstop=2       " Tab indentation when mixing tabs & spaces
+set shiftwidth=2        " Indent/outdent by two columns
+set shiftround          " Always indent/outdent to nearest tabstop
+set expandtab           " Convert all tabs that are typed into spaces
+set smarttab            " Use shiftwidths at left margin, tabstops everywhere else
+
+" searching
+set hlsearch            " highlight all text matching current search pattern
+set incsearch           " show search matches as you type
+set ignorecase          " ignore case on search
+set smartcase           " case sensitive when search includes uppercase
+set showmatch           " highlight matching [{()}]
+set splitbelow          " open new splits on the bottom
+set splitright          " open new splits on the right"
+set autoread            " reread a file if it's changed outside of vim
+set wrapscan            " begin search from top of the file when nothng is found
+set cpoptions+=x        " stay at seach item when <esc>
+
+set noswapfile          " No swap files
+
+set path=.,,,$PWD/**    " recursive search when using :find
+set lazyredraw          " redraw only when we need to.
+set foldenable          " enable folding
+set foldlevelstart=10   " open most folds by default
+set foldnestmax=10      " 10 nested fold max
+set foldmethod=indent   " fold based on indent level
+set modelines=1         " read a modeline on the last line of the file
+set autoindent          " autoindent
+set smartindent         " add <tab> depending on syntax (C/C++)
+"set diffopt+=vertical  " :Gdiffsplit vertical split (vim-fugitive)
+                        " use :Gvdiffsplit :Ghdiffsplit
+
+" show menu even for one item do not auto select/insert
+" IMPORTANT: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+
+" recommended settings for coc.vim
+set hidden              " TextEdit might fail if hidden is not set.
+set nobackup            " Some servers have issues with backup files, see #649:
+set nowritebackup       " https://github.com/neoclide/coc.nvim/issues/649
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Esc timeout delay (default is -1 which will fallback to timeoutlen 1000ms)
+set ttimeoutlen=50
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+set colorcolumn=81      " mark column 80
+set signcolumn=yes      " sign column left of line nr
+set cursorline
+
+set wildmenu            " visual autocomplete for the command menu
+if v:version >= 900
+  set wildoptions=pum   " Show completion items using the pop-up-menu (pum)
+endif
+
+" Cursor Mode settings:
+"  1 -> blinking block
+"  2 -> solid block 
+"  3 -> blinking underscore
+"  4 -> solid underscore
+"  5 -> blinking vertical bar
+"  6 -> solid vertical bar
+"let &t_SI = "\<Esc>[6 q" "SI = INSERT mode
+"let &t_SR = "\<Esc>[4 q" "SR = REPLACE mode
+"let &t_EI = "\<Esc>[2 q" "EI = NORMAL mode
+let &t_SI.="\e[6 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
+
+" reset the cursor once on init (EI = exit INSERT)
+if has("autocmd")
+  augroup setBlockCursor
+    au!
+    autocmd VimEnter * silent !echo -ne -ne "\e[2 q"
+  augroup END
+endif
+
+" Fix common typos
+cnoreabbrev W! w!
+cnoreabbrev W1 w!
+cnoreabbrev w1 w!
+cnoreabbrev Q! q!
+cnoreabbrev Q1 q!
+cnoreabbrev q1 q!
+cnoreabbrev Qa! qa!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wa wa
+cnoreabbrev Wq wq
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev wq1 wq!
+cnoreabbrev Wq1 wq!
+cnoreabbrev wQ1 wq!
+cnoreabbrev WQ1 wq!
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qa qa
+cnoreabbrev Qall qall
+
+" map leader as <space>
+nnoremap <Space> <nop>
+let mapleader ="\<Space>"
+ 
+" Split edit your vimrc. Type space, v, r in sequence to trigger
+nmap <leader>R :source $MYVIMRC<cr>   " reload .vimrc
+nmap <leader>E :split $MYVIMRC<cr>    " split edit .vimrc
+
+" <c-s> to save
+map <c-s> <c-c>:update<cr>
+
+" readline ctrl-{a|e} for home|end
+cmap <c-a> <home>
+cmap <c-e> <end>
+
+" keep visual selection when (de)indenting
+xmap < <gv
+xmap > >gv
+
+" c.|c> to search and replace current word/WORD
+nmap c. :%s/\<<C-r><C-w>\>//g<Left><Left>
+nmap c> :%s/\<<C-r><C-a>\>//g<Left><Left>
+
+" Turn off search matches with double-<Esc>
+nmap <silent> <Esc><Esc> :nohlsearch<CR>
+
+" Toggle display of `listchars`
+nmap <silent> <leader>' :set list!<cr>
+
+" Toggle colorcolum
+nnoremap <silent> <leader>\| :execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>
+
+" <leader>{o|O} to append newlines without INSERT mode
+nmap <leader>o :<C-u>call append(line("."), repeat([""], v:count1))<CR>
+nmap <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>
+
+" `Y` to copy to end of line conistent with the behaviour of `C` and `D`
+nnoremap Y y$
+vnoremap Y <Esc>y$gv
+
+" Any jump over 5 lines modifies the jumplist
+nnoremap <silent> <expr> j (v:count > 5 ? "m'" . v:count : "") . 'j'
+nnoremap <silent> <expr> k (v:count > 5 ? "m'" . v:count : "") . 'k'
+
+" move along visual lines, not numbered ones
+" without interferring with {count}<down|up>
+nnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
+vnoremap <expr> <Down> (v:count == 0 ? 'g<down>' : '<down>')
+nnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
+vnoremap <expr> <Up> (v:count == 0 ? 'g<up>' : '<up>')
+
+" []q|b to navigate buffers/quickfix
+nnoremap <silent> ]b :<C-u>bnext<CR>
+nnoremap <silent> [b :<C-u>bprev<CR>
+nnoremap <silent> ]B :<C-u>blast<CR>
+nnoremap <silent> [B :<C-u>bfirst<CR>
+nnoremap <silent> ]q :<C-u>cnext<CR>
+nnoremap <silent> [q :<C-u>cprev<CR>
+nnoremap <silent> ]Q :<C-u>clast<CR>
+nnoremap <silent> [Q :<C-u>cfirst<CR>
+
+" write as root
+"cmap w!! w !sudo tee > /dev/null %
+
+" messages shortcuts
+nnoremap <silent> <leader>m :messages<cr>
+nnoremap <leader>M :messages clear<cr>

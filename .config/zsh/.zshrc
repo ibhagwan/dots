@@ -53,10 +53,10 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 
 # Better searching in vi command mode
-bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
-# disabled due to bad interaction with nvim-neoterm
-#bindkey -M viins '^k' history-incremental-search-backward
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+bindkey -M viins '^r' history-incremental-search-backward
 #bindkey -M viins '^j' history-incremental-search-forward
 
 # Change cursor shape for different vi modes.
@@ -174,12 +174,17 @@ bindkey '^z' fg-bg
 
 # fzf (https://github.com/junegunn/fzf)
 # if installed enable fzf keybinds
-for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
-    "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf/shell" "$HOME/rootfs/share/fzf/shell"
-do
-    [ -f ${dir}/completion.zsh ] && source "${dir}/completion.zsh"
-    [ -f ${dir}/key-bindings.zsh ] && source "${dir}/key-bindings.zsh"
-done
+if fzf --zsh >/dev/null 2>&1; then
+    # fzf 0.48.0 embedded the shell integration scripts
+    eval "$(fzf --zsh)"
+else
+    for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
+        "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf/shell" "$HOME/rootfs/share/fzf/shell"
+    do
+        [ -f ${dir}/completion.zsh ] && source "${dir}/completion.zsh"
+        [ -f ${dir}/key-bindings.zsh ] && source "${dir}/key-bindings.zsh"
+    done
+fi
 
 # Fzf commands for git, need to unbind ^G or we conflict
 #   ^G^F    git ls-files
