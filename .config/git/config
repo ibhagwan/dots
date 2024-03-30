@@ -93,7 +93,9 @@
   ps    = push
   psf   = push --force
   pr    = pull --rebase=true
-  r     = remote --verbose
+  r     = remote
+  ra    = remote add
+  rv    = remote --verbose
   s     = status
   sb    = status -sb
   sbu   = status -sbu
