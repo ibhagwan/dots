@@ -1,0 +1,103 @@
+live_config_reload = true
+
+[colors.bright]
+black = "#56687E"
+blue = "#6498EF"
+cyan = "#24D1E7"
+green = "#53E2AE"
+magenta = "#FF8FFD"
+red = "#EE4F84"
+white = "#FFFFFF"
+yellow = "#FFFDC2"
+
+[colors.normal]
+black = "#3D4C5F"
+blue = "#92B6F4"
+cyan = "#87DFEB"
+green = "#A1EFD3"
+magenta = "#FFB2FF"
+red = "#F48FB1"
+white = "#F1F1F2"
+yellow = "#FFFED5"
+
+[colors.primary]
+background = "#323F4E"
+foreground = "#F8F8F2"
+
+[colors.selection]
+background = "#3D4C5F"
+text = "#BD99FF"
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 6.0
+
+[font.bold]
+style = "Bold"
+
+[font.bold_italic]
+family = "monospace"
+style = "Bold Italic"
+
+[font.italic]
+family = "monospace"
+style = "Italic"
+
+[font.normal]
+family = "monospace"
+style = "Regular"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "PasteSelection"
+key = "Insert"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "PasteSelection"
+key = "S"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "Key0"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Command"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[window.dimensions]
+columns = 126
+lines = 39
