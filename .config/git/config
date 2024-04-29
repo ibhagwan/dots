@@ -78,7 +78,7 @@
   ba    = branch --all
   bd    = branch --delete
   bdf   = branch --delete --force   ; same as `branch -D`
-  bdr   = push -u origin --delete   ; delete a remote branch
+  bdo   = push -u origin --delete   ; delete a branch from origin
   c     = commit
   cm    = commit -m
   cam   = commit -am
@@ -92,6 +92,7 @@
   pl    = pull --ff-only
   ps    = push
   psf   = push --force
+  pso   = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
   pr    = pull --rebase=true
   r     = remote
   ra    = remote add
@@ -103,6 +104,7 @@
   spu   = stash push
   spo   = stash pop
   sw    = switch
+  ; push branch to origin
   fpr   = "!f(){ git fetch origin pull/${@}/head:pr_${@}; }; f"
   ;undo-commit   undo last commit, preserve local changes
   ;undo-staging  unstage all changes, preserve local changes
