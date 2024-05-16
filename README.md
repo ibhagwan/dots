@@ -37,8 +37,10 @@ which add the below keybinds to the shell:
 
 | Key       | Command           |
 | ----------| ------------------|
-| `<C-f-f>` | find paths        |
-| `<C-f-g>` | "live" grep       |
+| `<A-c>`   | cd directory      |
+| `<C-r>`   | cmd history       |
+| `<C-t>`   | find paths        |
+| `<C-f>`   | "live" grep       |
 
 If the pwd is inside a git repo, the following binds are available:
 

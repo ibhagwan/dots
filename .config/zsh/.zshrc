@@ -176,7 +176,7 @@ bindkey '^z' fg-bg
 # if installed enable fzf keybinds
 if fzf --zsh >/dev/null 2>&1; then
     # fzf 0.48.0 embedded the shell integration scripts
-    eval "$(fzf --zsh)"
+    source <(fzf --zsh)
 else
     for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
         "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf/shell" "$HOME/rootfs/share/fzf/shell"
@@ -185,6 +185,14 @@ else
         [ -f ${dir}/key-bindings.zsh ] && source "${dir}/key-bindings.zsh"
     done
 fi
+
+# History widget should not run in a tmux popup as
+# command history is local to the current session
+fzf-widget-history-no-tmux() { FZF_TMUX_OPTS="" fzf-history-widget }
+zle     -N            fzf-widget-history-no-tmux
+bindkey -M emacs '^R' fzf-widget-history-no-tmux
+bindkey -M vicmd '^R' fzf-widget-history-no-tmux
+bindkey -M viins '^R' fzf-widget-history-no-tmux
 
 # Fzf commands for git, need to unbind ^G or we conflict
 #   ^G^F    git ls-files

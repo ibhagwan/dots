@@ -89,7 +89,7 @@ function "_${FZF_PREFIX}-gg" () {
   fi
   fzf-exec --ansi --multi --disabled \
     --query "$INITIAL_QUERY" \
-    --bind "start:reload:$CMD_PREFIX {q}" \
+    --bind "start:reload:[ -z {q} ] || $CMD_PREFIX {q}" \
     --bind "change:reload:sleep 0.1; $CMD_PREFIX {q} 2>&1 || true" \
     --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ regex ]] &&
     echo "rebind(change)+change-prompt(regex> )+disable-search+change-header(/ CTRL-R: fzf mode /)+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||

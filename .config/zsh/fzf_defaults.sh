@@ -3,19 +3,18 @@
 # Configure fzf, command line fuzzy finder
 #
 # Keybinds:
-# F3        - Toggle preview word wrap
-# F4        - Toggle preview
-# <ctrl-f>  - Scroll page down
-# <ctrl-b>  - Scroll page up
-# <shift-d> - Preview page down
-# <shift-u> - Preview page up
-# <alt-d>   - Preview half page down
-# <alt-u>   - Preview half page up
-# <alt-a>   - Toggle select-all
-# <ctrl-x>  - Delete selected files
-# <ctrl-y>  - Copy path to clipboard (requires xclip)
-FZF_OPTS="--no-mouse --layout=reverse --multi"
-FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-down:preview-half-page-down,alt-up:preview-half-page-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-a:beginning-of-line,ctrl-e:end-of-line,alt-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard)"
+# F3             - Toggle preview word wrap
+# F4             - Toggle preview
+# <ctrl-f>       - Scroll page down
+# <ctrl-b>       - Scroll page up
+# <shift-d>      - Preview page down
+# <shift-u>      - Preview page up
+# <alt-shift-d>  - Preview half page down
+# <alt-shift-u>  - Preview half page up
+# <alt-a>        - Toggle select-all
+# <ctrl-y>       - Copy path to clipboard (requires xclip)
+FZF_OPTS="--no-mouse --layout=reverse --multi --info=inline-right"
+FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-shift-down:preview-down,alt-shift-up:preview-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-a:beginning-of-line,ctrl-e:end-of-line,alt-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard)"
 FZF_PREVIEW_OPTS="hidden:border:nowrap,right:60%"
 FZF_CTRL_R_OPTS="--no-separator --info=inline"
 # FZF_CTRL_T_OPTS="--no-separator --info=inline"
@@ -62,19 +61,18 @@ fi
 # ctrl-t .gitignore toggle
 # https://github.com/junegunn/fzf/issues/3354
 
-# function _fzf_ctrl_t_command {
-#     FZF_CTRL_T_COMMAND=$(echo $FZF_CTRL_T_COMMAND | awk -F" " -v cmd="$FZF_CTRL_T_COMMAND" \
-#         '{if ($NF=="--no-ignore") { $(NF--)=""; print } else { print $cmd,"--no-ignore" } }')
-#     echo $FZF_CTRL_T_COMMAND
-# }
+NOIGNORE="\x1b[0;34m<ctrl-g>\x1b[0m"
 
-export FZF_CTRL_T_OPTS="
-    --bind 'ctrl-g:transform:[[ ! \$FZF_PROMPT =~ unrestricted ]] &&
-    echo \"rebind(ctrl-g)+change-prompt(unrestricted> )+change-header(/ CTRL-G: restricted /)+reload($FZF_CTRL_T_COMMAND --no-ignore)\" ||
-    echo \"rebind(ctrl-g)+change-prompt(restricted> )+change-header(/ CTRL-G: unrestricted /)+reload($FZF_CTRL_T_COMMAND)\"' \
-  --prompt 'restricted> '
-  --header '╱ CTRL-G: unrestricted ╱'
-"
-
-# remove line feeds
-export FZF_CTRL_T_OPTS=$(echo $FZF_CTRL_T_OPTS | tr -d '\n')
+# Bash concatenates string literals that are adjacent
+# spaces inside of backticks evaluate to nothing
+export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} "`
+    `"--prompt 'restricted> ' "`
+    `"--header ':: ${NOIGNORE} to disable .gitignore' "`
+    `"--bind 'ctrl-g:transform:[[ ! \$FZF_PROMPT =~ unrestricted ]] && "`
+        `"echo \"rebind(ctrl-g)+change-prompt(unrestricted> )"`
+            `"+change-header(:: ${NOIGNORE} to disable .gitignore)"`
+            `"+reload($FZF_CTRL_T_COMMAND --no-ignore)\""`
+    `" || "`
+        `"echo \"rebind(ctrl-g)+change-prompt(restricted> )"`
+            `"+change-header(:: ${NOIGNORE} to respect .gitignore)"`
+            `"+reload($FZF_CTRL_T_COMMAND)\"'"
