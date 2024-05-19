@@ -49,3 +49,6 @@ copy() {
 for FNAME in ${FNAMES}; do
     copy ${GIT_CWD}/${FNAME} ${TARGET}/${FNAME}
 done
+
+# Force zsh to refresh
+rm ${TARGET}/.config/zsh/.zshrc.zwc > /dev/null 2>&1
