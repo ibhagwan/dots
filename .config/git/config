@@ -7,6 +7,14 @@
   helper =
   ;helper = store
 
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
 ; run `git config --get user.email` inside ~/Sources/Work
 [includeIf "gitdir:~/Sources/Work/"]
     path = ~/.config/git/config-work

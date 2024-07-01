@@ -44,20 +44,23 @@ which add the below keybinds to the shell:
 
 If the pwd is inside a git repo, the following binds are available:
 
-| Key       | Command           | Key       | Command           |
-| ----------| ------------------| ----------| ------------------|
-| `<C-g-f>` | git ls-files      | `<C-g-s>` | git status        |
-| `<C-g-b>` | git branches      | `<C-g-c>` | git commits       |
-| `<C-g-g>` | git grep          | `<C-g-r>` | git remtoes       |
-| `<C-g-t>` | git tags          |
+| Key       | Command           | Key       | Command              |
+| ----------| ------------------| ----------| ---------------------|
+| `<C-g-f>` | git ls-files      | `<C-g-s>` | git stashes          |
+| `<C-g-b>` | git branches      | `<C-g-h>` | git hashes (commits) |
+| `<C-g-g>` | git grep          | `<C-g-r>` | git remtoes          |
+| `<C-g-t>` | git tags          | `<C-g-e>` | git for-each-ref     |
+| `<C-g-l>` | git reflogs       | `<C-g-w>` | git worktrees        |
 
 And the same for the `yadm` dot files repo with `<C-y>` prefix:
-| Key       | Command           | Key       | Command           |
-| ----------| ------------------| ----------| ------------------|
-| `<C-y-f>` | yadm ls-files     | `<C-y-s>` | yadm status       |
-| `<C-y-b>` | yadm branches     | `<C-y-c>` | yadm commits      |
-| `<C-y-g>` | yadm grep         | `<C-y-r>` | yadm remtoes      |
-| `<C-y-t>` | yadm tags         |
+| Key       | Command           | Key       | Command              |
+| ----------| ------------------| ----------| ---------------------|
+| `<C-y-f>` | yadm ls-files     | `<C-y-s>` | yadm stashes         |
+| `<C-y-b>` | yadm branches     | `<C-y-h>` | yadm hashes (commits)|
+| `<C-y-g>` | yadm grep         | `<C-y-r>` | yadm remtoes         |
+| `<C-y-t>` | yadm tags         | `<C-y-e>` | yadm for-each-ref    |
+| `<C-y-l>` | yadm reflogs      | `<C-y-w>` | yadm worktrees       |
+
 
 
 ### rEFInd

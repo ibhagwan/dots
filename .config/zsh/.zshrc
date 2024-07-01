@@ -197,18 +197,22 @@ bindkey -M viins '^R' fzf-widget-history-no-tmux
 # Fzf commands for git, need to unbind ^G or we conflict
 #   ^G^F    git ls-files
 #   ^G^B    git branches
-#   ^G^S    git status
-#   ^G^C    git commits
 #   ^G^T    git tags
 #   ^G^R    git remotes
-# ^Y set is equal for yadm bare repo
+#   ^G^H    git hashes (commits)
+#   ^G^S    git stashes
+#   ^G^L    git reflogs
+#   ^G^E    git for-each-ref
+#   ^G^W    git worktrees
+#   ^G^G    git grep
+# ^Y prefix are equal binds for yadm bare repo
 # ^F for generic "live" ripgrep
 source $ZDOTDIR/fzf_defaults.sh
-source $ZDOTDIR/fzf_git_functions.sh
-source $ZDOTDIR/fzf_git_keybindings.zsh
+source $ZDOTDIR/fzf-rg.sh
+source $ZDOTDIR/fzf-git.sh
 FZF_GIT_CMD="git -c status.showUntrackedFiles=no -C $HOME --work-tree=$HOME --git-dir=$YADM_REPO" \
-    FZF_ZLE_PREFIX="fzf-yadm" FZF_GIT_BIND="^Y" \
-    source $ZDOTDIR/fzf_git_keybindings.zsh
+    FZF_GIT_PREFIX="^y" \
+    source $ZDOTDIR/fzf-git.sh
 
 # totp command complettion (`pip install totp)
 # https://pypi.org/project/totp/
