@@ -37,19 +37,19 @@ function _fzf_rg() {
 
 if [[ -n "${ZSH_VERSION:-}" ]]; then
     local m=""
-    local key=${FZF_GIT_PREFIX:-"^f"}
-    local wn="fzf-rg-${key[2]}-widget"
-    eval "${wn}() { TMP_KEY=${key[2]} FZF_GIT_CMD=\"$FZF_GIT_CMD\"; local result=\$(_fzf_rg | __fzf_git_join); zle reset-prompt; LBUFFER+=\$result }"
+    local k=${FZF_GIT_PREFIX:-"^f"}
+    local wn="fzf-rg-${k[2]}-widget"
+    eval "${wn}() { TMP_KEY=${k[2]} FZF_GIT_CMD=\"$FZF_GIT_CMD\"; local result=\$(_fzf_rg | __fzf_git_join); zle reset-prompt; LBUFFER+=\$result }"
     eval "zle -N ${wn}"
     for m in emacs vicmd viins; do
         if [ ! -z $FZF_GIT_CMD ]; then
-            eval "bindkey -r '${key}g'"
-            eval "bindkey -r '${key}^g'"
-            eval "bindkey -M $m '${key}g' ${wn}"
-            eval "bindkey -M $m '${key}^g' ${wn}"
+            eval "bindkey -r '${k}g'"
+            eval "bindkey -r '${k}^g'"
+            eval "bindkey -M $m '${k}g' ${wn}"
+            eval "bindkey -M $m '${k}^g' ${wn}"
         else
-            eval "bindkey -r '$key'"
-            eval "bindkey -M $m '$key' ${wn}"
+            eval "bindkey -r '$k'"
+            eval "bindkey -M $m '$k' ${wn}"
         fi
     done
 fi
