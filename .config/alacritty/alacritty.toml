@@ -32,7 +32,7 @@ text = "#BD99FF"
 TERM = "xterm-256color"
 
 [font]
-size = 6.0
+size = 7.0
 
 [font.bold]
 style = "Bold"
