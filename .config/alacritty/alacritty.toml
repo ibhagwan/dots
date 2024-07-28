@@ -28,6 +28,13 @@ foreground = "#F8F8F2"
 background = "#3D4C5F"
 text = "#BD99FF"
 
+# https://alacritty.org/config-alacritty.html
+[colors.cursor]
+text = "CellBackground"
+cursor = "CellForeground"
+# text = "#000000"
+# cursor = "#FFB573"
+
 [env]
 TERM = "xterm-256color"
 
@@ -38,15 +45,15 @@ size = 7.0
 style = "Bold"
 
 [font.bold_italic]
-family = "monospace"
+family = "Monospace"
 style = "Bold Italic"
 
 [font.italic]
-family = "monospace"
+family = "Monospace"
 style = "Italic"
 
 [font.normal]
-family = "monospace"
+family = "Monospace"
 style = "Regular"
 
 [[keyboard.bindings]]
@@ -93,6 +100,11 @@ mods = "Command"
 action = "DecreaseFontSize"
 key = "Minus"
 mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001f"
+key = "/"
+mods = "Control"
 
 [scrolling]
 history = 10000
