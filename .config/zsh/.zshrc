@@ -174,7 +174,7 @@ bindkey '^z' fg-bg
 
 # fzf (https://github.com/junegunn/fzf)
 # if installed enable fzf keybinds
-if fzf --zsh >/dev/null 2>&1; then
+if uname -r | grep -v ish >/dev/null && fzf --zsh >/dev/null 2>&1; then
     # fzf 0.48.0 embedded the shell integration scripts
     source <(fzf --zsh)
 else
