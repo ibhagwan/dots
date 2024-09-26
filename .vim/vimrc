@@ -145,7 +145,7 @@ nmap <leader>R :source $MYVIMRC<cr>   " reload .vimrc
 nmap <leader>E :split $MYVIMRC<cr>    " split edit .vimrc
 
 " <c-s> to save
-map <c-s> <c-c>:update<cr>
+map <silent> <c-s> <c-c>:update<cr>
 
 " readline ctrl-{a|e} for home|end
 cmap <c-a> <home>

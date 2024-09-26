@@ -58,6 +58,11 @@ if command -v fd > /dev/null 2>&1; then
   # export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS . ~"
 fi
 
+# https://github.com/dandavison/delta
+if command -v delta > /dev/null 2>&1; then
+  export FZF_GIT_PAGER="delta"
+fi
+
 # ctrl-t .gitignore toggle
 # https://github.com/junegunn/fzf/issues/3354
 
