@@ -1,6 +1,6 @@
 # $OpenBSD: dot.profile,v 1.5 2018/02/02 02:29:54 yasuoka Exp $
 #
-PATH=$HOME/bin:$HOME/rootfs/bin:/usr/lib/ccache/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/X11R7/bin:/opt/X11/bin:/opt/local/bin:/usr/pkg/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin
+PATH=$HOME/bin:$HOME/rootfs/bin:/usr/lib/ccache/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/X11R7/bin:/opt/X11/bin:/opt/local/bin:/usr/pkg/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:/var/jb/usr/bin
 MANPATH=$HOME/rootfs/man:/usr/local/share/man:/usr/share/man:/opt/homebrew/share/man:/usr/pkg/man
 #LD_LIBRARY_PATH=$HOME/rootfs/lib:/opt/homebrew/lib:/usr/local/lib:/usr/local/share/lib:/usr/share/lib:/lib:/usr/lib:/usr/X11R6/lib:/usr/X11R7/lib:/opt/X11/lib:/opt/local/lib:/usr/pkg/lib
 export PATH MANPATH HOME TERM
