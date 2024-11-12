@@ -1,3 +1,5 @@
+# https://github.com/junegunn/fzf-git.sh/commit/f730cfa1860acdb64597a0cf060d4949f1cd02a8
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2024 Junegunn Choi
@@ -184,7 +186,7 @@ _fzf_git_files() {
   _fzf_git_fzf -m --ansi --nth 2..,.. \
     --border-label '📁 Files' \
     --header $'CTRL-O (open in browser) ╱ ALT-E (open in editor)\n\n' \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git file {-1}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" file {-1}" \
     --bind "alt-e:execute:${EDITOR:-vim} {-1} > /dev/tty" \
     --query "$query" \
     --preview "$(__fzf_git_cmd) diff --no-ext-diff --color=$(__fzf_git_color .) -- {-1} | $(__fzf_git_pager); $(__fzf_git_cat) ${cwd:-""}{-1}" "$@" |
@@ -202,7 +204,7 @@ _fzf_git_branches() {
     --color hl:underline,hl+:underline \
     --no-hscroll \
     --bind 'ctrl-/:change-preview-window(down,70%|hidden|)' \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git branch {}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" branch {}" \
     --bind "alt-a:change-border-label(🌳 All branches)+reload:$(__bash) \"$__fzf_git\" all-branches" \
     --preview "$(__fzf_git_cmd) log --oneline --graph --date=short --color=$(__fzf_git_color .) --pretty='format:%C(auto)%cd %h%d %s' \$(sed s/^..// <<< {} | cut -d' ' -f1) --" "$@" |
   sed 's/^..//' | cut -d' ' -f1
@@ -214,7 +216,7 @@ _fzf_git_tags() {
   _fzf_git_fzf --preview-window right,70% \
     --border-label '📛 Tags' \
     --header $'CTRL-O (open in browser)\n\n' \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git tag {}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" tag {}" \
     --preview "$(__fzf_git_cmd) show --color=$(__fzf_git_color .) {} | $(__fzf_git_pager)" "$@"
 }
 
@@ -224,7 +226,7 @@ _fzf_git_hashes() {
   _fzf_git_fzf --ansi --no-sort --bind 'ctrl-s:toggle-sort' \
     --border-label '🍡 Hashes' \
     --header-lines 3 \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git commit {}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" commit {}" \
     --bind "ctrl-d:execute:grep -o '[a-f0-9]\{7,\}' <<< {} | head -n 1 | xargs $(__fzf_git_cmd) diff --color=$(__fzf_git_color) > /dev/tty" \
     --bind "alt-a:change-border-label(🍇 All hashes)+reload:$(__bash) \"$__fzf_git\" all-hashes" \
     --color hl:underline,hl+:underline \
@@ -238,7 +240,7 @@ _fzf_git_remotes() {
   _fzf_git_fzf --tac \
     --border-label '📡 Remotes' \
     --header $'CTRL-O (open in browser)\n\n' \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git remote {1}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" remote {1}" \
     --preview-window right,70%,hidden \
     --preview "$(__fzf_git_cmd) log --oneline --graph --date=short --color=$(__fzf_git_color .) --pretty='format:%C(auto)%cd %h%d %s' '{1}/$($(__fzf_git_cmd) rev-parse --abbrev-ref HEAD)' --" "$@" |
   cut -d$'\t' -f1
@@ -274,7 +276,7 @@ _fzf_git_each_ref() {
     --color hl:underline,hl+:underline \
     --no-hscroll \
     --bind 'ctrl-/:change-preview-window(down,70%|hidden|)' \
-    --bind "ctrl-o:execute-silent:$(__bash) $__fzf_git {1} {2}" \
+    --bind "ctrl-o:execute-silent:$(__bash) \"$__fzf_git\" {1} {2}" \
     --bind "alt-e:execute:${EDITOR:-vim} <($(__fzf_git_cmd) show {2}) > /dev/tty" \
     --bind "alt-a:change-border-label(🍀 Every ref)+reload:$(__bash) \"$__fzf_git\" all-refs" \
     --preview "$(__fzf_git_cmd) log --oneline --graph --date=short --color=$(__fzf_git_color .) --pretty='format:%C(auto)%cd %h%d %s' {2} --" "$@" |
