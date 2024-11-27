@@ -194,6 +194,16 @@ bindkey -M emacs '^R' fzf-widget-history-no-tmux
 bindkey -M vicmd '^R' fzf-widget-history-no-tmux
 bindkey -M viins '^R' fzf-widget-history-no-tmux
 
+# If zoxide is installed, replace fzf's alt-c widget with zoxide's zi
+if command -v zoxide > /dev/null 2>&1; then
+    function zi() { _ZO_FZF_OPTS="${FZF_DEFAULT_OPTS} ${FZF_ALT_C_OPTS} --tiebreak=end" __zoxide_zi "$@" }
+    function zi_interactive() { zi; zle accept-line; }
+    zle -N zi_interactive
+    bindkey -M emacs '^[c' zi_interactive
+    bindkey -M vicmd '^[c' zi_interactive
+    bindkey -M viins '^[c' zi_interactive
+fi
+
 # Fzf commands for git, need to unbind ^G or we conflict
 #   ^G^F    git ls-files
 #   ^G^B    git branches

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Configure fzf, command line fuzzy finder
+# Configure fzf/skim
 #
 # Keybinds:
 # F3             - Toggle preview word wrap
@@ -9,20 +9,22 @@
 # <ctrl-b>       - Scroll page up
 # <shift-d>      - Preview page down
 # <shift-u>      - Preview page up
-# <alt-shift-d>  - Preview half page down
-# <alt-shift-u>  - Preview half page up
+# <alt-shift-d>  - Preview scroll down
+# <alt-shift-u>  - Preview scroll up
 # <alt-a>        - Toggle select-all
 # <ctrl-y>       - Copy path to clipboard (requires xclip)
-FZF_OPTS="--no-mouse --layout=reverse --multi --info=inline-right"
-FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-shift-down:preview-down,alt-shift-up:preview-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-a:beginning-of-line,ctrl-e:end-of-line,alt-a:toggle-all,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard)"
+FZF_OPTS="--no-mouse --layout=reverse --height=50% --multi"
+FZF_BINDS="f3:toggle-preview-wrap,f4:toggle-preview,shift-down:preview-page-down,shift-up:preview-page-up,alt-shift-down:preview-down,alt-shift-up:preview-up,ctrl-u:unix-line-discard,ctrl-f:half-page-down,ctrl-b:half-page-up,alt-a:toggle-all,alt-g:first,alt-G:last,ctrl-y:execute-silent(echo {+} | xclip -selection clipboard)"
 FZF_PREVIEW_OPTS="hidden:border:nowrap,right:60%"
-FZF_CTRL_R_OPTS="--no-separator --info=inline"
-# FZF_CTRL_T_OPTS="--no-separator --info=inline"
+export FZF_CTRL_R_OPTS="--no-separator --info=inline"
+export FZF_ALT_C_OPTS="--no-separator --info=inline"
 
 # Use fzf inside tmux popup if possible
-if [ -n $TMUX ]; then
-  export FZF_TMUX_OPTS="-p80%,60% -- --margin=0,0"
-  export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} --preview-window=nohidden"
+if [ ! -z ${TMUX+x} ]; then
+  # export FZF_TMUX_OPTS="-p80%,60% -- --margin=0,0"
+  export FZF_TMUX_OPTS=
+  export FZF_ALT_C_OPTS="--tmux 70%:70% --preview-window=hidden"
+  export FZF_CTRL_T_OPTS="--tmux 90%:70% ${FZF_CTRL_T_OPTS} --preview-window=nohidden"
 fi
 
 # use `bat` for preview if installed, `head` otherwise
@@ -38,7 +40,7 @@ else
 fi
 
 # construct ${FZF_DEFAULT_OPTS}
-export FZF_DEFAULT_OPTS="$FZF_OPTS --bind='$FZF_BINDS' --preview-window='$FZF_PREVIEW_OPTS' --preview='$FZF_PREVIEW_CMD'"
+export FZF_DEFAULT_OPTS="$FZF_OPTS --info=inline-right --bind='$FZF_BINDS' --preview-window='$FZF_PREVIEW_OPTS' --preview='$FZF_PREVIEW_CMD'"
 
 # use `rg` if installed
 # https://github.com/BurntSushi/ripgrep
@@ -57,6 +59,10 @@ if command -v fd > /dev/null 2>&1; then
   export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS"
   # export FZF_ALT_C_COMMAND="fd --type d $FD_OPTS . ~"
 fi
+
+# Use similar fzf flags with skim
+export SKIM_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}"
+export SKIM_DEFAULT_OPTIONS="$FZF_OPTS --inline-info --bind='$FZF_BINDS' --preview-window='$FZF_PREVIEW_OPTS' --preview='$FZF_PREVIEW_CMD'"
 
 # https://github.com/dandavison/delta
 if command -v delta > /dev/null 2>&1; then
