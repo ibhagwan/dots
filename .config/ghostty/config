@@ -1,0 +1,41 @@
+font-family = "Monospace"
+font-size = 7.0
+
+# Font looks too thick without this
+freetype-load-flags = no-hinting,no-autohint
+
+# Match wezterm default, also eliminates bottom padding
+adjust-cell-height = -5%
+
+window-width = 350
+window-height = 100
+window-decoration = false
+gtk-titlebar = false
+gtk-adwaita = false
+
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = false
+window-padding-color = background
+# window-padding-color = extend
+
+# theme = "iTerm2 Pastel Dark Background"
+# theme = "nordfox"
+# theme = "Atom"
+# theme = "NvimDark"
+# theme = "catppuccin-frappe"
+# theme = "tokyonight-storm"
+# theme = "MaterialOcean"
+# theme = "PaleNightHC"
+theme = "Mirage"
+
+cursor-invert-fg-bg = true
+selection-invert-fg-bg = true
+
+copy-on-select = true
+
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+keybind = super+s=paste_from_selection
+
+# vim:ft=config

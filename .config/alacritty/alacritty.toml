@@ -109,6 +109,10 @@ mods = "Control"
 history = 10000
 multiplier = 3
 
+[window]
+decorations = "None"
+padding = { x = 0, y = 0 }
+
 [window.dimensions]
 columns = 126
 lines = 39
