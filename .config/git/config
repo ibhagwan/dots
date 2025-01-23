@@ -52,6 +52,10 @@
 [push]
   default = simple
 
+[fetch]
+  ; auto prune no longer exisiting remote branches
+  prune = true
+
 [commit]
   verbose = true
   gpgsign = true
@@ -98,11 +102,13 @@
   m     = merge
   l     = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'
   pl    = pull --ff-only
+  pla   = "!git pull && git branch | grep -v '*' | xargs -I {} sh -c 'git fetch --update-head-ok origin {}:{}'"
   ps    = push
   psf   = push --force
   ; push local branch to origin
   pso   = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
-  pr    = pull --rebase=true
+  pr    = pull --rebase
+  pra   = "!git pull --rebase && git branch | grep -v '*' | xargs -I {} sh -c 'git fetch --update-head-ok origin {}:{}'"
   r     = remote
   ra    = remote add
   rv    = remote --verbose
