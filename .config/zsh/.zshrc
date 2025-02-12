@@ -176,7 +176,7 @@ bindkey '^z' fg-bg
 # if installed enable fzf keybinds
 if uname -r | grep -v ish >/dev/null && fzf --zsh >/dev/null 2>&1; then
     # fzf 0.48.0 embedded the shell integration scripts
-    source <(fzf --zsh)
+    source <(fzf --zsh) 2>/dev/null || eval "$(fzf --zsh)"
 else
     for dir in "/usr/share/fzf" "/usr/local/share/fzf" "/usr/share/doc/fzf" \
         "/usr/local/opt/fzf" "/opt/homebrew/opt/fzf/shell" "$HOME/rootfs/share/fzf/shell"
@@ -254,7 +254,7 @@ source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 # https://getantidote.github.io/migrating-from-antigen
 # Initialize antidote's dynamic mode, which changes `antidote bundle`
 # from static mode (instead of `antidote load` & .zsh_plugins.txt).
-source <(antidote init)
+source <(antidote init) 2>/dev/null || eval "$(antidote init)"
 
 # Syntax highlighting bundle.
 antidote bundle zdharma-continuum/fast-syntax-highlighting
@@ -262,7 +262,7 @@ antidote bundle zdharma-continuum/fast-syntax-highlighting
 # set the prompt theme to spaceship-prompt
 # if we don't have starship binary installed
 # spaceship-prompt configuration
-if [ $HAS_STARSHIP = false ]; then
+if [ $HAS_STARSHIP = false ] && [[ ! "$(uname -r)" =~ "ish$" ]]; then
     export SPACESHIP_CONFIG="${ZDOTDIR}/spaceship.zsh"
     antidote bundle "spaceship-prompt/spaceship-prompt"
     # antidote bundle "spaceship-prompt/spaceship-vi-mode@main"

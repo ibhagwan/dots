@@ -1,6 +1,5 @@
-" Disable 24 bit colors since we are using default colorschemes
 if has("termguicolors")
-  set notermguicolors
+  set termguicolors
 endif
 
 " Use 256 terminal colors instead

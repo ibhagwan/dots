@@ -105,7 +105,7 @@ alias matrix='LC_ALL=C tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS co
 
 # Neovim nightly
 alias nv="/shared/$USER/Applications/nvim.appimage"
-alias nv-dl-nightly="([ -f /shared/$USER/Applications/nvim.appimage ] && cp /shared/$USER/Applications/nvim.appimage /shared/$USER/Applications/nvim.appimage.bak); curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage --output /shared/$USER/Applications/nvim.appimage && chmod a+x /shared/$USER/Applications/nvim.appimage"
+alias nv-dl-nightly="([ -f /shared/$USER/Applications/nvim.appimage ] && cp /shared/$USER/Applications/nvim.appimage /shared/$USER/Applications/nvim.appimage.bak); curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage --output /shared/$USER/Applications/nvim.appimage && chmod a+x /shared/$USER/Applications/nvim.appimage"
 
 # yadm / dotfiles
 # need to add -C $HOME or `dot ls-files|grep` fails inside a git repo
