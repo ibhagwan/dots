@@ -19,6 +19,9 @@ window-padding-balance = false
 window-padding-color = background
 # window-padding-color = extend
 
+# close window without confirmation
+confirm-close-surface = false
+
 # theme = "iTerm2 Pastel Dark Background"
 # theme = "nordfox"
 # theme = "Atom"
