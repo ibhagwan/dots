@@ -9,7 +9,9 @@ adjust-cell-height = -5%
 
 window-width = 350
 window-height = 100
-window-decoration = false
+# https://github.com/ghostty-org/ghostty/issues/2023#issuecomment-2676156529
+window-decoration = none
+gtk-custom-css = ./gtk.css
 gtk-titlebar = false
 gtk-adwaita = false
 
