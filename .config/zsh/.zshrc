@@ -263,9 +263,11 @@ antidote bundle zdharma-continuum/fast-syntax-highlighting
 # if we don't have starship binary installed
 # spaceship-prompt configuration
 if [ $HAS_STARSHIP = false ] && [[ ! "$(uname -r)" =~ "ish$" ]]; then
-    export SPACESHIP_CONFIG="${ZDOTDIR}/spaceship.zsh"
+    # NOTE: use default config, uncomment for old setup
+    # export SPACESHIP_CONFIG="${ZDOTDIR}/spaceship.zsh"
     antidote bundle "spaceship-prompt/spaceship-prompt"
-    # antidote bundle "spaceship-prompt/spaceship-vi-mode@main"
+    # TODO: not working, always shows [I] regardless of mode
+    # antidote bundle "spaceship-prompt/spaceship-vi-mode"
 fi
 
 fi # if [ "$EUID" -ne 0 ]; then
