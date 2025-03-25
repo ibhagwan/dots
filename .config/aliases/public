@@ -74,6 +74,10 @@ alias awesome-restart='awesome-client "awesome.restart()"'
 # line count current directory
 alias line-count='rg --files  | xargs -d "\n" wc -l | perl -lne "\$s += \$1 if /(\d+) total/; END{print \$s}"'
 
+# tar total size
+alias tar-size='f(){ tar -tvf ${@} | awk '\''{s+=$3} END{print (s/1024/1024), "MB"}'\'' ; unset -f f;}; f'
+alias lz4-size='f(){ tar -I lz4 -tvf ${@} | awk '\''{s+=$3} END{print (s/1024/1024), "MB"}'\'' ; unset -f f;}; f'
+
 # ident.me: free public IP address API
 # https://www.ident.me/
 # https://api.ident.me/
