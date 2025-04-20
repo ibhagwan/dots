@@ -1,5 +1,7 @@
 #!/bin/sh
 
+CTRL_R="\x1b[0;34m<ctrl-r>\x1b[0m"
+
 function _fzf_rg() {
   if [ ! -z $FZF_GIT_CMD ]; then
     # git grep
@@ -17,19 +19,18 @@ function _fzf_rg() {
   fi
   _fzf_git_fzf --ansi --multi --disabled \
     --query "$INITIAL_QUERY" \
-    --bind "start:reload:[ -z {q} ] || $CMD_PREFIX {q}" \
+    --bind "start:transform-header(echo ':: ${CTRL_R} to fuzzy match')+reload:[ -z {q} ] || $CMD_PREFIX {q}" \
     --bind "change:reload:sleep 0.1; $CMD_PREFIX {q} 2>&1 || true" \
     --bind 'enter:execute-silent([[ ! $FZF_PROMPT =~ regex ]] &&
     echo {q} > /tmp/rg-fzf-f-'$TMP_KEY' || echo {q} > /tmp/rg-fzf-r-'$TMP_KEY')+accept' \
     --bind 'esc:execute-silent([[ ! $FZF_PROMPT =~ regex ]] &&
     echo {q} > /tmp/rg-fzf-f-'$TMP_KEY' || echo {q} > /tmp/rg-fzf-r-'$TMP_KEY')+abort' \
     --bind 'ctrl-r:transform:[[ ! $FZF_PROMPT =~ regex ]] &&
-    echo "rebind(change)+change-prompt(regex> )+disable-search+change-header(/ CTRL-R: fzf mode /)+transform-query:echo \{q} > /tmp/rg-fzf-f-'$TMP_KEY'; cat /tmp/rg-fzf-r-'$TMP_KEY'" ||
-    echo "unbind(change)+change-prompt(fzf> )+enable-search+transform-header(echo / CTRL-R: edit regex: \{q} /)+transform-query:echo \{q} > /tmp/rg-fzf-r-'$TMP_KEY'; cat /tmp/rg-fzf-f-'$TMP_KEY'"' \
-    --color hl:-1:underline,hl+:-1:underline:reverse,query:#ffffff,disabled:#f48fb1 \
+    echo "rebind(change)+change-prompt(regex> )+disable-search+transform-header(echo \":: '${CTRL_R}' to fuzzy match\")+transform-query:echo \{q} > /tmp/rg-fzf-f-'$TMP_KEY'; cat /tmp/rg-fzf-r-'$TMP_KEY'" ||
+    echo "unbind(change)+transform-prompt(echo \"\x1b[0;31m\"\{q}\"\x1b[0m > \")+enable-search+transform-header(echo \":: '${CTRL_R}' to edit regex\")+transform-query:echo \{q} > /tmp/rg-fzf-r-'$TMP_KEY'; cat /tmp/rg-fzf-f-'$TMP_KEY'"' \
+    --color header:regular,hl:-1:underline,hl+:-1:underline:reverse,query:#ffffff,disabled:#f48fb1 \
     --prompt 'regex> ' \
     --delimiter : \
-    --header '╱ CTRL-R: fzf mode ╱' \
     --preview-window 'nohidden,down,60%,border-top,+{2}+3/3,~3' \
     --preview $PREVIEW_CMD |
   cut -d':' -f1

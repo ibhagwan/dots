@@ -72,18 +72,18 @@ fi
 # ctrl-t .gitignore toggle
 # https://github.com/junegunn/fzf/issues/3354
 
-NOIGNORE="\x1b[0;34m<ctrl-g>\x1b[0m"
+CTRL_G="\x1b[0;34m<ctrl-g>\x1b[0m"
 
 # Bash concatenates string literals that are adjacent
 # spaces inside of backticks evaluate to nothing
 export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} "`
     `"--prompt 'restricted> ' "`
-    `"--header ':: ${NOIGNORE} to disable .gitignore' "`
+    `"--bind 'start:transform-header:echo \":: ${CTRL_G} to disable .gitignore\"' "`
     `"--bind 'ctrl-g:transform:[[ ! \$FZF_PROMPT =~ unrestricted ]] && "`
         `"echo \"rebind(ctrl-g)+change-prompt(unrestricted> )"`
-            `"+change-header(:: ${NOIGNORE} to disable .gitignore)"`
+            `"+change-header(:: ${CTRL_G} to respect .gitignore)"`
             `"+reload($FZF_CTRL_T_COMMAND --no-ignore)\""`
     `" || "`
         `"echo \"rebind(ctrl-g)+change-prompt(restricted> )"`
-            `"+change-header(:: ${NOIGNORE} to respect .gitignore)"`
+            `"+change-header(:: ${CTRL_G} to disable .gitignore)"`
             `"+reload($FZF_CTRL_T_COMMAND)\"'"
