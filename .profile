@@ -30,7 +30,7 @@ if [ $VI = "nvim" ]; then
     export MANWIDTH=999
 fi
 
-export EDITOR=$VI
+export EDITOR="$VI --noplugin"
 export FCEDIT=$EDITOR
 export PAGER=less
 export LESS='-iMRS -x2'

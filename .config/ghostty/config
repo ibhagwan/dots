@@ -1,6 +1,11 @@
 font-family = "Monospace"
 font-size = 7.0
 
+# Fallback font
+# TODO: icons are still large with symbols mono but small with pragmata?
+# font-family = "PragmataPro Mono Liga"
+font-family = "Symbols Nerd Font Mono"
+
 # Font looks too thick without this
 freetype-load-flags = no-hinting,no-autohint
 
