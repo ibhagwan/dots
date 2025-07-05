@@ -129,7 +129,7 @@
   undo-commit   = reset --mixed HEAD^1
   undo-staging  = reset --mixed HEAD
   reset-hard    = reset --hard HEAD
-  reset-origin  = reset --hard origin/master
+  reset-origin  = "!f(){ git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); }; f"
   reset-pull    = "!f(){ git reset --hard HEAD && git pull --rebase; }; f"
   squash-all    = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
   rebase-root   = rebase --interactive --root
