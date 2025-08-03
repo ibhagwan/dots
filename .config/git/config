@@ -30,6 +30,7 @@
 	status = false
 
 [core]
+  pager        = delta
   editor       = nvim
   whitespace   = cr-at-eol
   ; git prints non-ASCII file names in quoted octal notation,
@@ -56,6 +57,10 @@
   ; auto prune no longer exisiting remote branches
   prune = true
 
+[rebase]
+	autoStash = true
+	updateRefs = true
+
 [commit]
   verbose = true
   gpgsign = true
@@ -70,12 +75,25 @@
 [difftool "vimdiff"]
   cmd = nvim -d $LOCAL $REMOTE
 
+[interactive]
+  diffFilter = delta --color-only
+
 [merge]
-  tool = vimdiff
-  ;conflictStyle = diff3
+  ; tool = vimdiff
+  ; conflictStyle = diff3
+  tool = fugitive
+  conflictstyle = zdiff3
 
 [mergetool "vimdiff"]
   cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[mergetool "fugitive"]
+	cmd = nvim -c \"Gvdiffsplit!\" \"$MERGED\"
+
+[grep]
+	lineNumber = true
+	column = true
+	patternType = extended
 
 [color]
   diff   = auto
@@ -83,9 +101,21 @@
   branch = auto
   ui     = true
 
+[url "https://github.com/"]
+	insteadOf = gh:
+
+[url "git@gitlab.com:ibhagwan/"]
+	insteadOf = gl:
+
+[url "git@ibhagwan.codeberg.org:ibhagwan/"]
+	insteadOf = cb:
+
+[url "git@bhagwan.codeberg.org:bhagwan/"]
+	insteadOf = cb2:
+
 [alias]
   a     = add
-  b     = branch 
+  b     = branch -vv
   br    = branch
   ba    = branch --all
   bd    = branch --delete
@@ -93,10 +123,9 @@
   bdo   = push -u origin --delete   ; delete a branch from origin
   c     = commit
   cm    = commit -m
-  cam   = commit -am
   ca    = commit --amend
   co    = checkout
-  cp    = cherry-pick
+  cp    = cherrpick
   d     = diff
   dc    = diff --cached
   m     = merge
@@ -137,6 +166,8 @@
   fixup         = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 
 [delta]
+ # use n and N to move between diff sections
+  navigate = true
   dark = true
   side-by-side = false
   line-numbers = true
