@@ -5,6 +5,10 @@ MANPATH=$HOME/rootfs/man:/usr/local/share/man:/usr/share/man:/opt/homebrew/share
 #LD_LIBRARY_PATH=$HOME/rootfs/lib:/opt/homebrew/lib:/usr/local/lib:/usr/local/share/lib:/usr/share/lib:/lib:/usr/lib:/usr/X11R6/lib:/usr/X11R7/lib:/opt/X11/lib:/opt/local/lib:/usr/pkg/lib
 export PATH MANPATH HOME TERM
 
+if [ $(id -u) -eq 0 ]; then
+    export TERM=xterm-256color
+fi
+
 # NetBSD local install
 [ -d $HOME/rootfs/lib/libvterm03 ] && \
     export LD_LIBRARY_PATH=$HOME/rootfs/lib/libvterm03:$HOME/rootfs/lib
