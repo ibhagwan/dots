@@ -1,6 +1,7 @@
 // https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown
 configuration {
-	dpi: 192;
+	// dpi: 128;
+    matching: "fuzzy";
     // vi bindings for up/down
     kb-remove-to-eol: "";
     kb-accept-entry: "Control+m,Return,KP_Enter";
@@ -11,6 +12,8 @@ configuration {
     kb-move-char-forward: "Right";
     kb-page-prev: "Page_Up,Control+b";
     kb-page-next: "Page_Down,Control+f";
+    kb-cancel: "Escape,Control+c,Control+bracketleft";
+    kb-secondary-copy: "Super_L+c";
 }
 
 * {
@@ -37,12 +40,12 @@ configuration {
 }
 
 window {
-	width: 40%;
+	width: 30%;
+	height: 50%;
 	padding: 20px;
     border: 2px;
     border-radius: 3;
 }
-
 
 inputbar {
     text-color: #ffe6b3;

@@ -1,0 +1,23 @@
+# vim:ft=config
+palette = 0=#3D4C5F
+palette = 1=#F48FB1
+palette = 2=#A1EFD3
+palette = 3=#FFFED5
+palette = 4=#92B6F4
+palette = 5=#FFB2FF
+palette = 6=#87DFEB
+palette = 7=#F1F1F2
+palette = 8=#56687E
+palette = 9=#EE4F84
+palette = 10=#53E2AE
+palette = 11=#FFFDC2
+palette = 12=#6498EF
+palette = 13=#FF8FFD
+palette = 14=#24D1E7
+palette = 15=#FFFFFF
+background = #323F4E
+foreground = #F8F8F2
+cursor-color = #FFB573
+cursor-text = #000000
+selection-background = #3D4C5F
+selection-foreground = #BD99FF
