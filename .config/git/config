@@ -116,8 +116,7 @@
 [alias]
   a     = add
   b     = branch -vv
-  br    = branch
-  ba    = branch --all
+  ba    = branch -vv --all
   bd    = branch --delete
   bdf   = branch --delete --force   ; same as `branch -D`
   bdo   = push -u origin --delete   ; delete a branch from origin
@@ -125,9 +124,9 @@
   cm    = commit -m
   ca    = commit --amend
   co    = checkout
-  cp    = cherrpick
   d     = diff
   dc    = diff --cached
+  f     = fetch
   m     = merge
   l     = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'
   pl    = pull --ff-only
@@ -138,13 +137,14 @@
   pso   = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
   pr    = pull --rebase
   pra   = "!git pull --rebase && git branch | grep -v '*' | xargs -I {} sh -c 'git fetch --update-head-ok origin {}:{}'"
-  r     = remote
-  ra    = remote add
+  r     = rebase
+  ri    = rebase --interactive
   rv    = remote --verbose
   s     = status
   sb    = status -sb
   sbu   = status -sbu
   st    = stash
+  stp   = stash pop
   spu   = stash push
   spo   = stash pop
   sw    = switch
