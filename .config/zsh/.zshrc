@@ -194,14 +194,18 @@ bindkey -M emacs '^R' fzf-widget-history-no-tmux
 bindkey -M vicmd '^R' fzf-widget-history-no-tmux
 bindkey -M viins '^R' fzf-widget-history-no-tmux
 
-# If zoxide is installed, replace fzf's alt-c widget with zoxide's zi
+# find fzf-lua
+for dir in "$HOME/Sources/nvim/fzf-lua" "$HOME/.local/share/nvim/lazy/fzf-lua"
+do; [ -f ${dir}/scripts/cli.lua ] && FZF_LUA_CLI="${dir}/scripts/cli.lua"; done
+
+# If zoxide is installed, bind ^K to zoxide's zi
 if command -v zoxide > /dev/null 2>&1; then
     function zi() { _ZO_FZF_OPTS="${FZF_DEFAULT_OPTS} ${FZF_ALT_C_OPTS} --no-sort --scheme=path" __zoxide_zi "$@" }
     function zi_interactive() { zi; zle accept-line; }
     zle -N zi_interactive
-    bindkey -M emacs '^[c' zi_interactive
-    bindkey -M vicmd '^[c' zi_interactive
-    bindkey -M viins '^[c' zi_interactive
+    for m in emacs vicmd viins; do
+        eval "bindkey -M $m '^K' zi_interactive"
+    done
 fi
 
 # Fzf commands for git, need to unbind ^G or we conflict
@@ -217,12 +221,58 @@ fi
 #   ^G^G    git grep
 # ^Y prefix are equal binds for yadm bare repo
 # ^F for generic "live" ripgrep
+# ^k for zoxide
 source $ZDOTDIR/fzf_defaults.sh
-source $ZDOTDIR/fzf-rg.sh
-source $ZDOTDIR/fzf-git.sh
-FZF_GIT_CMD="git -c status.showUntrackedFiles=no -C $HOME --work-tree=$HOME --git-dir=$YADM_REPO" \
-    FZF_GIT_PREFIX="^y" \
+if [ ! -z $FZF_LUA_CLI ]; then
+    FzfLua() { ${NVIM:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty }
+    eval_widget() {
+        eval "${1}() {
+            local res=\$(FzfLua ${2} | while read -r line; do; echo -n -E \"\${(q)line} \"; done);
+            zle reset-prompt;
+            LBUFFER+=\$res
+        }"
+        eval "zle -N ${1}"
+    }
+    typeset -A git_prefix
+    typeset -A fzf_widgets
+    git_prefix=(g git y yadm)
+    fzf_widgets=(f files l lgrep s status c commits b branches h hunks)
+    for k_prefix cmd_prefix in "${(@kv)git_prefix}"; do
+        local prefix="^${k_prefix}"
+        eval "bindkey -r '$prefix'"
+        for k v in "${(@kv)fzf_widgets}"; do
+            local cmd="${cmd_prefix}_${v}"
+            local wn="_fzf_${cmd}"
+            eval_widget ${wn} ${cmd}
+            for m in emacs vicmd viins; do
+                eval "bindkey -M $m '$prefix^${k}' ${wn}"
+                eval "bindkey -M $m '$prefix${k}' ${wn}"
+            done
+        done
+    done
+    fzf_widgets=(t files p files f live_grep)
+    for key cmd in "${(@kv)fzf_widgets}"; do
+        local wn="_fzf_${cmd}"
+        eval_widget ${wn} ${cmd}
+        for m in emacs vicmd viins; do
+            eval "bindkey -M $m '^${key}' ${wn}"
+        done
+    done
+    function _fzf_zoxide() {
+        local res; res="$(FzfLua zoxide $@)" && __zoxide_cd "${res}";
+        zle accept-line;
+    }
+    zle -N _fzf_zoxide
+    for m in emacs vicmd viins; do
+        eval "bindkey -M $m '^K' _fzf_zoxide"
+    done
+else
+    source $ZDOTDIR/fzf-rg.sh
     source $ZDOTDIR/fzf-git.sh
+    FZF_GIT_CMD="git -c status.showUntrackedFiles=no -C $HOME --work-tree=$HOME --git-dir=$YADM_REPO" \
+        FZF_GIT_PREFIX="^y" \
+        source $ZDOTDIR/fzf-git.sh
+fi
 
 # totp command complettion (`pip install totp)
 # https://pypi.org/project/totp/
