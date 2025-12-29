@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  // "model": "anthropic/claude-sonnet-4-5",
+  // "autoupdate": true,
+  "tui": {
+    "cursor_blinking": true
+  },
+  "keybinds": {
+    "leader": "ctrl+x",
+    "input_submit": "alt+return,ctrl+return",
+    "input_newline": "return,shift+return,ctrl+j"
+  }
+}

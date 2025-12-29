@@ -131,6 +131,11 @@ if command -v zoxide > /dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
+# homebrew/linuxbrew
+if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 # pyenv
 # https://github.com/pyenv/pyenv#installation
 if command -v pyenv > /dev/null 2>&1; then

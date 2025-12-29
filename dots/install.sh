@@ -64,3 +64,11 @@ fi
 # Source aliases
 alias dot="${DOT_CMD}"
 echo "[1;32mCreated the [0;33mdot[1;32m alias.[0m"
+
+# If exists, run install.local
+if [ -x ${BASEDIR}/install.local ]; then
+    echo "[1;32mRunning [0;33minstall.local[1;32m...[0m"
+    ${BASEDIR}/install.local
+fi
+
+echo "[1;32mDONE.[0m"
