@@ -62,7 +62,7 @@ fi
 
 # Use similar fzf flags with skim
 export SKIM_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}"
-export SKIM_DEFAULT_OPTIONS="$FZF_OPTS --inline-info --bind='$FZF_BINDS' --preview-window='$FZF_PREVIEW_OPTS' --preview='$FZF_PREVIEW_CMD'"
+export SKIM_DEFAULT_OPTIONS="$FZF_OPTS --info=inline --bind='$FZF_BINDS' --preview-window='$FZF_PREVIEW_OPTS' --preview='$FZF_PREVIEW_CMD'"
 
 # https://github.com/dandavison/delta
 if command -v delta > /dev/null 2>&1; then

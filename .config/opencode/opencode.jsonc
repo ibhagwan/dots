@@ -1,14 +1,30 @@
 {
+  //
+  // https://opencode.ai/docs/
+  //
   "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/grok-code",
   "theme": "opencode",
-  // "model": "anthropic/claude-sonnet-4-5",
-  // "autoupdate": true,
+  "default_agent": "lead",
+  "autoupdate": true,
+  "instructions": ["{env:HOME}/.config/opencode/INSTRUCTIONS.md"],
   "tui": {
-    "cursor_blinking": true
+    "cursor_blinking": true,
+    "scroll_speed": 8,
+    "scroll_acceleration": {
+      "enabled": true,
+    },
   },
   "keybinds": {
     "leader": "ctrl+x",
+    "app_exit": "ctrl+c,<leader>q",
     "input_submit": "alt+return,ctrl+return",
-    "input_newline": "return,shift+return,ctrl+j"
-  }
+    "input_newline": "return,shift+return,ctrl+j",
+    "messages_page_up": "pageup,ctrl+alt+b",
+    "messages_page_down": "pagedown,ctrl+alt+f",
+    "messages_half_page_up": "ctrl+alt+u,ctrl+b",
+    "messages_half_page_down": "ctrl+d,ctrl+alt+d,ctrl+f",
+    "messages_first": "alt+g,ctrl+g,home",
+    "messages_last": "ctrl+alt+g,end",
+  },
 }

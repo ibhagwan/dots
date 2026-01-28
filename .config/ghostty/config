@@ -9,6 +9,7 @@ font-variation = wdth=85
 # echo "font-size = 12.0" > ~/.config/ghostty/macos.config
 # echo "font-variation = wdth=80" >> ~/.config/ghostty/macos.config
 config-file = ?macos.config
+macos-option-as-alt = true
 
 # Fallback font
 # TODO: icons are still large with symbols mono but small with pragmata?

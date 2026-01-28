@@ -231,45 +231,56 @@ source $ZDOTDIR/fzf_defaults.sh
 if [ ! -z $FZF_LUA_CLI ]; then
     FzfLua() { ${NVIM:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty }
     eval_widget() {
-        eval "${1}() {
-            local res=\$(FzfLua ${2} | while read -r line; do; echo -n -E \"\${(q)line} \"; done);
-            zle reset-prompt;
-            LBUFFER+=\$res
-        }"
+        if [[ "$3" == "cd" ]]; then
+            eval "${1}() {
+                local res; res=\"\$(FzfLua ${2})\" && __zoxide_cd \"\${res}\"
+                zle accept-line;
+            }"
+        elif [[ "$3" == "nil" ]]; then
+            eval "${1}() {
+                FzfLua ${2};
+                zle accept-line;
+            }"
+        else
+            eval "${1}() {
+                local res=\$(FzfLua ${2} | while read -r line; do; echo -n -E \"\${(q)line} \"; done);
+                zle reset-prompt;
+                LBUFFER+=\$res
+            }"
+        fi
         eval "zle -N ${1}"
     }
     typeset -A git_prefix
     typeset -A fzf_widgets
     git_prefix=(g git y yadm)
-    fzf_widgets=(f files l lgrep s status c commits b branches h hunks)
+    fzf_widgets=(f files g lgrep s status c commits l commits b branches h hunks t worktrees)
     for k_prefix cmd_prefix in "${(@kv)git_prefix}"; do
         local prefix="^${k_prefix}"
         eval "bindkey -r '$prefix'"
         for k v in "${(@kv)fzf_widgets}"; do
             local cmd="${cmd_prefix}_${v}"
             local wn="_fzf_${cmd}"
-            eval_widget ${wn} ${cmd}
+            local wt=""
+            [[ "$v" == "worktrees" ]] && wt="cd"
+            eval_widget ${wn} ${cmd} ${wt}
             for m in emacs vicmd viins; do
                 eval "bindkey -M $m '$prefix^${k}' ${wn}"
                 eval "bindkey -M $m '$prefix${k}' ${wn}"
             done
         done
     done
-    fzf_widgets=(t files p files f live_grep)
+    # relcaim ctrl-s|ctrl-q in the shell
+    unsetopt flowcontrol
+    fzf_widgets=(t files p files f live_grep k zoxide s serverlist)
     for key cmd in "${(@kv)fzf_widgets}"; do
         local wn="_fzf_${cmd}"
-        eval_widget ${wn} ${cmd}
+        local wt=""
+        [[ "$cmd" == "zoxide" ]] && wt="cd"
+        [[ "$cmd" == "serverlist" ]] && wt="nil"
+        eval_widget ${wn} ${cmd} ${wt}
         for m in emacs vicmd viins; do
             eval "bindkey -M $m '^${key}' ${wn}"
         done
-    done
-    function _fzf_zoxide() {
-        local res; res="$(FzfLua zoxide $@)" && __zoxide_cd "${res}";
-        zle accept-line;
-    }
-    zle -N _fzf_zoxide
-    for m in emacs vicmd viins; do
-        eval "bindkey -M $m '^K' _fzf_zoxide"
     done
 else
     source $ZDOTDIR/fzf-rg.sh
