@@ -42,6 +42,39 @@ require('fzf-lua').setup({
         }
       },
     },
+    commits = {
+      actions = {
+        ["ctrl-d"] = {
+          fn = function(s, _o)
+            if not s[1] then return FzfLua.utils.fzf_exit() end
+            local o = vim.deepcopy(_o.__call_opts)
+            o.ref = s[1]:match("[^ ]+")
+            o.ref1 = o.ref .. "~"
+            FzfLua.git_diff(o)
+          end,
+          reuse = true,
+          header = "git diff",
+          -- exec_silent to open a new picker is buggy in the cli
+          -- we have to merge with default action to override
+          exec_silent = false,
+        },
+      },
+    },
+    diff = {
+      actions = {
+        ["ctrl-d"] = {
+          fn = function(s, _o)
+            if not s[1] then return FzfLua.utils.fzf_exit() end
+            local o = vim.deepcopy(_o.__call_opts)
+            o.file = FzfLua.path.entry_to_file(s[1], _o).path
+            FzfLua.git_hunks(o)
+          end,
+          reuse = true,
+          header = "git hunks",
+          exec_silent = false,
+        },
+      }
+    },
     worktrees = {
       actions = {
         ["enter"] = function(s)

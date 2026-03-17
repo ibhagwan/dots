@@ -154,16 +154,18 @@
   ;undo-staging  unstage all changes, preserve local changes
   ;reset-hard    discard all changes since last commit
   ;reset-origin  reset repository to remote origin
+  ;reset-origin  reset repository to remote upstream
   ;reset-pull    discard local changes & pull from origin
-  undo-commit   = reset --mixed HEAD^1
-  undo-staging  = reset --mixed HEAD
-  reset-hard    = reset --hard HEAD
-  reset-origin  = "!f(){ git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); }; f"
-  reset-pull    = "!f(){ git reset --hard HEAD && git pull --rebase; }; f"
-  squash-all    = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
-  rebase-root   = rebase --interactive --root
-  ; https://words.filippo.io/git-fixup-amending-an-older-commit
-  fixup         = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
+  undo-commit    = reset --mixed HEAD^1
+  undo-staging   = reset --mixed HEAD
+  reset-hard     = reset --hard HEAD
+  reset-origin   = "!f(){ git reset --hard origin/$(git rev-parse --abbrev-ref HEAD); }; f"
+  reset-upstream = "!f(){ git reset --hard upstream/$(git rev-parse --abbrev-ref HEAD); }; f"
+  reset-pull     = "!f(){ git reset --hard HEAD && git pull --rebase; }; f"
+  squash-all     = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
+  rebase-root    = rebase --interactive --root
+  ; https://word s.filippo.io/git-fixup-amending-an-older-commit
+  fixup          = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 
 [delta]
  # use n and N to move between diff sections

@@ -1,6 +1,6 @@
 # $OpenBSD: dot.profile,v 1.5 2018/02/02 02:29:54 yasuoka Exp $
 #
-PATH=$HOME/bin:$HOME/rootfs/bin:$HOME/.cargo/bin:/usr/lib/ccache/bin:/opt/homebrew/bin:/opt/local/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/X11R7/bin:/opt/X11/bin:/opt/local/bin:/usr/pkg/bin:$HOME/.local/bin:$HOME/.local/share/nvim/mason/bin:/var/jb/usr/bin
+PATH=$HOME/.local/bin:$HOME/rootfs/bin:$HOME/.cargo/bin:$HOME/.npm/bin:/usr/lib/ccache/bin:/opt/homebrew/bin:/opt/local/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/X11R7/bin:/opt/X11/bin:/opt/local/bin:/usr/pkg/bin:$HOME/.local/bin:$HOME/.local/share/nvim/mason/bin:/var/jb/usr/bin
 MANPATH=$HOME/rootfs/man:/usr/local/share/man:/usr/share/man:/opt/homebrew/share/man:/usr/pkg/man
 #LD_LIBRARY_PATH=$HOME/rootfs/lib:/opt/homebrew/lib:/usr/local/lib:/usr/local/share/lib:/usr/share/lib:/lib:/usr/lib:/usr/X11R6/lib:/usr/X11R7/lib:/opt/X11/lib:/opt/local/lib:/usr/pkg/lib
 export PATH MANPATH HOME TERM
@@ -62,6 +62,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/inputrc"
 export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
+export TERMINFO_DIRS="${XDG_DATA_HOME}/terminfo:$TERMINFO_DIRS"
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 
 #export QT_QPA_PLATFORMTHEME="qt5ct"
@@ -69,6 +70,9 @@ export QT_STYLE_OVERRIDE=adwaita-dark
 
 # zsh will look for .zshrc here
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
+# source local vars
+[ -f ~/.config/profile.local ] && . ~/.config/profile.local
 
 # yadm dotfile repo
 export YADM_REPO="$HOME/dots/.git"
@@ -91,6 +95,12 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # rust backtrace by default
 export RUST_BACKTRACE=1
+
+if command -v sccache > /dev/null 2>&1; then
+    export RUSTC_WRAPPER=sccache
+    export SCCACHE_DIR="$HOME/.cargo/sccache"
+    export SCCACHE_CACHE_SIZE="40G"
+fi
 
 # Prevent launching `at-spi-bus-launcher|at-spi2-registryd`
 export NO_AT_BRIDGE=1

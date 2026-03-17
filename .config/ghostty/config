@@ -28,7 +28,7 @@ window-height = 100
 window-decoration = none
 gtk-custom-css = ./gtk.css
 gtk-titlebar = false
-gtk-adwaita = false
+# gtk-adwaita = false
 
 window-padding-x = 0
 window-padding-y = 0
