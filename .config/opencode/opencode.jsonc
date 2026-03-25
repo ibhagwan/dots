@@ -3,9 +3,9 @@
   // https://opencode.ai/docs/
   //
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode/grok-code",
+  "model": "opencode-go/kimi-k2.5",
   "theme": "opencode",
-  "default_agent": "lead",
+  "default_agent": "plan",
   "autoupdate": true,
   "instructions": ["{env:HOME}/.config/opencode/INSTRUCTIONS.md"],
   "tui": {
@@ -27,4 +27,34 @@
     "messages_first": "alt+g,ctrl+g,home",
     "messages_last": "ctrl+alt+g,end",
   },
+  "agent": {
+    "build": {
+      "color": "secondary",
+    },
+    "plan": {
+      "color": "accent",
+    },
+  },
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Nvidia",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "{env:NVIDIA_API_KEY}",
+      },
+      "models": {
+        "qwen/qwen3.5-397b-a17b": { "name": "Qwen3.5 397B A17B Free" },
+      },
+    },
+    "openrouter": {
+      "options": {
+        "apiKey": "{env:OPENROUTER_API_KEY}",
+        "baseURL": "https://openrouter.ai/api/v1",
+      },
+    },
+  },
+  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
+  // hermes-agent doesn't use a formatter
+  // "formatter": { "ruff": { "disabled": true } },
 }
