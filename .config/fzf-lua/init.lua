@@ -1,3 +1,4 @@
+local cli = require("fzf-lua.profiles.cli")
 ---@diagnostic disable: inject-field, missing-fields
 require('fzf-lua').setup({
   { "cli" },
@@ -19,6 +20,12 @@ require('fzf-lua').setup({
     -- ["--border"] = os.getenv("TMUX") and "rounded" or "horizontal",
   },
   previewers = { bat = { theme = "Catppuccin Mocha" } },
+  actions = {
+    files = {
+      ["enter"]     = cli.actions.files["ctrl-q"],
+      ["alt-enter"] = cli.actions.files["enter"],
+    }
+  },
   grep = {
     ---@diagnostic disable-next-line: param-type-mismatch
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
@@ -41,39 +48,6 @@ require('fzf-lua').setup({
           reload = true,
         }
       },
-    },
-    commits = {
-      actions = {
-        ["ctrl-d"] = {
-          fn = function(s, _o)
-            if not s[1] then return FzfLua.utils.fzf_exit() end
-            local o = vim.deepcopy(_o.__call_opts)
-            o.ref = s[1]:match("[^ ]+")
-            o.ref1 = o.ref .. "~"
-            FzfLua.git_diff(o)
-          end,
-          reuse = true,
-          header = "git diff",
-          -- exec_silent to open a new picker is buggy in the cli
-          -- we have to merge with default action to override
-          exec_silent = false,
-        },
-      },
-    },
-    diff = {
-      actions = {
-        ["ctrl-d"] = {
-          fn = function(s, _o)
-            if not s[1] then return FzfLua.utils.fzf_exit() end
-            local o = vim.deepcopy(_o.__call_opts)
-            o.file = FzfLua.path.entry_to_file(s[1], _o).path
-            FzfLua.git_hunks(o)
-          end,
-          reuse = true,
-          header = "git hunks",
-          exec_silent = false,
-        },
-      }
     },
     worktrees = {
       actions = {
@@ -125,6 +99,11 @@ end
 FzfLua.yadm_commits = function(opts)
   FzfLua.git_commits(vim.tbl_extend("force",
     yadm_opts, { winopts = { title = "Yadm Commits" } }, opts))
+end
+
+FzfLua.yadm_reflog = function(opts)
+  FzfLua.git_reflog(vim.tbl_extend("force",
+    yadm_opts, { winopts = { title = "Yadm Reflog" } }, opts))
 end
 
 FzfLua.yadm_lgrep = function(opts)

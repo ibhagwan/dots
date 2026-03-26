@@ -253,7 +253,7 @@ if [ ! -z $FZF_LUA_CLI ]; then
     typeset -A git_prefix
     typeset -A fzf_widgets
     git_prefix=(g git y yadm)
-    fzf_widgets=(f files g lgrep s status c commits l commits b branches h hunks t worktrees)
+    fzf_widgets=(f files g lgrep s status c commits l commits r reflog b branches h hunks t worktrees)
     for k_prefix cmd_prefix in "${(@kv)git_prefix}"; do
         local prefix="^${k_prefix}"
         eval "bindkey -r '$prefix'"
