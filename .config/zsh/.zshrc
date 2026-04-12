@@ -200,7 +200,7 @@ bindkey -M vicmd '^R' fzf-widget-history-no-tmux
 bindkey -M viins '^R' fzf-widget-history-no-tmux
 
 # find fzf-lua
-for dir in "$HOME/Sources/nvim/fzf-lua" "$HOME/.local/share/nvim/lazy/fzf-lua"
+for dir in "$HOME/Sources/nvim/fzf-lua" "$HOME/.local/share/nvim/site/pack/core/opt/fzf-lua"
 do; [ -f ${dir}/scripts/cli.lua ] && FZF_LUA_CLI="${dir}/scripts/cli.lua"; done
 
 # If zoxide is installed, bind ^K to zoxide's zi
