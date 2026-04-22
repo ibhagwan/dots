@@ -301,39 +301,44 @@ fi
 # Don't use an yplugins for root
 if [ "$EUID" -ne 0 ]; then
 
-# do we have starship.rs prompt installed?
-if command -v starship > /dev/null 2>&1; then
-    HAS_STARSHIP=true
-    eval "$(starship init zsh)"
-else
-    HAS_STARSHIP=false
-fi
+    # https://github.com/atuinsh/atuin
+    if command -v atuin > /dev/null 2>&1; then
+        eval "$(atuin init zsh)"
+    fi
 
-# https://github.com/mattmc3/antidote
-if [ ! -d ${ZDOTDIR:-~}/.antidote ]; then
-    git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
-fi
+    # do we have starship.rs prompt installed?
+    if command -v starship > /dev/null 2>&1; then
+        HAS_STARSHIP=true
+        eval "$(starship init zsh)"
+    else
+        HAS_STARSHIP=false
+    fi
 
-# source antidote
-source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+    # https://github.com/mattmc3/antidote
+    if [ ! -d ${ZDOTDIR:-~}/.antidote ]; then
+        git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+    fi
 
-# https://getantidote.github.io/migrating-from-antigen
-# Initialize antidote's dynamic mode, which changes `antidote bundle`
-# from static mode (instead of `antidote load` & .zsh_plugins.txt).
-source <(antidote init) 2>/dev/null || eval "$(antidote init)"
+    # source antidote
+    source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 
-# Syntax highlighting bundle.
-antidote bundle zdharma-continuum/fast-syntax-highlighting
+    # https://getantidote.github.io/migrating-from-antigen
+    # Initialize antidote's dynamic mode, which changes `antidote bundle`
+    # from static mode (instead of `antidote load` & .zsh_plugins.txt).
+    source <(antidote init) 2>/dev/null || eval "$(antidote init)"
 
-# set the prompt theme to spaceship-prompt
-# if we don't have starship binary installed
-# spaceship-prompt configuration
-if [ $HAS_STARSHIP = false ] && [[ ! "$(uname -r)" =~ "ish$" ]]; then
-    # NOTE: use default config, uncomment for old setup
-    export SPACESHIP_CONFIG="${ZDOTDIR}/spaceship.zsh"
-    antidote bundle "spaceship-prompt/spaceship-prompt"
-    # TODO: not working, always shows [I] regardless of mode
-    # antidote bundle "spaceship-prompt/spaceship-vi-mode"
-fi
+    # Syntax highlighting bundle.
+    antidote bundle zdharma-continuum/fast-syntax-highlighting
 
-fi # if [ "$EUID" -ne 0 ]; then
+    # set the prompt theme to spaceship-prompt
+    # if we don't have starship binary installed
+    # spaceship-prompt configuration
+    if [ $HAS_STARSHIP = false ] && [[ ! "$(uname -r)" =~ "ish$" ]]; then
+        # NOTE: use default config, uncomment for old setup
+        export SPACESHIP_CONFIG="${ZDOTDIR}/spaceship.zsh"
+        antidote bundle "spaceship-prompt/spaceship-prompt"
+        # TODO: not working, always shows [I] regardless of mode
+        # antidote bundle "spaceship-prompt/spaceship-vi-mode"
+    fi
+
+fi # [ "$EUID" -ne 0 ];
