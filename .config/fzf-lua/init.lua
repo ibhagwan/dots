@@ -26,6 +26,9 @@ require('fzf-lua').setup({
       ["alt-enter"] = cli.actions.files["enter"],
     }
   },
+  oldfiles = {
+    shada_file = "$HOME/.local/state/nvim/shada/main.shada"
+  },
   grep = {
     ---@diagnostic disable-next-line: param-type-mismatch
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
@@ -71,6 +74,11 @@ require('fzf-lua').setup({
 
 -- skip confirmation dialogs as these cannot popup in the shell
 FzfLua.utils.confirm = function() return 1 end
+
+FzfLua.oldfiles_cwd = function(opts)
+  return FzfLua.oldfiles(vim.tbl_extend("force",
+    { cwd_only = true, cwd_header = true }, opts))
+end
 
 local yadm_opts = {
   -- debug = true,

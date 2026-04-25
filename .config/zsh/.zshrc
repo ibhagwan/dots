@@ -271,7 +271,7 @@ if [ ! -z $FZF_LUA_CLI ]; then
     done
     # relcaim ctrl-s|ctrl-q in the shell
     unsetopt flowcontrol
-    fzf_widgets=(t files p files f live_grep k zoxide s serverlist)
+    fzf_widgets=(t files p files h oldfiles_cwd o oldfiles f live_grep k zoxide s serverlist)
     for key cmd in "${(@kv)fzf_widgets}"; do
         local wn="_fzf_${cmd}"
         local wt=""
