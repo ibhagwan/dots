@@ -3,7 +3,7 @@
   // https://opencode.ai/docs/
   //
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode-go/kimi-k2.6",
+  "model": "opencode-go/kimi-k2.7-code",
   "theme": "opencode",
   "default_agent": "plan",
   "autoupdate": true,
@@ -55,7 +55,7 @@
       },
     },
   },
-  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
+  // "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
   // hermes-agent doesn't use a formatter
   // "formatter": { "ruff": { "disabled": true } },
 }

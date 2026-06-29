@@ -195,9 +195,9 @@ fi
 # command history is local to the current session
 fzf-widget-history-no-tmux() { FZF_TMUX_OPTS="" fzf-history-widget }
 zle     -N            fzf-widget-history-no-tmux
-bindkey -M emacs '^R' fzf-widget-history-no-tmux
-bindkey -M vicmd '^R' fzf-widget-history-no-tmux
-bindkey -M viins '^R' fzf-widget-history-no-tmux
+bindkey -M emacs '\er' fzf-widget-history-no-tmux
+bindkey -M vicmd '\er' fzf-widget-history-no-tmux
+bindkey -M viins '\er' fzf-widget-history-no-tmux
 
 # find fzf-lua
 for dir in "$HOME/Sources/nvim/fzf-lua" "$HOME/.local/share/nvim/site/pack/core/opt/fzf-lua"
@@ -301,9 +301,13 @@ fi
 # Don't use an yplugins for root
 if [ "$EUID" -ne 0 ]; then
 
+    if command -v hermes > /dev/null 2>&1; then
+        eval "$(hermes completion zsh)"
+    fi
+
     # https://github.com/atuinsh/atuin
     if command -v atuin > /dev/null 2>&1; then
-        eval "$(atuin init zsh)"
+        eval "$(atuin init zsh --disable-up-arrow)"
     fi
 
     # do we have starship.rs prompt installed?
