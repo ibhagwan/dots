@@ -45,7 +45,40 @@
       },
       "models": {
         "qwen/qwen3.5-397b-a17b": { "name": "Qwen3.5 397B A17B Free" },
-        "minimaxai/minimax-m2.7": { "name": "MiniMax M2.7 Free" },
+        "minimaxai/minimax-m3": { "name": "MiniMax M3 Free" },
+        "z-ai/glm-5.2": { "name": "GLM 5.2" },
+      },
+    },
+    "featherless": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Featherless",
+      "options": {
+        "baseURL": "https://api.featherless.ai/v1",
+        "apiKey": "{env:FEATHERLESS_API_KEY}",
+      },
+      "models": {
+        "zai-org/GLM-5.2": { "name": "GLM 5.2" },
+        "moonshotai/Kimi-K2.6": { "name": "Kimi K2.6" },
+        "moonshotai/Kimi-K2.7-Code": { "name": "Kimi K2.7 Code" },
+        "MiniMaxAI/MiniMax-M3": { "name": "MiniMax M3" },
+        "deepseek-ai/DeepSeek-V4-Flash": { "name": "DeepSeek V4 Flash" },
+        "deepseek-ai/DeepSeek-V4-Pro": { "name": "DeepSeek V4 Pro" },
+        "Qwen/Qwen3.6-35B-A3B": { "name": "Qwen3.6 35B A3B" },
+        "XiaomiMiMo/MiMo-V2.5": { "name": "MiMo V2.5" },
+      },
+    },
+    "cloudflare-workers-ai": {
+      "options": {
+        "accountId": "{env:CLOUDFLARE_ACCOUNT_ID}",
+        "apiKey": "{env:CLOUDFLARE_API_TOKEN}",
+      },
+    },
+    "cloudflare-ai-gateay": {
+      "name": "Cloudflare AI Gateway",
+      "options": {
+        "gatewayId": "{env:CLOUDFLARE_GATEWAY_ID}",
+        "accountId": "{env:CLOUDFLARE_ACCOUNT_ID}",
+        "apiKey": "{env:CLOUDFLARE_API_TOKEN}",
       },
     },
     "openrouter": {
