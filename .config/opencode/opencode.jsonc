@@ -4,29 +4,9 @@
   //
   "$schema": "https://opencode.ai/config.json",
   "model": "opencode-go/kimi-k2.7-code",
-  "theme": "opencode",
   "default_agent": "plan",
   "autoupdate": true,
   "instructions": ["{env:HOME}/.config/opencode/INSTRUCTIONS.md"],
-  "tui": {
-    "cursor_blinking": true,
-    "scroll_speed": 8,
-    "scroll_acceleration": {
-      "enabled": true,
-    },
-  },
-  "keybinds": {
-    "leader": "ctrl+x",
-    "app_exit": "ctrl+c,<leader>q",
-    "input_submit": "alt+return,ctrl+return",
-    "input_newline": "return,shift+return,ctrl+j",
-    "messages_page_up": "pageup,ctrl+alt+b",
-    "messages_page_down": "pagedown,ctrl+alt+f",
-    "messages_half_page_up": "ctrl+alt+u,ctrl+b",
-    "messages_half_page_down": "ctrl+d,ctrl+alt+d,ctrl+f",
-    "messages_first": "alt+g,ctrl+g,home",
-    "messages_last": "ctrl+alt+g,end",
-  },
   "agent": {
     "build": {
       "color": "secondary",
@@ -34,8 +14,23 @@
     "plan": {
       "color": "accent",
     },
+    "title": {
+      "disable": false,
+    },
   },
   "provider": {
+    "github-copilot": {
+      "name": "GitHub Copilot",
+      "options": {
+        "apiKey": "{env:GITHUB_COPILOT_API_KEY}",
+      },
+    },
+    "opencode-go": {
+      "name": "Opencode Go",
+      "options": {
+        "apiKey": "{env:OPENCODE_GO_API_KEY}",
+      },
+    },
     "nvidia": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Nvidia",
@@ -87,8 +82,20 @@
         "baseURL": "https://openrouter.ai/api/v1",
       },
     },
+    "anyapi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "AnyAPI",
+      "options": {
+        "baseURL": "https://api.anyapi.ai/v1",
+        "apiKey": "{env:ANYAPI_API_KEY}",
+      },
+      "models": {
+        "qwen/qwen3-coder:free": { "name": "Qwen3 Coder (free)" },
+        "google/gemma-4-26b-a4b-it:free": { "name": "Gemma 4 (free)" },
+      },
+    },
   },
-  // "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
+  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"],
   // hermes-agent doesn't use a formatter
   // "formatter": { "ruff": { "disabled": true } },
 }

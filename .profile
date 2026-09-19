@@ -119,3 +119,8 @@ export GOLF_VIM=/shared/$USER/Applications/nvim-v044/nvim.appimage
 # SSL version should match output of:
 # ❯ xbps-query -l | grep libssl
 export CLR_OPENSSL_VERSION_OVERRIDE=48
+
+# Disable GitHub CLI telemetry
+# https://docs.github.com/en/github-cli/github-cli/github-cli-telemetry
+export GH_TELEMETRY=false
+export DO_NOT_TRACK=true

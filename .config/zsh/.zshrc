@@ -229,7 +229,9 @@ fi
 # ^k for zoxide
 source $ZDOTDIR/fzf_defaults.sh
 if [ ! -z $FZF_LUA_CLI ]; then
-    FzfLua() { ${NVIM:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty }
+    FzfLua() {
+        VIMRUNTIME=$NVIM_SRC_RUNTIME ${NVIM_SRC_BIN:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty
+    }
     eval_widget() {
         if [[ "$3" == "cd" ]]; then
             eval "${1}() {
