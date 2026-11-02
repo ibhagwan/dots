@@ -3,15 +3,19 @@
   "theme": "opencode",
   "keybinds": {
     "leader": "ctrl+x",
-    "app_exit": "ctrl+c,<leader>q",
+    "app_exit": "ctrl+d,<leader>q",
     "input_submit": "alt+return,ctrl+return",
     "input_newline": "return,shift+return,ctrl+j",
-    "messages_page_up": "pageup,ctrl+alt+b",
-    "messages_page_down": "pagedown,ctrl+alt+f",
-    "messages_half_page_up": "ctrl+alt+u,ctrl+b",
-    "messages_half_page_down": "ctrl+d,ctrl+alt+d,ctrl+f",
+    "input_delete": "delete,shift+delete",
+    "input_move_left": "left",
+    "input_move_right": "right",
+    "messages_page_up": "pageup,ctrl+b,ctrl+alt+b",
+    "messages_page_down": "pagedown,ctrl+f,ctrl+alt+f",
+    "messages_half_page_up": "ctrl+alt+u",
+    "messages_half_page_down": "ctrl+alt+d",
     "messages_first": "alt+g,ctrl+g,home",
-    "messages_last": "ctrl+alt+g,end",
+    "messages_last": "ctrl+alt+g,ctrl+shift+g,end",
+    "session_background": "ctrl+shift+b"
   },
   "scroll_speed": 8,
   "scroll_acceleration": {
@@ -20,10 +24,6 @@
   "cursor": {
     "style": "default",
     "blinking": true,
-  },
-  "scroll_speed": 8,
-  "scroll_acceleration": {
-    "enabled": true,
   },
 }
 

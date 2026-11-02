@@ -36,6 +36,7 @@
   ; git prints non-ASCII file names in quoted octal notation,
   ; i.e. "\nnn\nnn...", disable to display UTF-8 chars
   quotepath    = off
+  autocrlf     = input
 
 [apply]
   whitespace = warn

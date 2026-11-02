@@ -3,20 +3,14 @@
   // https://opencode.ai/docs/
   //
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode-go/kimi-k2.7-code",
+  "model": "opencode-go/deepseek-v4.1-flash",
   "default_agent": "plan",
   "autoupdate": true,
-  "instructions": ["{env:HOME}/.config/opencode/INSTRUCTIONS.md"],
+  // "instructions": ["{env:HOME}/.config/opencode/INSTRUCTIONS.md"],
   "agent": {
-    "build": {
-      "color": "secondary",
-    },
-    "plan": {
-      "color": "accent",
-    },
-    "title": {
-      "disable": false,
-    },
+    "build": { "color": "#3B82F6" },  // blue
+    "plan":  { "color": "#8B5CF6" },  // purple
+    "title": { "disable": false },
   },
   "provider": {
     "github-copilot": {

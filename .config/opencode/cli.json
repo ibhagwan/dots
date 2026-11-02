@@ -1,0 +1,36 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "diffs": {
+    "wrap": "word"
+  },
+  "session": {
+    "sidebar": "auto",
+    "scrollbar": false,
+    "thinking": "hide"
+  },
+  "animations": true,
+  "keybinds": {
+    "leader": "ctrl+x",
+    "app.exit": "ctrl+d,<leader>q",
+    "input.submit": "alt+return,ctrl+return",
+    "input.newline": "return,shift+return,ctrl+j",
+    "input.delete": "delete,shift+delete",
+    "input.move.left": "left",
+    "input.move.right": "right",
+    "session.page.up": "pageup,ctrl+b,ctrl+alt+b",
+    "session.page.down": "pagedown,ctrl+f,ctrl+alt+f",
+    "session.half.page.up": "ctrl+alt+u",
+    "session.half.page.down": "ctrl+alt+d",
+    "session.first": "alt+g,ctrl+g,home",
+    "session.last": "ctrl+alt+g,ctrl+shift+g,end",
+    "session.background": "ctrl+shift+b"
+  },
+  "scroll": {
+    "speed": 8,
+    "acceleration": true
+  },
+  "cursor": {
+    "style": "default",
+    "blinking": true
+  }
+}

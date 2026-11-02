@@ -27,7 +27,7 @@ require('fzf-lua').setup({
     }
   },
   oldfiles = {
-    shada_file = "$HOME/.local/state/nvim/shada/main.shada"
+    shada_file = vim.fs.joinpath(vim.fn.stdpath("state"), "shada", "main.shada")
   },
   grep = {
     ---@diagnostic disable-next-line: param-type-mismatch
@@ -117,7 +117,11 @@ end
 FzfLua.yadm_lgrep = function(opts)
   FzfLua.live_grep(vim.tbl_extend("force", yadm_opts, {
     winopts = { title = "Yadm Grep" },
-    cmd = "git --git-dir=${YADM_REPO} -C ${HOME} grep -i --line-number --column --color=always",
+    -- `cmd` runs through the platform shell (cmd.exe on Windows), which does
+    -- not expand POSIX `${VAR}`; expand the repo path here instead. `cwd`
+    -- (from `yadm_opts`) already switches to $HOME, so `git -C` isn't needed.
+    cmd = ("git --git-dir=%s grep -i --line-number --column --color=always"):format(
+      vim.fn.shellescape(vim.fn.expand("$YADM_REPO"))),
     rg_glob = false, -- this isn't `rg`
   }, opts))
 end

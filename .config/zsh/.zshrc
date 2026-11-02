@@ -230,7 +230,11 @@ fi
 source $ZDOTDIR/fzf_defaults.sh
 if [ ! -z $FZF_LUA_CLI ]; then
     FzfLua() {
-        VIMRUNTIME=$NVIM_SRC_RUNTIME ${NVIM_SRC_BIN:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty
+        if [ -x "$NVIM_SRC_BIN" ]; then
+            VIMRUNTIME=$NVIM_SRC_RUNTIME ${NVIM_SRC_BIN:-nvim} -l "$FZF_LUA_CLI" $@ </dev/tty
+        else
+            nvim -l "$FZF_LUA_CLI" $@ </dev/tty
+        fi
     }
     eval_widget() {
         if [[ "$3" == "cd" ]]; then
